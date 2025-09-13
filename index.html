@@ -1,140 +1,366 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crux&amp;Beta Film - Fotografía &amp; Video</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crux&Beta Film - Fotografía & Video</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet"/>
+
+  <!-- Estilos custom (paleta negro/gris/dorado + sheen + router) -->
+  <style>
+    :root{
+      --black:#0a0a0a;
+      --gray-900:#121212;
+      --gray-800:#1e1e1e;
+      --gray-700:#2a2a2a;
+      --gray-300:#d1d5db;
+      --gray-200:#e5e7eb;
+      --gold:#d4af37;
+      --gold-2:#b8860b;
+      --gold-3:#f0d98a;
+      --border:rgba(255,255,255,.14);
+    }
+    html,body{height:100%}
+    body{
+      font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--gray-200);
+      background:
+        radial-gradient(1000px 540px at 75% -10%, rgba(212,175,55,.14), transparent 60%),
+        radial-gradient(900px 520px at 15% 110%, rgba(184,134,11,.10), transparent 60%),
+        var(--black);
+      transition:height .2s ease;
+    }
+    /* Bloquear scroll en HOME */
+    body.lock{height:100vh; overflow:hidden}
+    .hidden-route{display:none !important}
+
+    /* Botón con brillo (sheen) */
+    .btn-gold{
+      position:relative; overflow:hidden;
+      background:linear-gradient(180deg, var(--gold-3), var(--gold));
+      color:#111; border:1px solid rgba(255,255,255,.15);
+      box-shadow:0 8px 24px rgba(212,175,55,.18);
+    }
+    .btn-gold-outline{
+      position:relative; overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.02));
+      color:var(--gold-3); border:1px solid rgba(212,175,55,.45);
+      box-shadow:0 8px 24px rgba(0,0,0,.24);
+    }
+    .btn-sheen::after{
+      content:""; position:absolute; inset:0;
+      transform:translateX(-120%) skewX(12deg);
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+      animation:sheen 2s infinite; mix-blend-mode:screen;
+    }
+    @keyframes sheen{
+      0%{transform:translateX(-120%) skewX(12deg)}
+      60%{transform:translateX(120%) skewX(12deg)}
+      100%{transform:translateX(120%) skewX(12deg)}
+    }
+
+    /* Tarjeta elegante */
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      box-shadow:0 20px 50px rgba(0,0,0,.6);
+      backdrop-filter: blur(8px);
+    }
+    .card{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);
+      transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 0 0 1px rgba(212,175,55,.18) inset, 0 30px 80px -20px rgba(212,175,55,.25);
+      border-color:rgba(212,175,55,.35);
+    }
+
+    /* Masonry portafolio (opcional si agregas fotos) */
+    .masonry{columns:1; column-gap:16px}
+    @media(min-width:700px){.masonry{columns:2}}
+    @media(min-width:1024px){.masonry{columns:3}}
+    .masonry img{width:100%;margin:0 0 16px;border-radius:14px;display:block;break-inside:avoid;filter:grayscale(30%) contrast(105%)}
+    .masonry img:hover{filter:grayscale(0%) contrast(110%)}
+  </style>
 </head>
-<body class="bg-gray-900 p-4 min-h-screen flex items-center justify-center">
 
-    <div class="bg-gray-800 rounded-2xl shadow-2xl overflow-hidden max-w-2xl w-full mx-auto">
-        <!-- Encabezado -->
-        <div class="bg-black text-white p-8 text-center">
-            <!-- Logo -->
-            <img src="https://raw.githubusercontent.com/edgarces9/Mi-primera-p-gina-/main/IMG_1135.png"
-                 alt="Logo de Crux&amp;Beta Film"
-                 class="mx-auto mb-4 rounded-full w-24 h-24 sm:w-32 sm:h-32">
+<body class="min-h-screen">
 
-            <!-- Título corregido -->
-            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">Crux&amp;Beta Film</h1>
-            <p class="text-xl sm:text-2xl font-light mt-2 opacity-90">Fotografía &amp; Video</p>
-        </div>
+  <!-- =========================
+       HOME (solo portada; sin scroll)
+       ========================= -->
+  <section data-route="home" class="min-h-screen flex items-center justify-center relative overflow-hidden px-6">
+    <!-- Poster/velo opcional -->
+    <div class="absolute inset-0 opacity-25 grayscale bg-[url('https://images.unsplash.com/photo-1499084732479-de2c02d45fc4?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 to-black/90"></div>
 
-        <div class="p-6 sm:p-8 bg-gray-900 text-white">
-            <!-- Paquetes para Restaurantes -->
-            <div class="mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-200 mb-4">🍽️ Paquetes Restaurantes</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Paquete START -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-inner border border-gray-700">
-                        <h3 class="text-xl font-bold mb-1 text-amber-400">START – $9,000 MXN</h3>
-                        <ul class="text-gray-400 space-y-2 text-sm sm:text-base">
-                            <li><span class="font-semibold text-white">✔️</span> 40 fotos profesionales</li>
-                            <li><span class="font-semibold text-white">✔️</span> 4 reels (30–45s)</li>
-                            <li><span class="font-semibold text-white">✔️</span> 1 visita al mes</li>
-                        </ul>
-                    </div>
-                    <!-- Paquete GROWTH -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-inner border border-gray-700">
-                        <h3 class="text-xl font-bold mb-1 text-amber-400">GROWTH – $11,500 MXN</h3>
-                        <ul class="text-gray-400 space-y-2 text-sm sm:text-base">
-                            <li><span class="font-semibold text-white">✔️</span> 60 fotos profesionales</li>
-                            <li><span class="font-semibold text-white">✔️</span> 6 reels (30–45s)</li>
-                            <li><span class="font-semibold text-white">✔️</span> 2 visitas al mes</li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- Extras -->
-                <div class="mt-6 text-gray-400 text-sm">
-                    <h4 class="font-semibold text-gray-200 mb-2">Extras:</h4>
-                    <ul class="space-y-1">
-                        <li>📹 Reel adicional – $1,800 MXN</li>
-                        <li>📱 Stories pack (10 clips) – $900 MXN</li>
-                        <li>📷 Foto de menú con fondo limpio – $70 c/u (mín. 10)</li>
-                    </ul>
-                </div>
-            </div>
+    <div class="relative text-center max-w-3xl">
+      <!-- Logo -->
+      <img
+        src="https://raw.githubusercontent.com/edgarces9/Mi-primera-p-gina-/main/IMG_1135.png"
+        alt="Logo de Crux&Beta Film"
+        class="mx-auto mb-5 rounded-full w-32 h-32 border border-white/20 object-cover"/>
 
-            <!-- Separador visual -->
-            <div class="border-t border-solid border-gray-700 my-8"></div>
+      <!-- Título -->
+      <h1 class="text-4xl sm:text-6xl font-black tracking-tight bg-clip-text text-transparent"
+          style="background-image:linear-gradient(90deg,var(--gold-3),var(--gold),var(--gold-2))">
+        Crux&Beta Film
+      </h1>
+      <p class="mt-3 text-lg sm:text-2xl text-gray-200/90">Fotografía &amp; Video con un look formal y atemporal</p>
 
-            <!-- Paquetes para Eventos Sociales -->
-            <div class="mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-200 mb-4">👥 Paquetes Sociales</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Mini Sesión -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-inner border border-gray-700">
-                        <h3 class="text-xl font-bold mb-1 text-amber-400">Mini Sesión – $1,800 MXN</h3>
-                        <ul class="text-gray-400 space-y-2 text-sm sm:text-base">
-                            <li><span class="font-semibold text-white">✔️</span> 45 minutos</li>
-                            <li><span class="font-semibold text-white">✔️</span> 12 fotos editadas</li>
-                            <li><span class="font-semibold text-white">✔️</span> 1 locación pública</li>
-                        </ul>
-                    </div>
-                    <!-- Sesión Pareja/Familia -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-inner border border-gray-700">
-                        <h3 class="text-xl font-bold mb-1 text-amber-400">Sesión Pareja/Familia – $2,200 MXN</h3>
-                        <ul class="text-gray-400 space-y-2 text-sm sm:text-base">
-                            <li><span class="font-semibold text-white">✔️</span> 75 minutos</li>
-                            <li><span class="font-semibold text-white">✔️</span> 25 fotos editadas</li>
-                            <li><span class="font-semibold text-white">✔️</span> 1–2 locaciones</li>
-                        </ul>
-                    </div>
-                    <!-- Evento Chico -->
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-inner border border-gray-700">
-                        <h3 class="text-xl font-bold mb-1 text-amber-400">Evento Chico – $5,500 MXN</h3>
-                        <ul class="text-gray-400 space-y-2 text-sm sm:text-base">
-                            <li><span class="font-semibold text-white">✔️</span> 3 horas de cobertura</li>
-                            <li><span class="font-semibold text-white">✔️</span> 60–80 fotos editadas</li>
-                            <li><span class="font-semibold text-white">✔️</span> Video highlight 45s (<span class="font-semibold text-white">+$1,800</span> opcional)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Notas Adicionales -->
-            <div class="text-center text-gray-400 mt-8 text-sm sm:text-base">
-                <p class="mb-2">⚡ Todos los paquetes incluyen edición profesional y entrega digital en alta calidad.</p>
-                <p class="mb-2">💳 Se requiere 50% de anticipo para reservar fecha.</p>
-                <p class="mb-2"><span class="font-extrabold text-white">⏳ Entrega de todos los paquetes en 7 días.</span></p>
-                <p>📌 Precios sujetos a IVA.</p>
-            </div>
-
-            <!-- Botón de Contacto y Redes Sociales -->
-            <div class="mt-8 text-center">
-                <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="https://tapni.com/cruxbetafilm" target="_blank" class="bg-amber-400 text-gray-900 font-bold py-3 px-6 rounded-full shadow-lg hover:bg-amber-500 transition duration-300 transform hover:scale-105 whitespace-nowrap">
-                        Contacto
-                    </a>
-                    <!-- Íconos de redes sociales -->
-                    <div class="flex space-x-4">
-                        <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="WhatsApp" class="text-gray-400 hover:text-amber-400 transition-colors duration-300">
-                            <!-- WhatsApp SVG -->
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12.04 2C6.54 2 2.08 6.46 2.08 11.96c0 1.7.45 3.32 1.25 4.74L2 22l4.98-1.31a9.982 9.982 0 005.06 1.34c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm3.32 14.77a2.238 2.238 0 01-1.59 1.58c-.46.12-.96.18-1.46.18a3.194 3.194 0 01-2.28-.96 11.232 11.232 0 01-4.14-7.25c-.1-.36-.15-.75-.15-1.14a2.915 2.915 0 012.92-2.92c.67 0 1.33.15 1.94.45l.17.08c.55.28.9.5 1.13.75.14.15.22.28.26.43.05.2.06.33.02.43-.05.1-.14.28-.31.47a1.693 1.693 0 00-.23.47c-.05.15-.09.31-.02.5.07.21.2.42.36.65.16.23.33.45.5.65.23.28.45.54.73.74.28.2.58.33.9.33s.62-.05.82-.1a1.293 1.293 0 01.7-.58l.1-.16a1.59 1.59 0 011.64-.78l.45.09c.3.06.5.15.6.28.1.13.15.27.18.42.03.18.06.36.06.58a1.597 1.597 0 01-.1.49z"/>
-                            </svg>
-                        </a>
-                        <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="Instagram" class="text-gray-400 hover:text-amber-400 transition-colors duration-300">
-                            <!-- Instagram SVG -->
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.978 4.978.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.252-1.691 4.771-4.978 4.978-.058.007-1.266.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.978-4.978-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.252 1.691-4.771 4.978-4.978.058-.007 1.266-.07 4.85-.07zm0 2.18c-3.18 0-3.57.012-4.825.07c-2.426.111-3.693 1.393-3.834 3.834-.058 1.255-.07 1.645-.07 4.825s.012 3.57.07 4.825c.141 2.441 1.408 3.723 3.834 3.834 1.255.058 1.645.07 4.825.07s3.57-.012 4.825-.07c2.441-.141 3.723-1.408 3.834-3.834.058-1.255.07-1.645.07-4.825s-.012-3.57-.07-4.825c-.141-2.441-1.408-3.723-3.834-3.834-1.255-.058-1.645-.07-4.825-.07zm-5.26 3.65c-.88 0-1.6.72-1.6 1.6s.72 1.6 1.6 1.6 1.6-.72 1.6-1.6-.72-1.6-1.6-1.6zm5.26 4.97c-2.762 0-5 2.238-5 5s2.238 5 5 5 5-2.238 5-5-2.238-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
-                            </svg>
-                        </a>
-                        <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="Facebook" class="text-gray-400 hover:text-amber-400 transition-colors duration-300">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M22.675 0h-21.35c-.739 0-1.325.586-1.325 1.325v21.35c0 .739.586 1.325 1.325 1.325h11.455v-9.352h-3.13v-3.648h3.13v-2.618c0-3.085 1.884-4.755 4.624-4.755 1.325 0 2.477.098 2.812.141v3.235l-1.921-.001c-1.503 0-1.795.714-1.795 1.765v2.318h3.58l-.466 3.648h-3.114v9.352h6.082c.739 0 1.325-.586 1.325-1.325v-21.35c0-.739-.586-1.325-1.325-1.325z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <!-- Acciones (solo botones) -->
+      <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
+        <a href="#paquetes" class="btn-gold btn-sheen font-extrabold px-6 py-3 rounded-full hover:brightness-110 transition">
+          Ver paquetes
+        </a>
+        <a href="#contacto" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full hover:brightness-110 transition">
+          Contacto
+        </a>
+        <!-- Botones opcionales; si no quieres mostrarlos, bórralos -->
+        <a href="#portafolio" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full hover:brightness-110 transition">
+          Portafolio
+        </a>
+        <a href="#opiniones" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full hover:brightness-110 transition">
+          Opiniones
+        </a>
+      </div>
     </div>
+  </section>
+
+  <!-- =========================
+       PAQUETES (contenido original adaptado a estilo formal)
+       ========================= -->
+  <section data-route="paquetes" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
+    <div class="panel max-w-5xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
+      <!-- Barra superior -->
+      <div class="flex items-center gap-3 mb-6">
+        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
+        <h2 class="text-3xl sm:text-4xl font-extrabold">Paquetes</h2>
+      </div>
+
+      <!-- Restaurantes -->
+      <div class="mb-8">
+        <h3 class="text-2xl sm:text-3xl font-bold text-gray-100 mb-4">🍽️ Paquetes Restaurantes</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- START -->
+          <div class="card rounded-xl p-6">
+            <h4 class="text-xl font-extrabold mb-2" style="color:var(--gold-3)">START – $9,000 MXN</h4>
+            <ul class="text-gray-300 space-y-2 text-sm sm:text-base list-disc list-inside">
+              <li>40 fotos profesionales</li>
+              <li>4 reels (30–45s)</li>
+              <li>1 visita al mes</li>
+            </ul>
+            <div class="mt-4 flex gap-2">
+              <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold">Reservar</a>
+              <a href="#portafolio" class="btn-gold-outline btn-sheen px-5 py-2 rounded-full font-bold">Ver ejemplos</a>
+            </div>
+          </div>
+          <!-- GROWTH -->
+          <div class="card rounded-xl p-6">
+            <h4 class="text-xl font-extrabold mb-2" style="color:var(--gold-3)">GROWTH – $11,500 MXN</h4>
+            <ul class="text-gray-300 space-y-2 text-sm sm:text-base list-disc list-inside">
+              <li>60 fotos profesionales</li>
+              <li>6 reels (30–45s)</li>
+              <li>2 visitas al mes</li>
+            </ul>
+            <div class="mt-4 flex gap-2">
+              <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold">Reservar</a>
+              <a href="#portafolio" class="btn-gold-outline btn-sheen px-5 py-2 rounded-full font-bold">Ver ejemplos</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extras -->
+        <div class="mt-6 text-gray-300 text-sm">
+          <h5 class="font-semibold text-gray-100 mb-2">Extras:</h5>
+          <ul class="space-y-1 list-disc list-inside">
+            <li>📹 Reel adicional – $1,800 MXN</li>
+            <li>📱 Stories pack (10 clips) – $900 MXN</li>
+            <li>📷 Foto de menú con fondo limpio – $70 c/u (mín. 10)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-white/10 my-8"></div>
+
+      <!-- Sociales (tal como tuviste) -->
+      <div class="mb-2">
+        <h3 class="text-2xl sm:text-3xl font-bold text-gray-100 mb-4">👥 Paquetes Sociales</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card rounded-xl p-6">
+            <h4 class="text-xl font-extrabold mb-2" style="color:var(--gold-3)">Mini Sesión – $1,800 MXN</h4>
+            <ul class="text-gray-300 space-y-2 text-sm sm:text-base list-disc list-inside">
+              <li>45 minutos</li>
+              <li>12 fotos editadas</li>
+              <li>1 locación pública</li>
+            </ul>
+            <div class="mt-4">
+              <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold">Apartar</a>
+            </div>
+          </div>
+
+          <div class="card rounded-xl p-6">
+            <h4 class="text-xl font-extrabold mb-2" style="color:var(--gold-3)">Sesión Pareja/Familia – $2,200 MXN</h4>
+            <ul class="text-gray-300 space-y-2 text-sm sm:text-base list-disc list-inside">
+              <li>75 minutos</li>
+              <li>25 fotos editadas</li>
+              <li>1–2 locaciones</li>
+            </ul>
+            <div class="mt-4">
+              <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold">Apartar</a>
+            </div>
+          </div>
+
+          <div class="card rounded-xl p-6">
+            <h4 class="text-xl font-extrabold mb-2" style="color:var(--gold-3)">Evento Chico – $5,500 MXN</h4>
+            <ul class="text-gray-300 space-y-2 text-sm sm:text-base list-disc list-inside">
+              <li>3 horas de cobertura</li>
+              <li>60–80 fotos editadas</li>
+              <li>Video highlight 45s (+$1,800 opcional)</li>
+            </ul>
+            <div class="mt-4">
+              <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold">Apartar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notas -->
+      <div class="text-center text-gray-300 mt-8 text-sm sm:text-base">
+        <p class="mb-2">⚡ Todos los paquetes incluyen edición profesional y entrega digital en alta calidad.</p>
+        <p class="mb-2">💳 Se requiere 50% de anticipo para reservar fecha.</p>
+        <p class="mb-2 font-extrabold text-white">⏳ Entrega de todos los paquetes en 7 días.</p>
+        <p>📌 Precios sujetos a IVA.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       OPINIONES (opcional)
+       ========================= -->
+  <section data-route="opiniones" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
+    <div class="panel max-w-5xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
+      <div class="flex items-center gap-3 mb-6">
+        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
+        <h2 class="text-3xl sm:text-4xl font-extrabold">Opiniones</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <blockquote class="card rounded-xl p-6">
+          <h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">“Excelente experiencia”</h4>
+          <p class="text-gray-300">“Subió nuestras reservas en brunch en 3 semanas. Fotografía que parece cine.” — Cornalina</p>
+        </blockquote>
+        <blockquote class="card rounded-xl p-6">
+          <h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">“Entrega puntual”</h4>
+          <p class="text-gray-300">“Fotos y video highlight justo como lo queríamos. Recomendado.” — Cliente social</p>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       PORTAFOLIO (opcional)
+       ========================= -->
+  <section data-route="portafolio" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
+    <div class="panel max-w-5xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
+      <div class="flex items-center gap-3 mb-6">
+        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
+        <h2 class="text-3xl sm:text-4xl font-extrabold">Portafolio</h2>
+      </div>
+
+      <!-- Reemplaza las imágenes por las tuyas (WebP/JPG) -->
+      <div class="masonry">
+        <!-- <img src="tu-foto-1.jpg" alt="" />
+        <img src="tu-foto-2.jpg" alt="" /> -->
+        <div class="text-gray-300 text-center py-10">Sube aquí tus fotos de muestra…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       CONTACTO
+       ========================= -->
+  <section data-route="contacto" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
+    <div class="panel max-w-5xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
+      <div class="flex items-center gap-3 mb-6">
+        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
+        <h2 class="text-3xl sm:text-4xl font-extrabold">Contacto</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="card rounded-xl p-6">
+          <h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">WhatsApp</h4>
+          <p class="text-gray-300">Tap para conversar: <a href="https://tapni.com/cruxbetafilm" class="underline" target="_blank">cruxbetafilm</a></p>
+          <a href="https://tapni.com/cruxbetafilm" target="_blank" class="btn-gold btn-sheen mt-4 inline-block px-5 py-2 rounded-full font-bold">Abrir chat</a>
+        </div>
+
+        <div class="card rounded-xl p-6">
+          <h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">Cobertura</h4>
+          <p class="text-gray-300">Monterrey y área metropolitana. Viajes a otros estados bajo agenda.</p>
+        </div>
+
+        <div class="card rounded-xl p-6">
+          <h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">Entrega</h4>
+          <p class="text-gray-300">Fotos en 7 días. Video highlight en 7–10 días.</p>
+        </div>
+      </div>
+
+      <!-- Redes -->
+      <div class="mt-10 text-center">
+        <div class="flex items-center justify-center gap-4">
+          <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="WhatsApp" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.04 2C6.54 2 2.08 6.46 2.08 11.96c0 1.7.45 3.32 1.25 4.74L2 22l4.98-1.31a9.982 9.982 0 005.06 1.34c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm3.32 14.77a2.238 2.238 0 01-1.59 1.58c-.46.12-.96.18-1.46.18a3.194 3.194 0 01-2.28-.96 11.232 11.232 0 01-4.14-7.25c-.1-.36-.15-.75-.15-1.14a2.915 2.915 0 012.92-2.92c.67 0 1.33.15 1.94.45l.17.08c.55.28.9.5 1.13.75.14.15.22.28.26.43.05.2.06.33.02.43-.05.1-.14.28-.31.47a1.693 1.693 0 00-.23.47c-.05.15-.09.31-.02.5.07.21.2.42.36.65.16.23.33.45.5.65.23.28.45.54.73.74.28.2.58.33.9.33s.62-.05.82-.1a1.293 1.293 0 01.7-.58l.1-.16a1.59 1.59 0 011.64-.78l.45.09c.3.06.5.15.6.28.1.13.15.27.18.42.03.18.06.36.06.58a1.597 1.597 0 01-.1.49z"/>
+            </svg>
+          </a>
+          <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="Instagram" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.978 4.978.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.252-1.691 4.771-4.978 4.978-.058.007-1.266.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.978-4.978-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.141-3.252 1.691-4.771 4.978-4.978.058-.007 1.266-.07 4.85-.07zm0 2.18c-3.18 0-3.57.012-4.825.07c-2.426.111-3.693 1.393-3.834 3.834-.058 1.255-.07 1.645-.07 4.825s.012 3.57.07 4.825c.141 2.441 1.408 3.723 3.834 3.834 1.255.058 1.645.07 4.825.07s3.57-.012 4.825-.07c2.441-.141 3.723-1.408 3.834-3.834.058-1.255.07-1.645.07-4.825s-.012-3.57-.07-4.825c-.141-2.441-1.408-3.723-3.834-3.834-1.255-.058-1.645-.07-4.825-.07zm-5.26 3.65c-.88 0-1.6.72-1.6 1.6s.72 1.6 1.6 1.6 1.6-.72 1.6-1.6-.72-1.6-1.6-1.6zm5.26 4.97c-2.762 0-5 2.238-5 5s2.238 5 5 5 5-2.238 5-5-2.238-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
+            </svg>
+          </a>
+          <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="Facebook" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M22.675 0h-21.35c-.739 0-1.325.586-1.325 1.325v21.35c0 .739.586 1.325 1.325 1.325h11.455v-9.352h-3.13v-3.648h3.13v-2.618c0-3.085 1.884-4.755 4.624-4.755 1.325 0 2.477.098 2.812.141v3.235l-1.921-.001c-1.503 0-1.795.714-1.795 1.765v2.318h3.58l-.466 3.648h-3.114v9.352h6.082c.739 0 1.325-.586 1.325-1.325v-21.35c0-.739-.586-1.325-1.325-1.325z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       Router (muestra solo una sección a la vez)
+       ========================= -->
+  <script>
+    (function () {
+      const routes = ["home", "paquetes", "portafolio", "opiniones", "contacto"];
+      const sections = Array.from(document.querySelectorAll("[data-route]"));
+
+      function render() {
+        let hash = (location.hash || "#home").replace("#", "");
+        if (!routes.includes(hash)) hash = "home";
+        sections.forEach(s => {
+          const visible = s.getAttribute("data-route") === hash;
+          s.classList.toggle("hidden-route", !visible);
+        });
+        // Home sin scroll
+        document.body.classList.toggle("lock", hash === "home");
+        // Evitar quedar a mitad de scroll al cambiar
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
+
+      window.addEventListener("hashchange", render);
+      render();
+    })();
+  </script>
 
 </body>
 </html>
