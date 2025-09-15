@@ -13,83 +13,93 @@
 
   <!-- Estilos custom (paleta negro/gris/dorado + sheen + router) -->
   <style>
-    :root{
-      --black:#0a0a0a;
-      --gray-900:#121212;
-      --gray-800:#1e1e1e;
-      --gray-700:#2a2a2a;
-      --gray-300:#d1d5db;
-      --gray-200:#e5e7eb;
-      --gold:#d4af37;
-      --gold-2:#b8860b;
-      --gold-3:#f0d98a;
-      --border:rgba(255,255,255,.14);
-    }
-    html,body{height:100%}
-    body{
-      font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--gray-200);
-      background:
-        radial-gradient(1000px 540px at 75% -10%, rgba(212,175,55,.14), transparent 60%),
-        radial-gradient(900px 520px at 15% 110%, rgba(184,134,11,.10), transparent 60%),
-        var(--black);
-      transition:height .2s ease;
-    }
-    /* Bloquear scroll en HOME */
-    body.lock{height:100vh; overflow:hidden}
-    .hidden-route{display:none !important}
+    :root{
+      --black:#0a0a0a;
+      --gray-900:#121212;
+      --gray-800:#1e1e1e;
+      --gray-700:#2a2a2a;
+      --gray-300:#d1d5db;
+      --gray-200:#e5e7eb;
+      --gold:#d4af37;
+      --gold-2:#b8860b;
+      --gold-3:#f0d98a;
+      --border:rgba(255,255,255,.14);
+    }
+    html,body{height:100%}
+    body{
+      font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--gray-200);
+      background:
+        radial-gradient(1000px 540px at 75% -10%, rgba(212,175,55,.14), transparent 60%),
+        radial-gradient(900px 520px at 15% 110%, rgba(184,134,11,.10), transparent 60%),
+        var(--black);
+      transition:height .2s ease;
+    }
+    /* Bloquear scroll en HOME */
+    body.lock{height:100vh; overflow:hidden}
+    .hidden-route{display:none !important}
 
-    /* Botón con brillo (sheen) */
-    .btn-gold{
-      position:relative; overflow:hidden;
-      background:linear-gradient(180deg, var(--gold-3), var(--gold));
-      color:#111; border:1px solid rgba(255,255,255,.15);
-      box-shadow:0 8px 24px rgba(212,175,55,.18);
-    }
-    .btn-gold-outline{
-      position:relative; overflow:hidden;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.02));
-      color:var(--gold-3); border:1px solid rgba(212,175,55,.45);
-      box-shadow:0 8px 24px rgba(0,0,0,.24);
-    }
-    .btn-sheen::after{
-      content:""; position:absolute; inset:0;
-      transform:translateX(-120%) skewX(12deg);
-      background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
-      animation:sheen 2s infinite; mix-blend-mode:screen;
-    }
-    @keyframes sheen{
-      0%{transform:translateX(-120%) skewX(12deg)}
-      60%{transform:translateX(120%) skewX(12deg)}
-      100%{transform:translateX(120%) skewX(12deg)}
-    }
+    /* Botón con brillo (sheen) */
+    .btn-gold{
+      position:relative; overflow:hidden;
+      background:linear-gradient(180deg, var(--gold-3), var(--gold));
+      color:#111; border:1px solid rgba(255,255,255,.15);
+      box-shadow:0 8px 24px rgba(212,175,55,.18);
+    }
+    .btn-gold-outline{
+      position:relative; overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.02));
+      color:var(--gold-3); border:1px solid rgba(212,175,55,.45);
+      box-shadow:0 8px 24px rgba(0,0,0,.24);
+    }
+    .btn-sheen::after{
+      content:""; position:absolute; inset:0;
+      transform:translateX(-120%) skewX(12deg);
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+      animation:sheen 2s infinite; mix-blend-mode:screen;
+    }
+    @keyframes sheen{
+      0%{transform:translateX(-120%) skewX(12deg)}
+      60%{transform:translateX(120%) skewX(12deg)}
+      100%{transform:translateX(120%) skewX(12deg)}
+    }
 
-    /* Tarjeta elegante */
-    .panel{
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-      border:1px solid var(--border);
-      box-shadow:0 20px 50px rgba(0,0,0,.6);
-      backdrop-filter: blur(8px);
-    }
-    .card{
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.04);
-      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);
-      transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-    }
-    .card:hover{
-      transform:translateY(-4px);
-      box-shadow:0 0 0 1px rgba(212,175,55,.18) inset, 0 30px 80px -20px rgba(212,175,55,.25);
-      border-color:rgba(212,175,55,.35);
-    }
+    /* Tarjeta elegante */
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      box-shadow:0 20px 50px rgba(0,0,0,.6);
+      backdrop-filter: blur(8px);
+    }
+    .card{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);
+      transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 0 0 1px rgba(212,175,55,.18) inset, 0 30px 80px -20px rgba(212,175,55,.25);
+      border-color:rgba(212,175,55,.35);
+    }
 
-    /* Masonry portafolio (opcional si agregas fotos) */
-    .masonry{columns:1; column-gap:16px}
-    @media(min-width:700px){.masonry{columns:2}}
-    @media(min-width:1024px){.masonry{columns:3}}
-    .masonry img{width:100%;margin:0 0 16px;border-radius:14px;display:block;break-inside:avoid;filter:grayscale(30%) contrast(105%)}
-    .masonry img:hover{filter:grayscale(0%) contrast(110%)}
-  </style>
+    /* Masonry portafolio (opcional si agregas fotos) */
+    .masonry{columns:1; column-gap:16px}
+    @media(min-width:700px){.masonry{columns:2}}
+    @media(min-width:1024px){.masonry{columns:3}}
+    .masonry img{width:100%;margin:0 0 16px;border-radius:14px;display:block;break-inside:avoid;filter:grayscale(30%) contrast(105%)}
+    .masonry img:hover{filter:grayscale(0%) contrast(110%)}
+
+    /* Animación para la nota flotante */
+    .floating-note {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+</style>
 </head>
 
 <body class="min-h-screen">
