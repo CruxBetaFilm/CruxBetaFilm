@@ -97,15 +97,18 @@
     .masonry{columns:1; column-gap:16px}
     @media(min-width:700px){.masonry{columns:2}}
     @media(min-width:1024px){.masonry{columns:3}}
-    .masonry img{width:100%;margin:0 0 16px;border-radius:14px;display:block;break-inside:avoid;filter:grayscale(30%) contrast(105%)}
+    .masonry img{width:100%;margin:0 0 16px;border-radius:14px;display:block;break-inside:avoid;filter:grayscale(30%) contrast(105%);cursor:pointer}
     .masonry img:hover{filter:grayscale(0%) contrast(110%)}
 
     /* Nota flotante */
     .floating-note { animation: float 3s ease-in-out infinite; }
     @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
 
-    /* Lightbox backdrop */
+    /* Lightbox backdrop y fallback */
     #lightbox::backdrop { background: rgba(0,0,0,.8); }
+    #lightbox[open]{padding:0;border:0;background:transparent;}
+    #lightbox{position:relative;}
+    .lb-controls button{z-index:50;}
 
     /* Respeto a reduce-motion */
     @media (prefers-reduced-motion: reduce) {
@@ -247,7 +250,7 @@
       </div>
 
       <h4 class="text-2xl font-bold text-gray-100 mb-4">Fotografía de Producto 📦</h4>
-      <div class="masonry mb-12">
+      <div class="masonry mb-12" data-group="producto">
         <img src="https://images.unsplash.com/photo-1542152399-6e3e150d8977?q=80&w=1587&auto=format&fit=crop"
              alt="Producto profesional" loading="lazy" decoding="async" width="1587" height="1060">
         <img src="https://images.unsplash.com/photo-1579705707736-218206d2d0a0?q=80&w=1587&auto=format&fit=crop"
@@ -257,7 +260,7 @@
       </div>
 
       <h4 class="text-2xl font-bold text-gray-100 mb-4">Sesiones Sociales y Eventos 📸</h4>
-      <div class="masonry mb-12">
+      <div class="masonry mb-12" data-group="sociales">
         <img src="https://images.unsplash.com/photo-1596727409244-a957b11d94be?q=80&w=1587&auto=format&fit=crop"
              alt="Sesión de pareja" loading="lazy" decoding="async" width="1587" height="1060">
         <img src="https://images.unsplash.com/photo-1612151855475-877969f4a6cc?q=80&w=1587&auto=format&fit=crop"
@@ -267,7 +270,7 @@
       </div>
       
       <h4 class="text-2xl font-bold text-gray-100 mb-4">Videos y Comerciales 🎥</h4>
-      <div class="masonry mb-12">
+      <div class="masonry mb-12" data-group="videos">
         <img src="https://images.unsplash.com/photo-1588661726081-37f26d246d6b?q=80&w=1587&auto=format&fit=crop"
              alt="Video musical" loading="lazy" decoding="async" width="1587" height="1060">
         <img src="https://images.unsplash.com/photo-1510443909117-2708b17b209e?q=80&w=1587&auto=format&fit=crop"
@@ -308,17 +311,17 @@
         <div class="flex items-center justify-center gap-4">
           <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="WhatsApp" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12.04 2C6.54 2 2.08 6.46 2.08 11.96c0 1.7.45 3.32 1.25 4.74L2 22l4.98-1.31a9.982 9.982 0 005.06 1.34c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm3.32 14.77a2.238 2.238 0 01-1.59 1.58c-.46 .12-.96 .18-1.46 .18a3.194 3.194 0 01-2.28-.96 11.232 11.232 0 01-4.14-7.25c-.1-.36-.15-.75-.15-1.14a2.915 2.915 0 012.92-2.92c.67 0 1.33 .15 1.94 .45l.17 .08c.55 .28 .9 .5 1.13 .75 .14 .15 .22 .28 .26 .43 .05 .2 .06 .33 .02 .43-.05 .1-.14 .28-.31 .47a1.693 1.693 0 00-.23 .47c-.05 .15-.09 .31-.02 .5 .07 .21 .2 .42 .36 .65 .16 .23 .33 .45 .5 .65 .23 .28 .45 .54 .73 .74 .28 .2 .58 .33 .9 .33s .62-.05 .82-.1a1.293 1.293 0 01.7-.58l.1-.16a1.59 1.59 0 011.64-.78l.45 .09c.3 .06 .5 .15 .6 .28 .1 .13 .15 .27 .18 .42 .03 .18 .06 .36 .06 .58a1.597 1.597 0 01-.1 .49z"/>
+              <path d="M12.04 2C6.54 2 2.08 6.46 2.08 11.96c0 1.7.45 3.32 1.25 4.74L2 22l4.98-1.31a9.982 9.982 0 005.06 1.34c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm3.32 14.77a2.238 2.238 0 01-1.59 1.58c-.46.12-.96.18-1.46.18a3.194 3.194 0 01-2.28-.96 11.232 11.232 0 01-4.14-7.25c-.1-.36-.15-.75-.15-1.14a2.915 2.915 0 012.92-2.92c.67 0 1.33.15 1.94.45l.17.08c.55.28.9.5 1.13.75.14.15.22.28.26.43.05.2.06.33.02.43-.05.1-.14.28-.31.47a1.693 1.693 0 00-.23.47c-.05.15-.09.31-.02.5.07.21.2.42.36.65.16.23.33.45.5.65.23.28.45.54.73.74.28.2.58.33.9.33s.62-.05.82-.1a1.293 1.293 0 01.7-.58l.1-.16a1.59 1.59 0 011.64-.78l.45.09c.3.06.5.15.6.28.1.13.15.27.18.42.03.18.06.36.06.58a1.597 1.597 0 01-.1.49z"/>
             </svg>
           </a>
           <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="Instagram" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2.163c3.204 0 3.584 .012 4.85 .07 3.252 .148 4.771 1.691 4.978 4.978 .058 1.266 .07 1.646 .07 4.85s-.012 3.584-.07 4.85c-.148 3.252-1.691 4.771-4.978 4.978-.058-.007-1.266 .07-4.85 .07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.978-4.978-.058-1.266-.07-1.645-.07-4.85s.012-3.584 .07-4.85c.141-3.252 1.691-4.771 4.978-4.978 .058-.007 1.266-.07 4.85-.07zm-5.26 3.65c-.88 0-1.6 .72-1.6 1.6s .72 1.6 1.6 1.6 1.6-.72 1.6-1.6-.72-1.6-1.6-1.6zm5.26 4.97c-2.762 0-5 2.238-5 5s2.238 5 5 5 5-2.238 5-5-2.238-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.978 4.978.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.252-1.691 4.771-4.978 4.978-.058.007-1.266.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.978-4.978-.058-1.266-.07-1.645-.07-4.85s.012-3.584.07-4.85c.141-3.252 1.691-4.771 4.978-4.978.058-.007 1.266-.07 4.85-.07zm-5.26 3.65c-.88 0-1.6.72-1.6 1.6s.72 1.6 1.6 1.6 1.6-.72 1.6-1.6-.72-1.6-1.6-1.6zm5.26 4.97c-2.762 0-5 2.238-5 5s2.238 5 5 5 5-2.238 5-5-2.238-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
             </svg>
           </a>
           <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="Facebook" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M22.675 0h-21.35c-.739 0-1.325 .586-1.325 1.325v21.35c0 .739 .586 1.325 1.325 1.325h11.455v-9.352h-3.13v-3.648h3.13v-2.618c0-3.085 1.884-4.755 4.624-4.755 1.325 0 2.477 .098 2.812 .141v3.235l-1.921-.001c-1.503 0-1.795 .714-1.795 1.765v2.318h3.58l-.466 3.648h-3.114v9.352h6.082c.739 0 1.325-.586 1.325-1.325v-21.35c0-.739-.586-1.325-1.325-1.325z"/>
+              <path d="M22.675 0h-21.35c-.739 0-1.325.586-1.325 1.325v21.35c0 .739.586 1.325 1.325 1.325h11.455v-9.352h-3.13v-3.648h3.13v-2.618c0-3.085 1.884-4.755 4.624-4.755 1.325 0 2.477.098 2.812.141v3.235l-1.921-.001c-1.503 0-1.795.714-1.795 1.765v2.318h3.58l-.466 3.648h-3.114v9.352h6.082c.739 0 1.325-.586 1.325-1.325v-21.35c0-.739-.586-1.325-1.325-1.325z"/>
             </svg>
           </a>
         </div>
@@ -329,28 +332,31 @@
   <!-- LIGHTBOX (con controles) -->
   <dialog id="lightbox" class="p-0 rounded-xl">
     <div class="relative">
-      <!-- Botón cerrar (X) -->
-      <button id="lbClose"
-        class="absolute top-3 right-3 z-20 w-10 h-10 rounded-full bg-black/60 text-white text-2xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none"
-        aria-label="Cerrar (Esc)">×</button>
+      <!-- Barra superior con botón cerrar -->
+      <div class="lb-controls absolute inset-x-0 top-0 z-50 flex items-center justify-end p-3">
+        <button id="lbClose"
+          class="w-10 h-10 rounded-full bg-black/60 text-white text-2xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none ring-1 ring-white/30"
+          aria-label="Cerrar (Esc)">×</button>
+      </div>
 
       <!-- Botón anterior -->
       <button id="lbPrev"
-        class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/60 text-white text-3xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none"
+        class="lb-controls absolute left-3 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/60 text-white text-3xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none ring-1 ring-white/30"
         aria-label="Anterior">‹</button>
 
       <!-- Imagen -->
-      <img id="lbImg" src="" alt="" class="max-w-[92vw] max-h-[92vh] rounded-lg block select-none">
+      <img id="lbImg" src="" alt="" class="relative z-10 max-w-[92vw] max-h-[92vh] rounded-lg block select-none">
 
       <!-- Botón siguiente -->
       <button id="lbNext"
-        class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/60 text-white text-3xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none"
+        class="lb-controls absolute right-3 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/60 text-white text-3xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none ring-1 ring-white/30"
         aria-label="Siguiente">›</button>
     </div>
   </dialog>
 
   <!-- Router + Lightbox -->
   <script>
+    // Router de secciones
     (function () {
       const sections = Array.from(document.querySelectorAll("[data-route]"));
 
@@ -382,6 +388,7 @@
       });
     })();
 
+    // Lightbox segmentado por grupo
     (function () {
       const dlg = document.getElementById('lightbox');
       const imgEl = document.getElementById('lbImg');
@@ -389,34 +396,58 @@
       const btnNext = document.getElementById('lbNext');
       const btnClose = document.getElementById('lbClose');
 
-      // Colección de imágenes de TODAS las secciones masonry del portafolio
-      const gallery = Array.from(document.querySelectorAll('[data-route="portafolio"] .masonry img'));
-      let current = -1;
+      // Mapa: group -> array de <img>
+      const galleries = new Map();
 
-      function openAt(index) {
-        if (!gallery.length) return;
-        current = (index + gallery.length) % gallery.length;
-        const src = gallery[current].dataset.full || gallery[current].src;
+      function buildGalleries() {
+        galleries.clear();
+        document.querySelectorAll('[data-route="portafolio"] .masonry').forEach(container => {
+          const group = container.dataset.group || 'default';
+          galleries.set(group, Array.from(container.querySelectorAll('img')));
+        });
+      }
+      buildGalleries();
+
+      let currentGroup = null;
+      let currentIndex = -1;
+
+      function openAt(group, index) {
+        const list = galleries.get(group) || [];
+        if (!list.length) return;
+        currentGroup = group;
+        // wrap index
+        currentIndex = ((index % list.length) + list.length) % list.length;
+        const el = list[currentIndex];
+        const src = el.dataset.full || el.src;
         imgEl.src = src;
-        imgEl.alt = gallery[current].alt || '';
+        imgEl.alt = el.alt || '';
         if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
-        // Enfoca el botón cerrar para accesibilidad
         setTimeout(() => btnClose.focus(), 0);
       }
 
-      function prev() { if (gallery.length) openAt(current - 1); }
-      function next() { if (gallery.length) openAt(current + 1); }
+      function prev() {
+        const list = galleries.get(currentGroup) || [];
+        if (list.length) openAt(currentGroup, currentIndex - 1);
+      }
+      function next() {
+        const list = galleries.get(currentGroup) || [];
+        if (list.length) openAt(currentGroup, currentIndex + 1);
+      }
       function closeLB() { if (dlg.open) dlg.close(); }
 
-      // Delegación: abrir al click en cualquier imagen
+      // Abrir: click en cualquier imagen de portafolio
       document.addEventListener('click', (e) => {
         const img = e.target.closest('[data-route="portafolio"] .masonry img');
         if (!img) return;
-        const idx = gallery.indexOf(img);
-        if (idx >= 0) openAt(idx);
+        buildGalleries(); // por si cambias contenido dinámicamente
+        const container = img.closest('.masonry');
+        const group = container?.dataset.group || 'default';
+        const list = galleries.get(group) || [];
+        const idx = list.indexOf(img);
+        if (idx >= 0) openAt(group, idx);
       });
 
-      // Botones
+      // Controles
       btnPrev.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
       btnNext.addEventListener('click', (e) => { e.stopPropagation(); next(); });
       btnClose.addEventListener('click', (e) => { e.stopPropagation(); closeLB(); });
@@ -436,8 +467,15 @@
         else if (e.key === 'Escape') { e.preventDefault(); closeLB(); }
       });
 
-      // Evitar arrastrar la imagen (UX)
+      // Evitar arrastrar imagen
       imgEl.addEventListener('dragstart', (e) => e.preventDefault());
+
+      // Al cambiar de sección, cerrar y resetear
+      window.addEventListener('hashchange', () => {
+        if (dlg.open) closeLB();
+        currentGroup = null;
+        currentIndex = -1;
+      });
     })();
   </script>
 
