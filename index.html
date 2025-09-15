@@ -5,17 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crux&Beta Film - Fotografía & Video</title>
 
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet"/>
 
+  <!-- SEO / OG -->
   <meta name="description" content="Crux&Beta Film — Fotografía & Video con un look formal y atemporal.">
   <meta property="og:title" content="Crux&Beta Film">
   <meta property="og:description" content="Fotografía & Video con un look formal y atemporal.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://raw.githubusercontent.com/edgarces9/Mi-primera-p-gina-/main/IMG_1135.png">
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
 
   <style>
     :root{
@@ -101,16 +106,25 @@
 
     /* Lightbox backdrop */
     #lightbox::backdrop { background: rgba(0,0,0,.8); }
+
+    /* Respeto a reduce-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .btn-sheen::after { animation: none; }
+      .floating-note { animation: none; }
+    }
   </style>
 </head>
 
 <body class="min-h-screen">
 
+  <!-- HOME -->
   <section data-route="home" class="min-h-screen flex items-center justify-center relative overflow-hidden px-6">
-    <div class="absolute inset-0 opacity-25 grayscale bg-[url('https://images.unsplash.com/photo-1499084732479-de2c02d45fc4?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-black/60 to-black/90"></div>
+    <!-- Fondo y overlay: no capturan clic -->
+    <div class="pointer-events-none absolute inset-0 opacity-25 grayscale bg-[url('https://images.unsplash.com/photo-1499084732479-de2c02d45fc4?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center"></div>
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 to-black/90"></div>
 
-    <div class="relative text-center max-w-3xl">
+    <!-- Contenido por encima -->
+    <div class="relative z-10 text-center max-w-3xl">
       <img
         src="https://raw.githubusercontent.com/edgarces9/Mi-primera-p-gina-/main/IMG_1135.png"
         alt="Logo de Crux&Beta Film"
@@ -131,6 +145,7 @@
     </div>
   </section>
 
+  <!-- PAQUETES -->
   <section data-route="paquetes" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
     <div class="panel max-w-6xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
       <div class="flex items-center gap-3 mb-6">
@@ -197,6 +212,7 @@
     </div>
   </section>
 
+  <!-- OPINIONES -->
   <section data-route="opiniones" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
     <div class="panel max-w-5xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
       <div class="flex items-center gap-3 mb-6">
@@ -217,6 +233,7 @@
     </div>
   </section>
 
+  <!-- PORTAFOLIO -->
   <section data-route="portafolio" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
     <div class="panel max-w-5xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
       <div class="flex items-center gap-3 mb-6">
@@ -231,27 +248,37 @@
 
       <h4 class="text-2xl font-bold text-gray-100 mb-4">Fotografía de Producto 📦</h4>
       <div class="masonry mb-12">
-        <img src="https://images.unsplash.com/photo-1542152399-6e3e150d8977?q=80&w=1587&auto=format&fit=crop" alt="Producto profesional" loading="lazy" decoding="async">
-        <img src="https://images.unsplash.com/photo-1579705707736-218206d2d0a0?q=80&w=1587&auto=format&fit=crop" alt="Producto con fondo limpio" loading="lazy" decoding="async">
-        <img src="https://images.unsplash.com/photo-1620712948210-e5559c5d140e?q=80&w=1587&auto=format&fit=crop" alt="Producto en exteriores" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1542152399-6e3e150d8977?q=80&w=1587&auto=format&fit=crop"
+             alt="Producto profesional" loading="lazy" decoding="async" width="1587" height="1060">
+        <img src="https://images.unsplash.com/photo-1579705707736-218206d2d0a0?q=80&w=1587&auto=format&fit=crop"
+             alt="Producto con fondo limpio" loading="lazy" decoding="async" width="1587" height="1060">
+        <img src="https://images.unsplash.com/photo-1620712948210-e5559c5d140e?q=80&w=1587&auto=format&fit=crop"
+             alt="Producto en exteriores" loading="lazy" decoding="async" width="1587" height="1060">
       </div>
 
       <h4 class="text-2xl font-bold text-gray-100 mb-4">Sesiones Sociales y Eventos 📸</h4>
       <div class="masonry mb-12">
-        <img src="https://images.unsplash.com/photo-1596727409244-a957b11d94be?q=80&w=1587&auto=format&fit=crop" alt="Sesión de pareja" loading="lazy" decoding="async">
-        <img src="https://images.unsplash.com/photo-1612151855475-877969f4a6cc?q=80&w=1587&auto=format&fit=crop" alt="Fotografía de moda" loading="lazy" decoding="async">
-        <img src="https://images.unsplash.com/photo-1558299105-e414c52f754b?q=80&w=1587&auto=format&fit=crop" alt="Fotografía familiar" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1596727409244-a957b11d94be?q=80&w=1587&auto=format&fit=crop"
+             alt="Sesión de pareja" loading="lazy" decoding="async" width="1587" height="1060">
+        <img src="https://images.unsplash.com/photo-1612151855475-877969f4a6cc?q=80&w=1587&auto=format&fit=crop"
+             alt="Fotografía de moda" loading="lazy" decoding="async" width="1587" height="1060">
+        <img src="https://images.unsplash.com/photo-1558299105-e414c52f754b?q=80&w=1587&auto=format&fit=crop"
+             alt="Fotografía familiar" loading="lazy" decoding="async" width="1587" height="1060">
       </div>
       
       <h4 class="text-2xl font-bold text-gray-100 mb-4">Videos y Comerciales 🎥</h4>
       <div class="masonry mb-12">
-        <img src="https://images.unsplash.com/photo-1588661726081-37f26d246d6b?q=80&w=1587&auto=format&fit=crop" alt="Video musical" loading="lazy" decoding="async">
-        <img src="https://images.unsplash.com/photo-1510443909117-2708b17b209e?q=80&w=1587&auto=format&fit=crop" alt="Comercial de comida" loading="lazy" decoding="async">
-        <img src="https://images.unsplash.com/photo-1587050308060-e74f85e49221?q=80&w=1587&auto=format&fit=crop" alt="Video automotriz" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1588661726081-37f26d246d6b?q=80&w=1587&auto=format&fit=crop"
+             alt="Video musical" loading="lazy" decoding="async" width="1587" height="1060">
+        <img src="https://images.unsplash.com/photo-1510443909117-2708b17b209e?q=80&w=1587&auto=format&fit=crop"
+             alt="Comercial de comida" loading="lazy" decoding="async" width="1587" height="1060">
+        <img src="https://images.unsplash.com/photo-1587050308060-e74f85e49221?q=80&w=1587&auto=format&fit=crop"
+             alt="Video automotriz" loading="lazy" decoding="async" width="1587" height="1060">
       </div>
     </div>
   </section>
 
+  <!-- CONTACTO -->
   <section data-route="contacto" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
     <div class="panel max-w-5xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
       <div class="flex items-center gap-3 mb-6">
@@ -286,7 +313,7 @@
           </a>
           <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="Instagram" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.978 4.978.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.252-1.691 4.771-4.978 4.978-.058-.007-1.266.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.978-4.978-.058-1.266-.07-1.645-.07-4.85s.012-3.584.07-4.85c.141-3.252 1.691-4.771 4.978-4.978.058-.007 1.266-.07 4.85-.07zm-5.26 3.65c-.88 0-1.6.72-1.6 1.6s.72 1.6 1.6 1.6 1.6-.72 1.6-1.6-.72-1.6-1.6-1.6zm5.26 4.97c-2.762 0-5 2.238-5 5s2.238 5 5 5 5-2.238 5-5-2.238-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.978 4.978.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.252-1.691 4.771-4.978 4.978-.058-.007-1.266.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.978-4.978-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c-.141-3.252-1.691-4.771 4.978-4.978.058-.007 1.266-.07 4.85-.07zm-5.26 3.65c-.88 0-1.6.72-1.6 1.6s.72 1.6 1.6 1.6 1.6-.72 1.6-1.6-.72-1.6-1.6-1.6zm5.26 4.97c-2.762 0-5 2.238-5 5s2.238 5 5 5 5-2.238 5-5-2.238-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
             </svg>
           </a>
           <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="Facebook" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
@@ -299,10 +326,12 @@
     </div>
   </section>
 
+  <!-- LIGHTBOX -->
   <dialog id="lightbox" class="p-0 rounded-xl">
     <img src="" alt="" class="max-w-[92vw] max-h-[92vh] rounded-lg block">
   </dialog>
 
+  <!-- Router + Lightbox -->
   <script>
     (function () {
       const sections = Array.from(document.querySelectorAll("[data-route]"));
@@ -327,6 +356,12 @@
 
       window.addEventListener("hashchange", render);
       render();
+
+      // Cierra el lightbox si navegas a otra sección
+      window.addEventListener("hashchange", () => {
+        const dlg = document.getElementById('lightbox');
+        if (dlg?.open) dlg.close();
+      });
     })();
 
     (function () {
