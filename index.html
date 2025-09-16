@@ -49,7 +49,7 @@
     .grid-wrap{
       display:grid;
       grid-template-columns:repeat(1,minmax(0,1fr));
-      grid-auto-rows:8px; /* unidad base para calcular spans */
+      grid-auto-rows:8px;
       gap:16px;
     }
     @media(min-width:640px){.grid-wrap{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -62,9 +62,7 @@
       box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);
       -webkit-user-select:none;user-select:none;-webkit-user-drag:none;
     }
-    .slot img{
-      display:block;width:100%;height:auto;
-    }
+    .slot img{display:block;width:100%;height:auto}
     .slot--empty{display:flex;align-items:center;justify-content:center;min-height:160px;border:1px dashed rgba(200,160,53,.35);background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.03));color:#cbb77a;border-radius:14px}
     .slot--empty .plus{font-size:28px;line-height:1;opacity:.7}
 
@@ -72,31 +70,20 @@
     #lightbox::backdrop{background:rgba(0,0,0,.85)}
     #lightbox[open]{padding:0;border:0;background:transparent}
     #lightbox{padding:0;border:0;background:transparent}
-    .lb-stage{
-      position:relative;
-      display:flex; align-items:center; justify-content:center;
-      padding:12px;
-    }
+    .lb-stage{position:relative;display:flex;align-items:center;justify-content:center;padding:12px}
     .lb-inner{
       position:relative;
-      /* ¡clave para evitar bandas negras! */
       width:auto; height:auto;
       max-width:92vw; max-height:92vh;
-      overflow:hidden;
-      border-radius:12px;
-      margin:auto;
-      background:#000;
-      touch-action:none;
+      overflow:hidden;border-radius:12px;margin:auto;background:#000;touch-action:none;
     }
     .lb-img{
-      display:block;
-      width:100%; height:100%;
-      max-width:100%; max-height:100%;
-      object-fit:contain;
+      display:block;max-width:100%;max-height:100%;
+      width:auto;height:auto;object-fit:contain;
       user-select:none;-webkit-user-drag:none;
-      transform:translate(0px,0px) scale(1);
+      transform:translate(0,0) scale(1);
       will-change:transform;
-      cursor:zoom-in; /* cambia dinámicamente con JS */
+      cursor:zoom-in;
     }
     .lb-close{
       position:absolute;top:8px;right:8px;z-index:3;
@@ -120,7 +107,6 @@
     }
     .lb-zoom-hint svg{width:18px;height:18px}
 
-    /* Evitar selección/drag global suave */
     img{user-select:none;-webkit-user-drag:none}
   </style>
 </head>
@@ -232,29 +218,24 @@
         <h2 class="text-3xl sm:text-4xl font-extrabold">Portafolio</h2>
       </div>
 
-      <!-- Tabs principales: Fotografía / Video -->
       <div class="tabbar mb-6" role="tablist" aria-label="Categorías principales">
         <button class="tab-btn active" data-tab="fotografia" role="tab" aria-controls="tab-fotografia">Fotografía</button>
         <button class="tab-btn" data-tab="video" role="tab" aria-controls="tab-video">Video</button>
       </div>
 
-      <!-- FOTOGRAFÍA -->
       <section id="tab-fotografia" class="tab-pane">
         <div class="subtabs" role="tablist" aria-label="Subcategorías fotografía">
           <button class="subtab-btn active" data-subtab="producto" role="tab" aria-controls="sub-producto">Producto</button>
           <button class="subtab-btn" data-subtab="registro" role="tab" aria-controls="sub-registro">Registro</button>
         </div>
-        <!-- Producto -->
         <div id="sub-producto" class="subpane">
           <div class="grid-wrap" id="grid-producto" aria-live="polite"></div>
         </div>
-        <!-- Registro -->
         <div id="sub-registro" class="subpane hidden">
           <div class="grid-wrap" id="grid-registro" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- VIDEO -->
       <section id="tab-video" class="tab-pane hidden">
         <div class="subtabs" role="tablist" aria-label="Subcategorías video">
           <button class="subtab-btn active" data-subtab="general" role="tab" aria-controls="sub-general">General</button>
@@ -285,12 +266,11 @@
     </div>
   </section>
 
-  <!-- LIGHTBOX (fotos) -->
+  <!-- LIGHTBOX -->
   <dialog id="lightbox">
     <div class="lb-stage">
       <button id="lbClose" class="lb-close" aria-label="Cerrar">×</button>
       <div class="lb-zoom-hint" id="lbHint" aria-hidden="true" title="Clic para ampliar / otro clic para salir de zoom">
-        <!-- icono lupa -->
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.49 21.49 20l-5.99-6zM4 9.5C4 6.46 6.46 4 9.5 4S15 6.46 15 9.5 12.54 15 9.5 15 4 12.54 4 9.5z"/></svg>
         <span>Zoom</span>
       </div>
@@ -310,7 +290,7 @@
   </dialog>
 
   <script>
-    /* ====== Router por hash + init portafolio cuando se muestra ====== */
+    /* ====== Router por hash ====== */
     (function(){
       const sections = Array.from(document.querySelectorAll('[data-route]'));
       const routes = sections.map(s => s.getAttribute('data-route'));
@@ -321,13 +301,12 @@
         document.body.classList.toggle('lock', route==='home');
         window.scrollTo({ top: 0, behavior: 'auto' });
 
-        // Inicializa/refluye grid al entrar/salir
         if (route === 'portafolio') {
           if (!portfolioInitialized) {
-            initPortfolio();           // <-- primera vez
+            initPortfolio(false);     // ya precargamos; aquí solo reflow final
             portfolioInitialized = true;
           } else {
-            reflowGrid(gridProducto);  // <-- siguientes veces
+            reflowGrid(gridProducto);
           }
         }
       }
@@ -344,10 +323,15 @@
         if (routes.includes(target)) {
           e.preventDefault();
           if (location.hash.slice(1) !== target) location.hash = '#' + target;
-          else show(target); // mismo hash -> forzar render
+          else show(target);
         }
       });
       render();
+
+      // 🔥 Precarga del portafolio apenas se monta la página
+      window.addEventListener('DOMContentLoaded', () => {
+        initPortfolio(true); // preloadOnly = true (carga archivos en bg)
+      });
     })();
 
     /* ====== Helpers Portafolio ====== */
@@ -383,7 +367,7 @@
       }
     }
 
-    /* ====== Lightbox con Zoom + Arrastre (Pointer Events) ====== */
+    /* ====== Lightbox con Zoom + Arrastre (sin zoom automático al abrir) ====== */
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lbImg');
     const lbInner = document.getElementById('lbInner');
@@ -395,18 +379,94 @@
     let currentList = [], currentIdx = 0;
     let scale = 1, tx = 0, ty = 0;
     let dragging = false, startX = 0, startY = 0, startTx = 0, startTy = 0, moved = false;
+    let justOpened = false;
 
     function applyTransform(){
       lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
       lbImg.style.cursor = scale>1 ? (dragging ? 'grabbing' : 'grab') : 'zoom-in';
     }
-    function resetZoom(){
-      scale = 1; tx = 0; ty = 0; applyTransform();
+    function resetZoom(){ scale = 1; tx = 0; ty = 0; applyTransform(); }
+
+    function fitLightboxToImage(nw, nh){
+      // Ajusta lbInner al tamaño máximo posible respetando aspecto
+      const maxW = Math.min(window.innerWidth * 0.92, 1200);
+      const maxH = window.innerHeight * 0.92;
+      const ratio = Math.min(maxW / nw, maxH / nh, 1);
+      const w = Math.max(1, Math.floor(nw * ratio));
+      const h = Math.max(1, Math.floor(nh * ratio));
+      lbInner.style.width  = w + 'px';
+      lbInner.style.height = h + 'px';
     }
+
+    function loadLbImage(url, showHint){
+      resetZoom();
+      lbImg.onload = () => {
+        fitLightboxToImage(lbImg.naturalWidth, lbImg.naturalHeight);
+        if (showHint) {
+          lbHint.style.display = 'flex';
+          setTimeout(()=>{ lbHint.style.display='none'; }, 2000);
+        }
+      };
+      lbImg.src = url;
+    }
+
+    function openLightbox(list,i){
+      currentList=list; currentIdx=i;
+      justOpened = true;
+      loadLbImage(list[i], true);
+      if (typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open','');
+      // Anti-“zoom fantasma” del primer click
+      setTimeout(()=>{ justOpened = false; }, 200);
+    }
+    function closeLightbox(){ resetZoom(); lb.close(); }
+    lbClose.addEventListener('click', closeLightbox);
+    window.addEventListener('resize', () => {
+      // Reajusta al redimensionar
+      if (lb.open) fitLightboxToImage(lbImg.naturalWidth||1, lbImg.naturalHeight||1);
+    });
+
+    function nav(step){
+      if (!currentList.length) return;
+      currentIdx=(currentIdx+step+currentList.length)%currentList.length;
+      loadLbImage(currentList[currentIdx], false);
+    }
+    lbPrev.addEventListener('click', ()=> nav(-1));
+    lbNext.addEventListener('click', ()=> nav(1));
+
+    // Zoom manual con click (sin arrastre) + arrastre cuando hay zoom
+    lbInner.addEventListener('pointerdown',(e)=>{
+      if (e.button !== 0) return;
+      lbInner.setPointerCapture(e.pointerId);
+      moved = false;
+      if (scale>1){
+        dragging = true; startX = e.clientX; startY = e.clientY; startTx = tx; startTy = ty;
+        lbImg.style.cursor = 'grabbing';
+      }
+    });
+    lbInner.addEventListener('pointermove',(e)=>{
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+      tx = startTx + dx; ty = startTy + dy;
+      applyTransform();
+    });
+    lbInner.addEventListener('pointerup',(e)=>{
+      lbInner.releasePointerCapture(e.pointerId);
+      if (justOpened) return; // evita togglear zoom por el click que abrió
+      if (dragging){
+        dragging = false;
+        applyTransform();
+        if (!moved){ toggleZoom(e.clientX, e.clientY); }
+      } else {
+        toggleZoom(e.clientX, e.clientY);
+      }
+    });
+
     function toggleZoom(clientX, clientY){
       if (scale === 1){
         scale = 2.5;
-        // centrar el zoom hacia donde hizo clic
+        // Centra el zoom hacia donde hiciste click
         const rect = lbImg.getBoundingClientRect();
         const cx = clientX - rect.left - rect.width/2;
         const cy = clientY - rect.top  - rect.height/2;
@@ -417,68 +477,6 @@
       applyTransform();
     }
 
-    function openLightbox(list,i){
-      currentList=list; currentIdx=i;
-      loadLbImage(list[i], true);
-      if (typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open','');
-    }
-    function closeLightbox(){
-      resetZoom();
-      lb.close();
-    }
-    lbClose.addEventListener('click', closeLightbox);
-
-    function nav(step){
-      if (!currentList.length) return;
-      currentIdx=(currentIdx+step+currentList.length)%currentList.length;
-      loadLbImage(currentList[currentIdx], false);
-    }
-    lbPrev.addEventListener('click', ()=> nav(-1));
-    lbNext.addEventListener('click', ()=> nav(1));
-
-    function loadLbImage(url, showHint){
-      resetZoom();
-      lbImg.src = url;
-      lbHint.style.display = showHint ? 'flex' : 'none';
-      setTimeout(()=>{ lbHint.style.display='none'; }, 2000);
-    }
-
-    // Pointer events para drag/zoom sin “rebote”
-    lbInner.addEventListener('pointerdown',(e)=>{
-      if (e.button !== 0) return; // solo click principal
-      lbInner.setPointerCapture(e.pointerId);
-      moved = false;
-      if (scale>1){
-        dragging = true; startX = e.clientX; startY = e.clientY; startTx = tx; startTy = ty;
-        lbImg.style.cursor = 'grabbing';
-      }
-    }, {passive:false});
-
-    lbInner.addEventListener('pointermove',(e)=>{
-      if (!dragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
-      tx = startTx + dx; ty = startTy + dy;
-      applyTransform();
-    }, {passive:false});
-
-    lbInner.addEventListener('pointerup',(e)=>{
-      lbInner.releasePointerCapture(e.pointerId);
-      if (dragging){
-        dragging = false;
-        applyTransform();
-        // Si hubo arrastre significativo, NO togglear zoom.
-        if (!moved){
-          toggleZoom(e.clientX, e.clientY);
-        }
-      } else {
-        // Sin drag y en escala 1: click = toggle zoom
-        toggleZoom(e.clientX, e.clientY);
-      }
-    });
-
-    // Navegación con teclado
     window.addEventListener('keydown',(e)=>{
       if(!lb.open) return;
       if(e.key==='Escape') closeLightbox();
@@ -486,7 +484,6 @@
       if(e.key==='ArrowRight') nav(1);
     });
 
-    // Click fuera cierra
     lb.addEventListener('click', (e)=>{
       const innerRect = lbInner.getBoundingClientRect();
       const outside = e.clientX<innerRect.left||e.clientX>innerRect.right||e.clientY<innerRect.top||e.clientY>innerRect.bottom;
@@ -498,7 +495,7 @@
     const panes = { fotografia: document.getElementById('tab-fotografia'), video: document.getElementById('tab-video') };
     mainTabs.forEach(btn=>{
       btn.addEventListener('click', ()=>{
-        if(!btn.dataset.tab) return; // los del header no tienen data-tab
+        if(!btn.dataset.tab) return;
         mainTabs.forEach(b=>b.classList.remove('active'));
         btn.classList.add('active');
         const t = btn.dataset.tab;
@@ -506,6 +503,8 @@
           panes.fotografia.classList.toggle('hidden', t!=='fotografia');
           panes.video.classList.toggle('hidden', t!=='video');
         }
+        // opcional: reflow al cambiar de pestaña
+        if (t==='fotografia') reflowGrid(gridProducto);
       });
     });
 
@@ -517,7 +516,6 @@
         btn.classList.add('active');
         const t = btn.dataset.subtab;
         Object.entries(subFoto).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
-        // Reflow al cambiar subtabs
         reflowGrid(gridProducto);
       });
     });
@@ -533,20 +531,13 @@
       });
     });
 
-    /* ====== Autollenado desde /img/producto (robusto, conserva ORDEN) ====== */
+    /* ====== Autollenado desde /img/producto ====== */
     const gridProducto = document.getElementById('grid-producto');
-    // const gridRegistro = document.getElementById('grid-registro');
-
     const PRODUCTO_DIR   = './img/producto/';
     const PRODUCTO_COUNT = 43; // foto (1) ... foto (43)
 
     const EXT_CANDIDATAS = ['jpg','jpeg','png','webp','JPG','JPEG','PNG','WEBP'];
-    // 5..11 -> jpeg, 18..21 -> png, 39..43 -> png
-    const EXT_MAP = {
-      5:'jpeg',6:'jpeg',7:'jpeg',8:'jpeg',9:'jpeg',10:'jpeg',11:'jpeg',
-      18:'png',19:'png',20:'png',21:'png',
-      39:'png',40:'png',41:'png',42:'png',43:'png'
-    };
+    const EXT_MAP = {5:'jpeg',6:'jpeg',7:'jpeg',8:'jpeg',9:'jpeg',10:'jpeg',11:'jpeg',18:'png',19:'png',20:'png',21:'png',39:'png',40:'png',41:'png',42:'png',43:'png'};
 
     function posiblesURLs(baseDir, i) {
       const conEspacio = `foto (${i})`;
@@ -562,24 +553,44 @@
 
     function cargarConFallback(imgEl, urls, onOk, onFail, idx = 0) {
       if (idx >= urls.length) { onFail(); return; }
-      imgEl.onload = () => onOk(urls[idx]);
+      imgEl.onload = () => onOk(urls[idx], imgEl);
       imgEl.onerror = () => cargarConFallback(imgEl, urls, onOk, onFail, idx + 1);
       imgEl.src = urls[idx];
     }
 
+    // abre lightbox desde la URL correcta preservando orden visible
     function openLightboxFrom(okUrl, visibles){
       const idxVisible = visibles.indexOf(okUrl);
       openLightbox(visibles, Math.max(idxVisible,0));
     }
 
-    function renderFotosDesdeCarpetaRobusto(grid, baseDir, count) {
+    function renderFotosDesdeCarpetaRobusto(grid, baseDir, count, {preloadOnly=false} = {}) {
       if (!grid || count <= 0) return;
-      grid.innerHTML = '';
-      const urlsOK = [];  // índice 1..n
+      if (!preloadOnly) grid.innerHTML = ''; // si es precarga, no toques DOM visible
+
+      const urlsOK = [];
       const fallidas = [];
+      const preloadBucket = []; // para precarga con Image()
 
       for (let i = 1; i <= count; i++) {
         const candidatos = posiblesURLs(baseDir, i);
+
+        if (preloadOnly) {
+          // 🔥 Precarga en bg (sin afectar layout)
+          const img = new Image();
+          img.decoding = 'async';
+          img.loading = 'eager';
+          cargarConFallback(
+            img,
+            candidatos,
+            (okUrl) => { urlsOK[i] = okUrl; },
+            () => { fallidas.push(i); }
+          );
+          preloadBucket.push(img);
+          continue;
+        }
+
+        // Render normal (cuando ya entraste a #portafolio)
         const a = document.createElement('a');
         a.href = '#';
         a.className = 'slot';
@@ -587,8 +598,9 @@
         const img = document.createElement('img');
         img.alt = `Foto ${i}`;
         img.setAttribute('draggable','false');
-        img.loading = 'lazy';       // <-- carga diferida
-        img.decoding = 'async';     // <-- decodificación asíncrona
+        // EAGER aquí para que ya estén en caché (las precargamos antes)
+        img.loading = 'eager';
+        img.decoding = 'async';
 
         a.appendChild(img);
         grid.appendChild(a);
@@ -596,12 +608,12 @@
         cargarConFallback(
           img,
           candidatos,
-          (okUrl) => {
+          (okUrl, el) => {
             urlsOK[i] = okUrl;
             a.href = okUrl;
-
-            // Recalcular span del grid al cargar
-            setGridSpanForItem(grid, a);
+            // span cuando la imagen tenga dimensiones
+            if (el.complete) setGridSpanForItem(grid, a);
+            else el.onload = ()=> setGridSpanForItem(grid, a);
 
             a.addEventListener('click', (e) => {
               e.preventDefault();
@@ -621,17 +633,10 @@
         );
       }
 
-      // Recalcular spans también al redimensionar
-      window.addEventListener('resize', ()=> reflowGrid(grid));
-      // Pequeño delay para corregir primeras mediciones
-      setTimeout(()=> reflowGrid(grid), 300);
-
-      setTimeout(() => {
-        if (fallidas.length) {
-          console.warn('Fotos NO encontradas (índices):', fallidas);
-          console.warn('Revisa extensión (.jpeg/.png) o el espacio en el nombre: "foto (i)" vs "foto(i)".');
-        }
-      }, 1000);
+      if (!preloadOnly) {
+        window.addEventListener('resize', ()=> reflowGrid(grid));
+        setTimeout(()=> reflowGrid(grid), 150);
+      }
     }
 
     // ==== Masonry-like por JS, SIN reordenar ====
@@ -648,16 +653,16 @@
       Array.from(grid.children).forEach(item=> setGridSpanForItem(grid, item));
     }
 
-    // Init portafolio cuando se entra por primera vez
-    function initPortfolio(){
-      renderFotosDesdeCarpetaRobusto(gridProducto, PRODUCTO_DIR, PRODUCTO_COUNT);
+    // Init portafolio
+    function initPortfolio(preloadOnly){
+      if (preloadOnly) {
+        // solo dispara la descarga de archivos
+        renderFotosDesdeCarpetaRobusto(gridProducto, PRODUCTO_DIR, PRODUCTO_COUNT, {preloadOnly:true});
+      } else {
+        // renderiza ya con imágenes probablemente en caché
+        renderFotosDesdeCarpetaRobusto(gridProducto, PRODUCTO_DIR, PRODUCTO_COUNT, {preloadOnly:false});
+      }
     }
-
-    // ====== Video (si lo usas) ======
-    // const gridVideoGen = document.getElementById('grid-video-general');
-    // const gridVideoRed = document.getElementById('grid-video-redes');
-    // renderVideos(['https://www.youtube.com/embed/dQw4w9WgXcQ'], gridVideoGen);
-    // renderVideos([], gridVideoRed);
   </script>
 </body>
-</html> 
+</html>
