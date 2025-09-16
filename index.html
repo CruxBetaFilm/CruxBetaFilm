@@ -401,32 +401,110 @@
       });
     });
 
-    /* ====== Autollenado desde /img/producto ====== */
+        /* ====== Autollenado desde /img/producto (con fallback y diagnóstico) ====== */
     const gridProducto = document.getElementById('grid-producto');
     const gridRegistro = document.getElementById('grid-registro');
     const gridVideoGen = document.getElementById('grid-video-general');
     const gridVideoRed = document.getElementById('grid-video-redes');
 
     const PRODUCTO_DIR   = './img/producto/';
-    const PRODUCTO_COUNT = 43;     // foto (1) ... foto (43)
-    const PRODUCTO_EXT   = 'jpg';
+    const PRODUCTO_COUNT = 43; // foto (1) ... foto (43)
 
-    function fotoUrl(baseDir, i, ext='jpg'){
-      const name = `foto (${i}).${ext}`;
-      return baseDir + encodeURIComponent(name);
+    // Extensiones candidatas que probaremos
+    const EXT_CANDIDATAS = ['jpg','jpeg','png','webp','JPG','JPEG','PNG','WEBP'];
+
+    // Mapa de extensiones que sabemos por índice:
+    // 5..11 -> jpeg, 18..21 -> png, 39..43 -> png
+    const EXT_MAP = {
+      5:'jpeg',6:'jpeg',7:'jpeg',8:'jpeg',9:'jpeg',10:'jpeg',11:'jpeg',
+      18:'png',19:'png',20:'png',21:'png',
+      39:'png',40:'png',41:'png',42:'png',43:'png'
+    };
+
+    // Genera posibles rutas para un índice i, con y sin espacio
+    function posiblesURLs(baseDir, i) {
+      const conEspacio = `foto (${i})`;
+      const sinEspacio = `foto(${i})`;
+      const exts = EXT_MAP[i] ? [EXT_MAP[i], ...EXT_CANDIDATAS] : EXT_CANDIDATAS;
+      const urls = [];
+      for (const ext of exts) {
+        urls.push(baseDir + encodeURIComponent(`${conEspacio}.${ext}`));
+        urls.push(baseDir + encodeURIComponent(`${sinEspacio}.${ext}`));
+      }
+      return Array.from(new Set(urls)); // eliminar duplicados
     }
-    (function renderFotosDesdeCarpeta(){
-      if (!gridProducto) return;
-      const list = [];
-      for (let i=1; i<=PRODUCTO_COUNT; i++) list.push(fotoUrl(PRODUCTO_DIR, i, PRODUCTO_EXT));
-      renderFotos(list, gridProducto);
-    })();
 
-    // Si luego usas videos:
-    // const VIDEOS_GENERAL = ['https://www.youtube.com/embed/ID'];
-    // const VIDEOS_REDES = [];
-    // renderVideos(VIDEOS_GENERAL, gridVideoGen);
-    // renderVideos(VIDEOS_REDES, gridVideoRed);
+    // Cargar una lista de URLs hasta que alguna funcione
+    function cargarConFallback(imgEl, urls, onOk, onFail, idx = 0) {
+      if (idx >= urls.length) { onFail(); return; }
+      imgEl.onload = () => onOk(urls[idx]);
+      imgEl.onerror = () => cargarConFallback(imgEl, urls, onOk, onFail, idx + 1);
+      imgEl.src = urls[idx];
+    }
+
+    // Render: crea slots, prueba variantes y arma lightbox con las que existan
+    function renderFotosDesdeCarpetaRobusto(grid, baseDir, count) {
+      if (!grid || count <= 0) return;
+      grid.innerHTML = '';
+      const urlsOK = [];  // índice 1..n (puede tener huecos)
+      const fallidas = [];
+
+      for (let i = 1; i <= count; i++) {
+        const candidatos = posiblesURLs(baseDir, i);
+
+        const a = document.createElement('a');
+        a.href = '#';
+        a.className = 'slot';
+
+        const img = document.createElement('img');
+        img.alt = `Foto ${i}`;
+
+        const badge = document.createElement('span');
+        badge.className = 'slot--badge';
+        badge.textContent = String(i);
+
+        a.appendChild(img);
+        a.appendChild(badge);
+        grid.appendChild(a);
+
+        cargarConFallback(
+          img,
+          candidatos,
+          (okUrl) => {
+            urlsOK[i] = okUrl;
+            a.href = okUrl;
+            a.addEventListener('click', (e) => {
+              e.preventDefault();
+              const visibles = urlsOK.filter(Boolean);               // compactar
+              const idxVisible = visibles.indexOf(okUrl);            // posición visible
+              openLightbox(visibles, idxVisible);
+            });
+          },
+          () => {
+            fallidas.push(i);
+            a.replaceChildren();
+            const ph = document.createElement('div');
+            ph.className = 'slot--empty';
+            ph.innerHTML = `<div class='plus'>No encontrada<br><small>foto ${i}</small></div>`;
+            a.appendChild(ph);
+          }
+        );
+      }
+
+      // Reporte en consola
+      setTimeout(() => {
+        if (fallidas.length) {
+          console.warn('Fotos NO encontradas (índices):', fallidas);
+          console.warn('Revisa extensión (.jpeg/.png) o el espacio en el nombre: "foto (i)" vs "foto(i)".');
+        }
+      }, 1500);
+    }
+
+    // Render inicial: PRODUCTO
+    renderFotosDesdeCarpetaRobusto(gridProducto, PRODUCTO_DIR, PRODUCTO_COUNT);
+
+    // Si luego usas "registro", descomenta y ajusta el COUNT/dir:
+    // renderFotosDesdeCarpetaRobusto(gridRegistro, './img/registro/', 50);
   </script>
 </body>
 </html>
