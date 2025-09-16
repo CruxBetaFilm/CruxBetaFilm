@@ -360,6 +360,31 @@
     renderFotos(FOTOS_REGISTRO, gridRegistro);
     renderVideos(VIDEOS_GENERAL, gridVideoGen);
     renderVideos(VIDEOS_REDES, gridVideoRed);
+   <script>
+    const PRODUCTO_DIR = './img/producto/';
+    const PRODUCTO_COUNT = 43;   // de foto (1) a foto (43)
+    const PRODUCTO_EXT = 'jpg';  // o webp/png
+
+    function fotoUrl(baseDir, i, ext='jpg') {
+      const name = `foto (${i}).${ext}`;
+      return baseDir + encodeURIComponent(name);
+    }
+
+    function renderFotosEn(id, baseDir, count, ext='jpg') {
+      const grid = document.querySelector(`#${id} .grid-slots`);
+      if (!grid || count <= 0) return;
+      grid.innerHTML = '';
+      for (let i = 1; i <= count; i++) {
+        const url = fotoUrl(baseDir, i, ext);
+        const cell = document.createElement('div');
+        cell.className = 'slot';
+        cell.innerHTML = `<img src="${url}" alt="Foto ${i}">`;
+        grid.appendChild(cell);
+      }
+    }
+
+    // Genera automáticamente las fotos de producto
+    renderFotosEn('producto', PRODUCTO_DIR, PRODUCTO_COUNT, PRODUCTO_EXT);
   </script>
 </body>
 </html>
