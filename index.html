@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crux&Beta Film - Fotografía & Video</title>
 
-  <!-- Tailwind CDN (ok para pruebas; en producción conviene build) -->
+  <!-- Tailwind (para pruebas) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet"/>
 
@@ -21,9 +21,9 @@
     body.lock{height:100vh;overflow:hidden}
 
     /* ===== Botones ===== */
-    .btn-gold{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--gold-3),var(--gold));color:#141414;border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(200,160,53,.22);transition:transform .18s ease,filter .18s ease}
+    .btn-gold{position:relative;background:linear-gradient(180deg,var(--gold-3),var(--gold));color:#141414;border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(200,160,53,.22);transition:transform .18s ease,filter .18s ease}
     .btn-gold:hover{transform:translateY(-1px);filter:brightness(1.06)}
-    .btn-gold-outline{position:relative;overflow:hidden;background:rgba(255,255,255,.02);color:var(--gold-3);border:1px solid rgba(200,160,53,.55);box-shadow:0 8px 24px rgba(0,0,0,.24);transition:transform .18s ease,filter .18s ease}
+    .btn-gold-outline{position:relative;background:rgba(255,255,255,.02);color:var(--gold-3);border:1px solid rgba(200,160,53,.55);box-shadow:0 8px 24px rgba(0,0,0,.24);transition:transform .18s ease,filter .18s ease}
     .btn-gold-outline:hover{transform:translateY(-1px);filter:brightness(1.08)}
     .btn-sheen::after{content:"";position:absolute;inset:0;transform:translateX(-120%) skewX(12deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:sheen 2.2s infinite;mix-blend-mode:screen}
     @keyframes sheen{0%{transform:translateX(-120%) skewX(12deg)}60%{transform:translateX(120%) skewX(12deg)}100%{transform:translateX(120%) skewX(12deg)}}
@@ -36,57 +36,80 @@
     .badge-accent{background:linear-gradient(180deg,rgba(196,124,59,.95),rgba(160,122,24,.95));color:#fff;border:1px solid rgba(255,255,255,.18)}
     .floating-note{animation:float 3s ease-in-out infinite}
     @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-
-    /* ===== Línea decorativa ===== */
     .hrule{height:2px;width:72px;margin:.75rem 0 1rem;background:linear-gradient(90deg,var(--gold-2),var(--gold-3),transparent);border-radius:999px;opacity:.95}
 
-    /* ===== Portafolio (tabs + grids) ===== */
+    /* ===== Portafolio (sin animaciones + masonry + anti-descarga) ===== */
+    /* Contenedor masonry por columnas (fluido, impactante) */
+    .masonry{column-count:1;column-gap:16px}
+    @media(min-width:640px){.masonry{column-count:2}}
+    @media(min-width:1024px){.masonry{column-count:3}}
+    @media(min-width:1280px){.masonry{column-count:4}}
+
+    /* Tarjeta de foto: SIN animaciones, aspecto fuerte */
+    .tile{
+      display:block; width:100%; margin:0 0 16px; break-inside:avoid; position:relative; isolation:isolate;
+      border:1px solid var(--border); border-radius:14px; overflow:hidden; background:#0d0d0d;
+      background-size:cover; background-position:center; cursor:zoom-in;
+      /* anti-descarga (difícil extraer vía arrastre/long-press) */
+      -webkit-user-drag:none; user-select:none; -webkit-touch-callout:none;
+    }
+    /* Esquinas y borde más visibles */
+    .tile::before{
+      content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+    /* Lupa */
+    .tile .loupe{
+      position:absolute; inset:auto auto 10px 10px; width:36px; height:36px; border-radius:999px;
+      background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.18);
+      display:flex; align-items:center; justify-content:center; opacity:.9;
+    }
+    .tile .loupe svg{width:18px;height:18px;opacity:.9}
+
+    /* Subtítulo/etiqueta */
+    .slot--badge{position:absolute;left:10px;top:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(4px);padding:4px 8px;border-radius:10px;font-size:12px;color:#fff}
+
+    /* Placeholder si no existe */
+    .slot--empty{
+      display:flex;align-items:center;justify-content:center; background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.03));
+      border:1px dashed rgba(200,160,53,.35); color:#cbb77a; border-radius:14px; height:260px;
+    }
+
+    /* Tabs */
     .tabbar{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
     .tab-btn{padding:.55rem 1rem;border:1px solid rgba(200,160,53,.45);border-radius:9999px;font-weight:800;letter-spacing:.2px;background:rgba(255,255,255,.02);color:var(--gold-3);cursor:pointer;transition:.18s}
-    .tab-btn:hover{transform:translateY(-1px);filter:brightness(1.06)}
     .tab-btn.active{background:linear-gradient(180deg,var(--gold-3),var(--gold));color:#111;box-shadow:0 8px 22px rgba(200,160,53,.28)}
     .subtabs{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:.75rem 0 1.25rem}
     .subtab-btn{padding:.4rem .85rem;border:1px dashed rgba(200,160,53,.35);border-radius:9999px;font-weight:700;color:#e7e7e7;background:rgba(255,255,255,.02);cursor:pointer;transition:.18s}
     .subtab-btn.active{border-style:solid;color:#111;background:linear-gradient(180deg,var(--gold-3),var(--gold))}
 
-    .grid-wrap{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:18px}
-    @media(min-width:640px){.grid-wrap{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(min-width:1024px){.grid-wrap{grid-template-columns:repeat(3,minmax(0,1fr))}}
-    @media(min-width:1280px){.grid-wrap{grid-template-columns:repeat(4,minmax(0,1fr))}}
-
-    .slot{
-      position:relative;border:1px solid var(--border);border-radius:14px;overflow:hidden;
-      background:rgba(255,255,255,.04);
-      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);
-      transition:transform .22s, box-shadow .22s, border-color .22s;
-      /* rendimiento */
-      content-visibility:auto; contain:layout paint;
-    }
-    .slot:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(212,175,55,.18) inset, 0 30px 80px -20px rgba(212,175,55,.25);border-color:rgba(212,175,55,.35)}
-    .slot img{
-      display:block;width:100%;height:240px;object-fit:cover;
-      /* color completo por defecto (sin opacidad/grayscale) */
-      filter:none; transition:transform .2s, filter .2s;
-    }
-    /* Efecto sutil SOLO en equipos con hover (desktop/laptop) */
-    @media (hover:hover) and (pointer:fine){
-      .slot:hover img{ transform:scale(1.02); filter:saturate(110%) contrast(108%); will-change:transform, filter; }
-    }
-
-    .slot--empty{display:flex;align-items:center;justify-content:center;height:240px;border:1px dashed rgba(200,160,53,.35);background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.03));color:#cbb77a;border-radius:14px}
-    .slot--empty .plus{font-size:28px;line-height:1;opacity:.7}
-    .slot--badge{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(4px);padding:4px 8px;border-radius:10px;font-size:12px;color:#fff}
-
-    /* Lightbox */
-    #lightbox::backdrop{background:rgba(0,0,0,.85)}
+    /* Lightbox + Zoom (con botón X) */
+    #lightbox::backdrop{background:rgba(0,0,0,.88)}
     #lightbox[open]{padding:0;border:0;background:transparent}
-    #lbImg{max-width:92vw;max-height:92vh;border-radius:12px}
-    .lb-ctrl{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);color:#fff;border:1px solid rgba(255,255,255,.25);width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:24px}
-    .lb-ctrl:hover{background:rgba(0,0,0,.8)}
+    .lb-wrap{position:relative;min-width:min(92vw,1200px);min-height:min(92vh,800px);display:flex;align-items:center;justify-content:center;background:#000;border-radius:12px;overflow:hidden}
+    #lbImg{max-width:none;max-height:none;transform-origin:50% 50%}
+    .lb-ctrl{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.65);color:#fff;border:1px solid rgba(255,255,255,.25);width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:24px}
+    #lbPrev{left:8px} #lbNext{right:8px}
+    .lb-toolbar{
+      position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
+      display:flex;gap:8px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);padding:6px;border-radius:999px;
+    }
+    .lb-btn{
+      width:40px;height:40px;border-radius:999px;border:1px solid rgba(255,255,255,.2);
+      background:rgba(20,20,20,.7); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900;
+    }
+    .lb-close{
+      position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.25);
+      background:rgba(0,0,0,.65);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center
+    }
+
+    /* Anti selección en zona de imágenes */
+    .no-select{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
   </style>
 </head>
 
-<body class="min-h-screen">
+<body class="min-h-screen no-select">
   <!-- HOME -->
   <section data-route="home" class="min-h-screen flex items-center justify-center relative overflow-hidden px-6">
     <div class="pointer-events-none absolute inset-0 opacity-25 grayscale bg-[url('https://images.unsplash.com/photo-1499084732479-de2c02d45fc4?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center"></div>
@@ -118,7 +141,6 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Inicio -->
         <div class="card p-6">
           <div class="flex flex-col h-full">
             <h4 class="text-2xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Inicio</h4>
@@ -132,7 +154,6 @@
           </div>
         </div>
 
-        <!-- Crecimiento (Más Popular) -->
         <div class="card p-8 bg-white/5 ring-2 ring-[color:var(--gold-3)] transform scale-105 transition-all duration-300 relative">
           <span class="badge-accent absolute top-0 right-0 -mt-3 -mr-3 px-3 py-1 text-sm font-bold rounded-full shadow-lg floating-note">Más Popular</span>
           <div class="flex flex-col h-full">
@@ -148,7 +169,6 @@
           </div>
         </div>
 
-        <!-- Impacto -->
         <div class="card p-6">
           <div class="flex flex-col h-full">
             <h4 class="text-2xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Impacto</h4>
@@ -196,7 +216,6 @@
         <h2 class="text-3xl sm:text-4xl font-extrabold">Portafolio</h2>
       </div>
 
-      <!-- Tabs principales: Fotografía / Video -->
       <div class="tabbar mb-6" role="tablist" aria-label="Categorías principales">
         <button class="tab-btn active" data-tab="fotografia" role="tab" aria-controls="tab-fotografia">Fotografía</button>
         <button class="tab-btn" data-tab="video" role="tab" aria-controls="tab-video">Video</button>
@@ -210,25 +229,25 @@
         </div>
         <!-- Producto -->
         <div id="sub-producto" class="subpane">
-          <div class="grid-wrap" id="grid-producto" aria-live="polite"></div>
+          <div class="masonry" id="grid-producto" aria-live="polite"></div>
         </div>
         <!-- Registro -->
         <div id="sub-registro" class="subpane hidden">
-          <div class="grid-wrap" id="grid-registro" aria-live="polite"></div>
+          <div class="masonry" id="grid-registro" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- VIDEO -->
+      <!-- VIDEO (estructura lista para futuro) -->
       <section id="tab-video" class="tab-pane hidden">
         <div class="subtabs" role="tablist" aria-label="Subcategorías video">
           <button class="subtab-btn active" data-subtab="general" role="tab" aria-controls="sub-general">General</button>
           <button class="subtab-btn" data-subtab="redes" role="tab" aria-controls="sub-redes">Redes Sociales</button>
         </div>
         <div id="sub-general" class="subpane">
-          <div class="grid-wrap" id="grid-video-general" aria-live="polite"></div>
+          <div class="masonry" id="grid-video-general" aria-live="polite"></div>
         </div>
         <div id="sub-redes" class="subpane hidden">
-          <div class="grid-wrap" id="grid-video-redes" aria-live="polite"></div>
+          <div class="masonry" id="grid-video-redes" aria-live="polite"></div>
         </div>
       </section>
     </div>
@@ -249,16 +268,23 @@
     </div>
   </section>
 
-  <!-- LIGHTBOX (fotos) -->
+  <!-- LIGHTBOX -->
   <dialog id="lightbox">
-    <div class="relative">
-      <button id="lbPrev" class="lb-ctrl" style="left:8px" aria-label="Anterior">‹</button>
-      <img id="lbImg" alt="Foto" />
-      <button id="lbNext" class="lb-ctrl" style="right:8px" aria-label="Siguiente">›</button>
+    <div class="lb-wrap" id="zoomWrap">
+      <button id="lbPrev" class="lb-ctrl" aria-label="Anterior">‹</button>
+      <img id="lbImg" alt="Foto" draggable="false"/>
+      <button id="lbNext" class="lb-ctrl" aria-label="Siguiente">›</button>
+
+      <div class="lb-toolbar">
+        <button class="lb-btn" id="zoomOut" aria-label="Alejar">−</button>
+        <button class="lb-btn" id="zoomReset" aria-label="Restablecer">⟲</button>
+        <button class="lb-btn" id="zoomIn" aria-label="Acercar">＋</button>
+      </div>
+      <button class="lb-close" id="lbClose" aria-label="Cerrar">✕</button>
     </div>
   </dialog>
 
-  <!-- MODAL video -->
+  <!-- VIDEO MODAL (listo para futuro) -->
   <dialog id="videoModal" style="padding:0;border:0;background:transparent">
     <div style="position:relative;width:min(92vw,1000px);aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden">
       <iframe id="videoFrame" src="" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
@@ -270,7 +296,6 @@
     (function(){
       const sections = Array.from(document.querySelectorAll('[data-route]'));
       const routes = sections.map(s => s.getAttribute('data-route'));
-
       function show(route){
         sections.forEach(s => s.classList.toggle('hidden-route', s.getAttribute('data-route')!==route));
         document.body.classList.toggle('lock', route==='home');
@@ -289,100 +314,18 @@
         if (routes.includes(target)) {
           e.preventDefault();
           if (location.hash.slice(1) !== target) location.hash = '#' + target;
-          else show(target); // mismo hash -> forzar render
+          else show(target);
         }
       });
       render();
     })();
 
-    /* ====== Utils Portafolio ====== */
-    function videoThumb(url){
-      const yt = String(url).match(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]{6,})/);
-      if (yt) return `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`;
-      const vm = String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/);
-      if (vm) return 'https://via.placeholder.com/800x450?text=Vimeo+Video';
-      return 'https://via.placeholder.com/800x450?text=Video';
-    }
-    function renderFotos(list, grid){
-      grid.innerHTML = '';
-      if (!list || list.length===0){ grid.parentElement.classList.add('hidden'); return; }
-      grid.parentElement.classList.remove('hidden');
-      list.slice(0,50).forEach((src,i)=>{
-        const a = document.createElement('a');
-        a.href = src;
-        a.className = 'slot';
-        a.innerHTML = `<img src="${src}" alt="Foto ${i+1}" loading="lazy" decoding="async"><span class="slot--badge">${i+1}</span>`;
-        a.addEventListener('click', (e)=>{ e.preventDefault(); openLightbox(list,i); });
-        grid.appendChild(a);
-      });
-    }
-    function renderVideos(list, grid){
-      grid.innerHTML = '';
-      const MAX = 10;
-      const filled = (list || []).slice(0,MAX);
-      filled.forEach((url,i)=>{
-        const div = document.createElement('div');
-        div.className = 'slot';
-        div.innerHTML = `<img src="${videoThumb(url)}" alt="Video ${i+1}" loading="lazy" decoding="async"><span class='slot--badge'>${i+1}/10</span>`;
-        div.addEventListener('click', ()=> openVideo(url));
-        grid.appendChild(div);
-      });
-      for(let i=filled.length;i<MAX;i++){
-        const ph = document.createElement('div');
-        ph.className = 'slot--empty';
-        ph.innerHTML = `<div class='plus'>+ slot ${i+1}/10</div>`;
-        grid.appendChild(ph);
-      }
-    }
-
-    /* ====== Lightbox ====== */
-    const lb = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lbImg');
-    const lbPrev = document.getElementById('lbPrev');
-    const lbNext = document.getElementById('lbNext');
-    let currentList = [], currentIdx = 0;
-    function openLightbox(list,i){
-      currentList=list; currentIdx=i; lbImg.src=list[i];
-      if (typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open','');
-    }
-    function lbNav(step){
-      if (!currentList.length) return;
-      currentIdx=(currentIdx+step+currentList.length)%currentList.length;
-      lbImg.src=currentList[currentIdx];
-    }
-    lbPrev.addEventListener('click', ()=> lbNav(-1));
-    lbNext.addEventListener('click', ()=> lbNav(1));
-    lb.addEventListener('click', (e)=>{
-      const r=lbImg.getBoundingClientRect();
-      const outside=e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom;
-      if(outside) lb.close();
-    });
-    window.addEventListener('keydown',(e)=>{
-      if(!lb.open) return;
-      if(e.key==='ArrowLeft') lbNav(-1);
-      if(e.key==='ArrowRight') lbNav(1);
-      if(e.key==='Escape') lb.close();
-    });
-
-    /* ====== Video modal ====== */
-    const vModal = document.getElementById('videoModal');
-    const vFrame = document.getElementById('videoFrame');
-    function openVideo(url){
-      vFrame.src = url;
-      if (typeof vModal.showModal==='function') vModal.showModal(); else vModal.setAttribute('open','');
-    }
-    vModal.addEventListener('click', (e)=>{
-      const box = vFrame.getBoundingClientRect();
-      const outside = e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom;
-      if(outside){ vFrame.src=''; vModal.close(); }
-    });
-
-    /* ====== Tabs (Portafolio) ====== */
+    /* ====== Tabs Portafolio ====== */
     const mainTabs = document.querySelectorAll('.tab-btn');
     const panes = { fotografia: document.getElementById('tab-fotografia'), video: document.getElementById('tab-video') };
     mainTabs.forEach(btn=>{
       btn.addEventListener('click', ()=>{
-        if(!btn.dataset.tab) return; // los del header no tienen data-tab
+        if(!btn.dataset.tab) return;
         mainTabs.forEach(b=>b.classList.remove('active'));
         btn.classList.add('active');
         const t = btn.dataset.tab;
@@ -392,7 +335,6 @@
         }
       });
     });
-
     const fotoSubBtns = document.querySelectorAll('#tab-fotografia .subtab-btn');
     const subFoto = { producto: document.getElementById('sub-producto'), registro: document.getElementById('sub-registro') };
     fotoSubBtns.forEach(btn=>{
@@ -404,38 +346,29 @@
       });
     });
 
-    const videoSubBtns = document.querySelectorAll('#tab-video .subtab-btn');
-    const subVid = { general: document.getElementById('sub-general'), redes: document.getElementById('sub-redes') };
-    videoSubBtns.forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        videoSubBtns.forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        const t = btn.dataset.subtab;
-        Object.entries(subVid).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
-      });
-    });
+    /* ====== Anti-descarga (disuasión) ====== */
+    document.addEventListener('contextmenu', e=> e.preventDefault(), {capture:true});
+    document.addEventListener('dragstart', e=> e.preventDefault(), {capture:true});
+    document.addEventListener('keydown', (e)=>{
+      const k = e.key.toLowerCase();
+      if ((e.ctrlKey||e.metaKey) && ['s','u','p','c','x','i','j'].includes(k)) { e.preventDefault(); e.stopPropagation(); }
+    }, {capture:true});
 
-    /* ====== Autollenado desde /img/producto (con fallback y diagnóstico) ====== */
+    /* ====== Masonry: generación de tiles desde /img/producto ====== */
     const gridProducto = document.getElementById('grid-producto');
-    const gridRegistro = document.getElementById('grid-registro');
-    const gridVideoGen = document.getElementById('grid-video-general');
-    const gridVideoRed = document.getElementById('grid-video-redes');
 
     const PRODUCTO_DIR   = './img/producto/';
     const PRODUCTO_COUNT = 43; // foto (1) ... foto (43)
 
-    // Extensiones candidatas que probaremos
+    // Extensiones detectables
     const EXT_CANDIDATAS = ['jpg','jpeg','png','webp','JPG','JPEG','PNG','WEBP'];
-
-    // Mapa de extensiones que sabemos por índice:
-    // 5..11 -> jpeg, 18..21 -> png, 39..43 -> png
+    // Mapa: 5..11 -> jpeg, 18..21 -> png, 39..43 -> png
     const EXT_MAP = {
       5:'jpeg',6:'jpeg',7:'jpeg',8:'jpeg',9:'jpeg',10:'jpeg',11:'jpeg',
       18:'png',19:'png',20:'png',21:'png',
       39:'png',40:'png',41:'png',42:'png',43:'png'
     };
 
-    // Genera posibles rutas para un índice i, con y sin espacio
     function posiblesURLs(baseDir, i) {
       const conEspacio = `foto (${i})`;
       const sinEspacio = `foto(${i})`;
@@ -445,84 +378,175 @@
         urls.push(baseDir + encodeURIComponent(`${conEspacio}.${ext}`));
         urls.push(baseDir + encodeURIComponent(`${sinEspacio}.${ext}`));
       }
-      return Array.from(new Set(urls)); // eliminar duplicados
+      return Array.from(new Set(urls));
     }
 
-    // Cargar una lista de URLs hasta que alguna funcione
-    function cargarConFallback(imgEl, urls, onOk, onFail, idx = 0) {
-      if (idx >= urls.length) { onFail(); return; }
-      imgEl.onload = () => onOk(urls[idx]);
-      imgEl.onerror = () => cargarConFallback(imgEl, urls, onOk, onFail, idx + 1);
-      imgEl.src = urls[idx];
+    function cargarConFallback(urls, onOk, onFail, idx=0){
+      if(idx>=urls.length){ onFail(); return; }
+      const img = new Image();
+      img.loading = idx < 6 ? 'eager' : 'lazy';
+      img.decoding = 'async';
+      img.onload = ()=> onOk(urls[idx], img);
+      img.onerror = ()=> cargarConFallback(urls, onOk, onFail, idx+1);
+      img.src = urls[idx];
     }
 
-    // Render: crea slots, prueba variantes y arma lightbox con las que existan
-    function renderFotosDesdeCarpetaRobusto(grid, baseDir, count) {
-      if (!grid || count <= 0) return;
-      grid.innerHTML = '';
-      const urlsOK = [];  // índice 1..n (puede tener huecos)
-      const fallidas = [];
+    const urlsOK = []; const fallidas=[];
+    function addTile(url, i, probeImg){
+      const tile = document.createElement('button');
+      tile.type='button';
+      tile.className='tile';
+      tile.setAttribute('aria-label', `Abrir foto ${i} en grande`);
+      tile.dataset.index = i;
 
-      for (let i = 1; i <= count; i++) {
-        const candidatos = posiblesURLs(baseDir, i);
+      // Altura según proporción real de la imagen
+      const setSize = ()=>{
+        const w = tile.clientWidth || tile.getBoundingClientRect().width || 300;
+        const ratio = probeImg.naturalWidth / probeImg.naturalHeight;
+        const h = Math.max(180, Math.round(w / ratio));
+        tile.style.height = h + 'px';
+      };
 
-        const a = document.createElement('a');
-        a.href = '#';
-        a.className = 'slot';
+      // Fondo + UI
+      tile.style.backgroundImage = `url("${url}")`;
+      tile.innerHTML = `
+        <span class="slot--badge">${i}</span>
+        <span class="loupe" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+      `;
 
-        const img = document.createElement('img');
-        img.alt = `Foto ${i}`;
-        // rendimiento: lazy + async; primeras 6 eager + alta prioridad
-        img.loading = (i <= 6) ? 'eager' : 'lazy';
-        img.decoding = 'async';
-        if (i <= 6) img.fetchPriority = 'high';
+      tile.addEventListener('click', ()=> openLightboxFromIndex(i));
+      gridProducto.appendChild(tile);
+      requestAnimationFrame(setSize);
+      window.addEventListener('resize', setSize);
+    }
 
-        const badge = document.createElement('span');
-        badge.className = 'slot--badge';
-        badge.textContent = String(i);
-
-        a.appendChild(img);
-        a.appendChild(badge);
-        grid.appendChild(a);
-
+    function renderMasonryProducto(){
+      if(!gridProducto) return;
+      gridProducto.innerHTML = '';
+      for(let i=1;i<=PRODUCTO_COUNT;i++){
+        const candidates = posiblesURLs(PRODUCTO_DIR, i);
         cargarConFallback(
-          img,
-          candidatos,
-          (okUrl) => {
-            urlsOK[i] = okUrl;
-            a.href = okUrl;
-            a.addEventListener('click', (e) => {
-              e.preventDefault();
-              const visibles = urlsOK.filter(Boolean);               // compactar
-              const idxVisible = visibles.indexOf(okUrl);            // posición visible
-              openLightbox(visibles, idxVisible);
-            });
-          },
+          candidates,
+          (okUrl, probe) => { urlsOK[i]=okUrl; addTile(okUrl, i, probe); },
           () => {
             fallidas.push(i);
-            a.replaceChildren();
             const ph = document.createElement('div');
             ph.className = 'slot--empty';
             ph.innerHTML = `<div class='plus'>No encontrada<br><small>foto ${i}</small></div>`;
-            a.appendChild(ph);
+            gridProducto.appendChild(ph);
           }
         );
       }
+      setTimeout(()=>{ if(fallidas.length){ console.warn('Fotos NO encontradas:', fallidas); }}, 1500);
+    }
+    renderMasonryProducto();
 
-      // Reporte en consola para depurar nombres/extensiones
-      setTimeout(() => {
-        if (fallidas.length) {
-          console.warn('Fotos NO encontradas (índices):', fallidas);
-          console.warn('Revisa extensión (.jpeg/.png) o el espacio en el nombre: "foto (i)" vs "foto(i)".');
-        }
-      }, 1500);
+    /* ====== LIGHTBOX + ZOOM (sin animaciones, con botón X) ====== */
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+    const lbClose= document.getElementById('lbClose');
+    const zoomWrap = document.getElementById('zoomWrap');
+    const zoomInBtn = document.getElementById('zoomIn');
+    const zoomOutBtn= document.getElementById('zoomOut');
+    const zoomResetBtn=document.getElementById('zoomReset');
+
+    let currentIdx = 1;
+    let scale = 1, tx = 0, ty = 0;
+    let isPanning = false, startX=0, startY=0, origX=0, origY=0;
+
+    function visibles(){
+      return urlsOK
+        .map((url,idx)=>({url,idx}))
+        .filter(x=>!!x.url);
+    }
+    function showAt(idx){
+      const list = visibles();
+      const pos = list.findIndex(x=>x.idx===idx);
+      const clampPos = pos<0 ? 0 : pos;
+      const item = list[clampPos] || list[0];
+      if(!item) return;
+      currentIdx = item.idx;
+      lbImg.src = item.url;
+      scale = 1; tx = 0; ty = 0; applyTransform();
+    }
+    function openLightboxFromIndex(idx){
+      showAt(idx);
+      if(typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open','');
+    }
+    function applyTransform(){
+      lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+    }
+    function zoomBy(delta){
+      const newScale = Math.min(4, Math.max(1, scale + delta));
+      if(newScale===1){ tx=0; ty=0; }
+      scale = newScale; applyTransform();
+    }
+    function nav(step){
+      const list = visibles();
+      if(!list.length) return;
+      const pos = list.findIndex(x=>x.idx===currentIdx);
+      const next = (pos + step + list.length) % list.length;
+      showAt(list[next].idx);
     }
 
-    // Render inicial: PRODUCTO
-    renderFotosDesdeCarpetaRobusto(gridProducto, PRODUCTO_DIR, PRODUCTO_COUNT);
+    lbPrev.addEventListener('click', ()=> nav(-1));
+    lbNext.addEventListener('click', ()=> nav(1));
+    lbClose.addEventListener('click', ()=> lb.close());
+    window.addEventListener('keydown', (e)=>{
+      if(!lb.open) return;
+      if(e.key==='Escape') lb.close();
+      if(e.key==='ArrowLeft') nav(-1);
+      if(e.key==='ArrowRight') nav(1);
+      if(e.key==='+' || (e.key==='='&&(e.ctrlKey||e.metaKey))) { e.preventDefault(); zoomBy(+0.25); }
+      if(e.key==='-' || (e.key==='_'&&(e.ctrlKey||e.metaKey))) { e.preventDefault(); zoomBy(-0.25); }
+      if(e.key==='0' && (e.ctrlKey||e.metaKey)) { e.preventDefault(); scale=1; tx=ty=0; applyTransform(); }
+    });
 
-    // Si luego usas "registro", descomenta y ajusta el COUNT/dir:
-    // renderFotosDesdeCarpetaRobusto(gridRegistro, './img/registro/', 50);
+    // Zoom botones y doble click
+    zoomInBtn.addEventListener('click', ()=> zoomBy(+0.25));
+    zoomOutBtn.addEventListener('click',()=> zoomBy(-0.25));
+    zoomResetBtn.addEventListener('click',()=> { scale=1; tx=ty=0; applyTransform(); });
+    lbImg.addEventListener('dblclick', ()=> { scale = scale===1 ? 2 : 1; if(scale===1){ tx=ty=0; } applyTransform(); });
+
+    // Pan al arrastrar (cuando zoom > 1)
+    lbImg.addEventListener('mousedown', (e)=>{
+      if(scale<=1) return;
+      isPanning=true; startX=e.clientX; startY=e.clientY; origX=tx; origY=ty;
+    });
+    window.addEventListener('mousemove', (e)=>{
+      if(!isPanning) return;
+      tx = origX + (e.clientX - startX);
+      ty = origY + (e.clientY - startY);
+      applyTransform();
+    });
+    window.addEventListener('mouseup', ()=> isPanning=false);
+
+    // Zoom con rueda
+    zoomWrap.addEventListener('wheel', (e)=>{
+      e.preventDefault();
+      const delta = e.deltaY>0 ? -0.2 : +0.2;
+      zoomBy(delta);
+    }, {passive:false});
+
+    // Cerrar al click fuera
+    lb.addEventListener('click',(e)=>{
+      const box=lbImg.getBoundingClientRect();
+      const outside=e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom;
+      const clickedClose = e.target.id==='lbClose';
+      if(outside && !clickedClose) lb.close();
+    });
+
+    /* ====== Video (placeholder para futuro) ====== */
+    const vModal=document.getElementById('videoModal'); const vFrame=document.getElementById('videoFrame');
+    function openVideo(url){ vFrame.src=url; if(typeof vModal.showModal==='function') vModal.showModal(); else vModal.setAttribute('open',''); }
+    vModal.addEventListener('click',(e)=>{ const box=vFrame.getBoundingClientRect(); const outside=e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom; if(outside){ vFrame.src=''; vModal.close(); }});
+
   </script>
 </body>
 </html> 
