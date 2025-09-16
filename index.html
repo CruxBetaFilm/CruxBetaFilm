@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crux&Beta Film - Fotografía & Video</title>
 
-  <!-- Tailwind (para pruebas) -->
+  <!-- Tailwind CDN (ok para pruebas; en producción conviene build) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet"/>
 
@@ -15,101 +15,112 @@
       --gold:#c8a035; --gold-2:#a07a18; --gold-3:#f3e2a5; --accent:#c47c3b;
     }
     html,body{height:100%}
-    body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--black);color:#ececec}
+    body{
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:var(--black); color:#ececec
+    }
     .hidden-route{display:none!important}
     .subtext{color:#d8d8d8}
     body.lock{height:100vh;overflow:hidden}
 
-    /* ===== Botones ===== */
-    .btn-gold{position:relative;background:linear-gradient(180deg,var(--gold-3),var(--gold));color:#141414;border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(200,160,53,.22);transition:transform .18s ease,filter .18s ease}
+    /* ===== Botones / paneles (SIN CAMBIOS) ===== */
+    .btn-gold{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--gold-3),var(--gold));color:#141414;border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(200,160,53,.22);transition:transform .18s ease,filter .18s ease}
     .btn-gold:hover{transform:translateY(-1px);filter:brightness(1.06)}
-    .btn-gold-outline{position:relative;background:rgba(255,255,255,.02);color:var(--gold-3);border:1px solid rgba(200,160,53,.55);box-shadow:0 8px 24px rgba(0,0,0,.24);transition:transform .18s ease,filter .18s ease}
+    .btn-gold-outline{position:relative;overflow:hidden;background:rgba(255,255,255,.02);color:var(--gold-3);border:1px solid rgba(200,160,53,.55);box-shadow:0 8px 24px rgba(0,0,0,.24);transition:transform .18s ease,filter .18s ease}
     .btn-gold-outline:hover{transform:translateY(-1px);filter:brightness(1.08)}
     .btn-sheen::after{content:"";position:absolute;inset:0;transform:translateX(-120%) skewX(12deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:sheen 2.2s infinite;mix-blend-mode:screen}
     @keyframes sheen{0%{transform:translateX(-120%) skewX(12deg)}60%{transform:translateX(120%) skewX(12deg)}100%{transform:translateX(120%) skewX(12deg)}}
 
-    /* ===== Panel / Card ===== */
     .panel{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid var(--border);box-shadow:0 20px 50px rgba(0,0,0,.6);backdrop-filter:blur(8px);border-radius:16px}
     .card{position:relative;border:1px solid var(--border);background:rgba(255,255,255,.04);box-shadow:0 0 0 1px rgba(255,255,255,.02) inset,0 20px 60px -20px rgba(0,0,0,.6);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;border-radius:14px}
     .card:hover{transform:translateY(-4px);box-shadow:0 0 0 1px rgba(212,175,55,.18) inset,0 30px 80px -20px rgba(212,175,55,.25);border-color:rgba(212,175,55,.35)}
-
     .badge-accent{background:linear-gradient(180deg,rgba(196,124,59,.95),rgba(160,122,24,.95));color:#fff;border:1px solid rgba(255,255,255,.18)}
-    .floating-note{animation:float 3s ease-in-out infinite}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-    .hrule{height:2px;width:72px;margin:.75rem 0 1rem;background:linear-gradient(90deg,var(--gold-2),var(--gold-3),transparent);border-radius:999px;opacity:.95}
 
-    /* ===== Portafolio (sin animaciones + masonry + anti-descarga) ===== */
-    /* Contenedor masonry por columnas (fluido, impactante) */
-    .masonry{column-count:1;column-gap:16px}
-    @media(min-width:640px){.masonry{column-count:2}}
-    @media(min-width:1024px){.masonry{column-count:3}}
-    @media(min-width:1280px){.masonry{column-count:4}}
-
-    /* Tarjeta de foto: SIN animaciones, aspecto fuerte */
-    .tile{
-      display:block; width:100%; margin:0 0 16px; break-inside:avoid; position:relative; isolation:isolate;
-      border:1px solid var(--border); border-radius:14px; overflow:hidden; background:#0d0d0d;
-      background-size:cover; background-position:center; cursor:zoom-in;
-      /* anti-descarga (difícil extraer vía arrastre/long-press) */
-      -webkit-user-drag:none; user-select:none; -webkit-touch-callout:none;
-    }
-    /* Esquinas y borde más visibles */
-    .tile::before{
-      content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
-    }
-    /* Lupa */
-    .tile .loupe{
-      position:absolute; inset:auto auto 10px 10px; width:36px; height:36px; border-radius:999px;
-      background:rgba(0,0,0,.55);
-      border:1px solid rgba(255,255,255,.18);
-      display:flex; align-items:center; justify-content:center; opacity:.9;
-    }
-    .tile .loupe svg{width:18px;height:18px;opacity:.9}
-
-    /* Subtítulo/etiqueta */
-    .slot--badge{position:absolute;left:10px;top:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(4px);padding:4px 8px;border-radius:10px;font-size:12px;color:#fff}
-
-    /* Placeholder si no existe */
-    .slot--empty{
-      display:flex;align-items:center;justify-content:center; background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.03));
-      border:1px dashed rgba(200,160,53,.35); color:#cbb77a; border-radius:14px; height:260px;
-    }
-
-    /* Tabs */
+    /* ===== Portafolio (SIN animaciones innecesarias) ===== */
     .tabbar{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
     .tab-btn{padding:.55rem 1rem;border:1px solid rgba(200,160,53,.45);border-radius:9999px;font-weight:800;letter-spacing:.2px;background:rgba(255,255,255,.02);color:var(--gold-3);cursor:pointer;transition:.18s}
+    .tab-btn:hover{transform:translateY(-1px);filter:brightness(1.06)}
     .tab-btn.active{background:linear-gradient(180deg,var(--gold-3),var(--gold));color:#111;box-shadow:0 8px 22px rgba(200,160,53,.28)}
     .subtabs{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:.75rem 0 1.25rem}
-    .subtab-btn{padding:.4rem .85rem;border:1px dashed rgba(200,160,53,.35);border-radius:9999px;font-weight:700;color:#e7e7e7;background:rgba(255,255,255,.02);cursor:pointer;transition:.18s}
+    .subtab-btn{padding:.4rem .85rem;border:1px dashed rgba(200,160,53,.35);border-radius:9999px;font-weight:700;color:#e7e7e7;background:rgba(255,255,255,.02);cursor:pointer}
     .subtab-btn.active{border-style:solid;color:#111;background:linear-gradient(180deg,var(--gold-3),var(--gold))}
 
-    /* Lightbox + Zoom (con botón X) */
-    #lightbox::backdrop{background:rgba(0,0,0,.88)}
-    #lightbox[open]{padding:0;border:0;background:transparent}
-    .lb-wrap{position:relative;min-width:min(92vw,1200px);min-height:min(92vh,800px);display:flex;align-items:center;justify-content:center;background:#000;border-radius:12px;overflow:hidden}
-    #lbImg{max-width:none;max-height:none;transform-origin:50% 50%}
-    .lb-ctrl{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.65);color:#fff;border:1px solid rgba(255,255,255,.25);width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:24px}
-    #lbPrev{left:8px} #lbNext{right:8px}
-    .lb-toolbar{
-      position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
-      display:flex;gap:8px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);padding:6px;border-radius:999px;
+    /* GRID con alturas variables, mantiene el orden de 1..43 */
+    .grid-wrap{
+      display:grid;
+      grid-template-columns:repeat(1,minmax(0,1fr));
+      grid-auto-rows:8px; /* unidad base para calcular spans */
+      gap:16px;
     }
-    .lb-btn{
-      width:40px;height:40px;border-radius:999px;border:1px solid rgba(255,255,255,.2);
-      background:rgba(20,20,20,.7); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900;
+    @media(min-width:640px){.grid-wrap{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(min-width:1024px){.grid-wrap{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media(min-width:1280px){.grid-wrap{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+    .slot{
+      position:relative;border:1px solid var(--border);border-radius:14px;overflow:hidden;
+      background:rgba(255,255,255,.04);
+      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);
+      /* sin transform/hover/filters para evitar lag */
+      -webkit-user-select:none;user-select:none;-webkit-user-drag:none;
     }
-    .lb-close{
-      position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.25);
-      background:rgba(0,0,0,.65);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center
+    .slot img{
+      display:block;width:100%;height:auto; /* mantiene proporción natural */
+      /* color completo por defecto, sin filtros */
     }
 
-    /* Anti selección en zona de imágenes */
-    .no-select{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+    .slot--empty{display:flex;align-items:center;justify-content:center;min-height:160px;border:1px dashed rgba(200,160,53,.35);background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.03));color:#cbb77a;border-radius:14px}
+    .slot--empty .plus{font-size:28px;line-height:1;opacity:.7}
+    .slot--badge{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(4px);padding:4px 8px;border-radius:10px;font-size:12px;color:#fff}
+
+    /* Lightbox */
+    #lightbox::backdrop{background:rgba(0,0,0,.85)}
+    #lightbox[open]{padding:0;border:0;background:transparent}
+    #lightbox{padding:0;border:0;background:transparent}
+    .lb-stage{position:relative}
+    .lb-inner{
+      position:relative;
+      width:min(92vw,1200px);
+      max-height:92vh;
+      overflow:hidden;
+      border-radius:12px;
+      margin:auto;
+      background:#000;
+      cursor:zoom-in; /* cambia a zoom-out cuando esté ampliado */
+      touch-action:none; /* mejora gesto en móvil */
+    }
+    .lb-img{
+      display:block;max-width:100%;max-height:92vh;object-fit:contain;user-select:none;-webkit-user-drag:none;
+      transform:translate(0px,0px) scale(1); /* será editado por JS */
+      will-change:transform;
+    }
+    .lb-close{
+      position:absolute;top:8px;right:8px;z-index:3;
+      width:40px;height:40px;border-radius:999px;border:1px solid rgba(255,255,255,.25);
+      background:rgba(0,0,0,.6);color:#fff;font-size:22px;line-height:40px;text-align:center;
+    }
+    .lb-close:hover{background:rgba(0,0,0,.8)}
+    .lb-ctrl{
+      position:absolute;top:50%;transform:translateY(-50%);
+      background:rgba(0,0,0,.6);color:#fff;border:1px solid rgba(255,255,255,.25);
+      width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:24px
+    }
+    .lb-ctrl:hover{background:rgba(0,0,0,.8)}
+    #lbPrev{left:8px} #lbNext{right:8px}
+
+    .lb-zoom-hint{
+      position:absolute;right:56px;top:8px;z-index:3;
+      display:flex;align-items:center;gap:6px;
+      background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.2);
+      padding:6px 10px;border-radius:10px;font-size:13px
+    }
+    .lb-zoom-hint svg{width:18px;height:18px}
+
+    /* Evitar selección y menú contextual globalmente (suave) */
+    img{user-select:none;-webkit-user-drag:none}
   </style>
 </head>
 
-<body class="min-h-screen no-select">
+<body class="min-h-screen">
   <!-- HOME -->
   <section data-route="home" class="min-h-screen flex items-center justify-center relative overflow-hidden px-6">
     <div class="pointer-events-none absolute inset-0 opacity-25 grayscale bg-[url('https://images.unsplash.com/photo-1499084732479-de2c02d45fc4?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center"></div>
@@ -155,7 +166,7 @@
         </div>
 
         <div class="card p-8 bg-white/5 ring-2 ring-[color:var(--gold-3)] transform scale-105 transition-all duration-300 relative">
-          <span class="badge-accent absolute top-0 right-0 -mt-3 -mr-3 px-3 py-1 text-sm font-bold rounded-full shadow-lg floating-note">Más Popular</span>
+          <span class="badge-accent absolute top-0 right-0 -mt-3 -mr-3 px-3 py-1 text-sm font-bold rounded-full shadow-lg">Más Popular</span>
           <div class="flex flex-col h-full">
             <h4 class="text-3xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Crecimiento</h4>
             <p class="text-sm subtext mb-4">Acelera tu crecimiento con contenido completo.</p>
@@ -216,6 +227,7 @@
         <h2 class="text-3xl sm:text-4xl font-extrabold">Portafolio</h2>
       </div>
 
+      <!-- Tabs principales: Fotografía / Video -->
       <div class="tabbar mb-6" role="tablist" aria-label="Categorías principales">
         <button class="tab-btn active" data-tab="fotografia" role="tab" aria-controls="tab-fotografia">Fotografía</button>
         <button class="tab-btn" data-tab="video" role="tab" aria-controls="tab-video">Video</button>
@@ -229,25 +241,25 @@
         </div>
         <!-- Producto -->
         <div id="sub-producto" class="subpane">
-          <div class="masonry" id="grid-producto" aria-live="polite"></div>
+          <div class="grid-wrap" id="grid-producto" aria-live="polite"></div>
         </div>
         <!-- Registro -->
         <div id="sub-registro" class="subpane hidden">
-          <div class="masonry" id="grid-registro" aria-live="polite"></div>
+          <div class="grid-wrap" id="grid-registro" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- VIDEO (estructura lista para futuro) -->
+      <!-- VIDEO -->
       <section id="tab-video" class="tab-pane hidden">
         <div class="subtabs" role="tablist" aria-label="Subcategorías video">
           <button class="subtab-btn active" data-subtab="general" role="tab" aria-controls="sub-general">General</button>
           <button class="subtab-btn" data-subtab="redes" role="tab" aria-controls="sub-redes">Redes Sociales</button>
         </div>
         <div id="sub-general" class="subpane">
-          <div class="masonry" id="grid-video-general" aria-live="polite"></div>
+          <div class="grid-wrap" id="grid-video-general" aria-live="polite"></div>
         </div>
         <div id="sub-redes" class="subpane hidden">
-          <div class="masonry" id="grid-video-redes" aria-live="polite"></div>
+          <div class="grid-wrap" id="grid-video-redes" aria-live="polite"></div>
         </div>
       </section>
     </div>
@@ -268,23 +280,24 @@
     </div>
   </section>
 
-  <!-- LIGHTBOX -->
+  <!-- LIGHTBOX (fotos) -->
   <dialog id="lightbox">
-    <div class="lb-wrap" id="zoomWrap">
-      <button id="lbPrev" class="lb-ctrl" aria-label="Anterior">‹</button>
-      <img id="lbImg" alt="Foto" draggable="false"/>
-      <button id="lbNext" class="lb-ctrl" aria-label="Siguiente">›</button>
-
-      <div class="lb-toolbar">
-        <button class="lb-btn" id="zoomOut" aria-label="Alejar">−</button>
-        <button class="lb-btn" id="zoomReset" aria-label="Restablecer">⟲</button>
-        <button class="lb-btn" id="zoomIn" aria-label="Acercar">＋</button>
+    <div class="lb-stage">
+      <button id="lbClose" class="lb-close" aria-label="Cerrar">×</button>
+      <div class="lb-zoom-hint" id="lbHint" aria-hidden="true" title="Clic para ampliar / otro clic para salir de zoom">
+        <!-- icono lupa -->
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.49 21.49 20l-5.99-6zM4 9.5C4 6.46 6.46 4 9.5 4S15 6.46 15 9.5 12.54 15 9.5 15 4 12.54 4 9.5z"/></svg>
+        <span>Zoom</span>
       </div>
-      <button class="lb-close" id="lbClose" aria-label="Cerrar">✕</button>
+      <button id="lbPrev" class="lb-ctrl" aria-label="Anterior">‹</button>
+      <div class="lb-inner" id="lbInner">
+        <img id="lbImg" class="lb-img" alt="Foto" />
+      </div>
+      <button id="lbNext" class="lb-ctrl" aria-label="Siguiente">›</button>
     </div>
   </dialog>
 
-  <!-- VIDEO MODAL (listo para futuro) -->
+  <!-- MODAL video -->
   <dialog id="videoModal" style="padding:0;border:0;background:transparent">
     <div style="position:relative;width:min(92vw,1000px);aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden">
       <iframe id="videoFrame" src="" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
@@ -296,6 +309,7 @@
     (function(){
       const sections = Array.from(document.querySelectorAll('[data-route]'));
       const routes = sections.map(s => s.getAttribute('data-route'));
+
       function show(route){
         sections.forEach(s => s.classList.toggle('hidden-route', s.getAttribute('data-route')!==route));
         document.body.classList.toggle('lock', route==='home');
@@ -314,18 +328,147 @@
         if (routes.includes(target)) {
           e.preventDefault();
           if (location.hash.slice(1) !== target) location.hash = '#' + target;
-          else show(target);
+          else show(target); // mismo hash -> forzar render
         }
       });
       render();
     })();
 
-    /* ====== Tabs Portafolio ====== */
+    /* ====== Helpers Portafolio ====== */
+    function videoThumb(url){
+      const yt = String(url).match(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]{6,})/);
+      if (yt) return `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`;
+      const vm = String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/);
+      if (vm) return 'https://via.placeholder.com/800x450?text=Vimeo+Video';
+      return 'https://via.placeholder.com/800x450?text=Video';
+    }
+
+    function renderVideos(list, grid){
+      grid.innerHTML = '';
+      const MAX = 10;
+      const filled = (list || []).slice(0,MAX);
+      filled.forEach((url,i)=>{
+        const div = document.createElement('div');
+        div.className = 'slot';
+        div.innerHTML = `<img src="${videoThumb(url)}" alt="Video ${i+1}"><span class='slot--badge'>${i+1}/10</span>`;
+        div.addEventListener('click', ()=> openVideo(url));
+        grid.appendChild(div);
+      });
+      for(let i=filled.length;i<MAX;i++){
+        const ph = document.createElement('div');
+        ph.className = 'slot--empty';
+        ph.innerHTML = `<div class='plus'>+ slot ${i+1}/10</div>`;
+        grid.appendChild(ph);
+      }
+    }
+
+    /* ====== Lightbox con Zoom + Arrastre ====== */
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbInner = document.getElementById('lbInner');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+    const lbClose = document.getElementById('lbClose');
+    const lbHint  = document.getElementById('lbHint');
+
+    let currentList = [], currentIdx = 0;
+    let scale = 1, tx = 0, ty = 0;
+    let dragging = false, startX = 0, startY = 0, startTx = 0, startTy = 0;
+
+    function applyTransform(){
+      lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      lbInner.style.cursor = scale>1 ? 'grab' : 'zoom-in';
+    }
+    function resetZoom(){
+      scale = 1; tx = 0; ty = 0; applyTransform();
+    }
+    function toggleZoom(clientX, clientY){
+      if (scale === 1){
+        scale = 2.5;
+        // centrar el zoom hacia donde hizo clic
+        const rect = lbImg.getBoundingClientRect();
+        const cx = clientX - rect.left - rect.width/2;
+        const cy = clientY - rect.top  - rect.height/2;
+        tx = -cx*(scale-1); ty = -cy*(scale-1);
+      } else {
+        resetZoom();
+      }
+      applyTransform();
+    }
+
+    function openLightbox(list,i){
+      currentList=list; currentIdx=i;
+      loadLbImage(list[i], true);
+      if (typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open','');
+    }
+    function closeLightbox(){
+      resetZoom();
+      lb.close();
+    }
+    lbClose.addEventListener('click', closeLightbox);
+
+    function nav(step){
+      if (!currentList.length) return;
+      currentIdx=(currentIdx+step+currentList.length)%currentList.length;
+      loadLbImage(currentList[currentIdx], false);
+    }
+    lbPrev.addEventListener('click', ()=> nav(-1));
+    lbNext.addEventListener('click', ()=> nav(1));
+
+    function loadLbImage(url, showHint){
+      resetZoom();
+      lbImg.src = url;
+      lbHint.style.display = showHint ? 'flex' : 'none';
+      setTimeout(()=>{ lbHint.style.display='none'; }, 2000);
+    }
+
+    // Click para zoom
+    lbInner.addEventListener('click', (e)=>{
+      e.preventDefault();
+      toggleZoom(e.clientX, e.clientY);
+    });
+
+    // Arrastre cuando hay zoom
+    lbInner.addEventListener('mousedown',(e)=>{
+      if (scale===1) return;
+      dragging = true; startX = e.clientX; startY = e.clientY; startTx = tx; startTy = ty;
+      lbInner.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove',(e)=>{
+      if (!dragging) return;
+      tx = startTx + (e.clientX - startX);
+      ty = startTy + (e.clientY - startY);
+      applyTransform();
+    });
+    window.addEventListener('mouseup',()=>{
+      if (!dragging) return;
+      dragging = false;
+      lbInner.style.cursor = 'grab';
+    });
+
+    // Cerrar con Esc y bloquear menú contextual sobre la imagen
+    window.addEventListener('keydown',(e)=>{
+      if(!lb.open) return;
+      if(e.key==='Escape') closeLightbox();
+      if(e.key==='ArrowLeft') nav(-1);
+      if(e.key==='ArrowRight') nav(1);
+    });
+    lbImg.addEventListener('contextmenu', (e)=> e.preventDefault());
+    lbImg.addEventListener('dragstart', (e)=> e.preventDefault());
+
+    // Clic fuera cierra
+    lb.addEventListener('click', (e)=>{
+      const innerRect = lbInner.getBoundingClientRect();
+      const outside = e.clientX<innerRect.left||e.clientX>innerRect.right||e.clientY<innerRect.top||e.clientY>innerRect.bottom;
+      if(outside) closeLightbox();
+    });
+
+    /* ====== Tabs (Portafolio) ====== */
     const mainTabs = document.querySelectorAll('.tab-btn');
     const panes = { fotografia: document.getElementById('tab-fotografia'), video: document.getElementById('tab-video') };
     mainTabs.forEach(btn=>{
       btn.addEventListener('click', ()=>{
-        if(!btn.dataset.tab) return;
+        if(!btn.dataset.tab) return; // los del header no tienen data-tab
         mainTabs.forEach(b=>b.classList.remove('active'));
         btn.classList.add('active');
         const t = btn.dataset.tab;
@@ -335,6 +478,7 @@
         }
       });
     });
+
     const fotoSubBtns = document.querySelectorAll('#tab-fotografia .subtab-btn');
     const subFoto = { producto: document.getElementById('sub-producto'), registro: document.getElementById('sub-registro') };
     fotoSubBtns.forEach(btn=>{
@@ -346,23 +490,27 @@
       });
     });
 
-    /* ====== Anti-descarga (disuasión) ====== */
-    document.addEventListener('contextmenu', e=> e.preventDefault(), {capture:true});
-    document.addEventListener('dragstart', e=> e.preventDefault(), {capture:true});
-    document.addEventListener('keydown', (e)=>{
-      const k = e.key.toLowerCase();
-      if ((e.ctrlKey||e.metaKey) && ['s','u','p','c','x','i','j'].includes(k)) { e.preventDefault(); e.stopPropagation(); }
-    }, {capture:true});
+    const videoSubBtns = document.querySelectorAll('#tab-video .subtab-btn');
+    const subVid = { general: document.getElementById('sub-general'), redes: document.getElementById('sub-redes') };
+    videoSubBtns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        videoSubBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const t = btn.dataset.subtab;
+        Object.entries(subVid).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
+      });
+    });
 
-    /* ====== Masonry: generación de tiles desde /img/producto ====== */
+    /* ====== Autollenado desde /img/producto (robusto, conserva ORDEN) ====== */
     const gridProducto = document.getElementById('grid-producto');
+    // Si luego usas registro:
+    // const gridRegistro = document.getElementById('grid-registro');
 
     const PRODUCTO_DIR   = './img/producto/';
     const PRODUCTO_COUNT = 43; // foto (1) ... foto (43)
 
-    // Extensiones detectables
     const EXT_CANDIDATAS = ['jpg','jpeg','png','webp','JPG','JPEG','PNG','WEBP'];
-    // Mapa: 5..11 -> jpeg, 18..21 -> png, 39..43 -> png
+    // 5..11 -> jpeg, 18..21 -> png, 39..43 -> png
     const EXT_MAP = {
       5:'jpeg',6:'jpeg',7:'jpeg',8:'jpeg',9:'jpeg',10:'jpeg',11:'jpeg',
       18:'png',19:'png',20:'png',21:'png',
@@ -381,172 +529,104 @@
       return Array.from(new Set(urls));
     }
 
-    function cargarConFallback(urls, onOk, onFail, idx=0){
-      if(idx>=urls.length){ onFail(); return; }
-      const img = new Image();
-      img.loading = idx < 6 ? 'eager' : 'lazy';
-      img.decoding = 'async';
-      img.onload = ()=> onOk(urls[idx], img);
-      img.onerror = ()=> cargarConFallback(urls, onOk, onFail, idx+1);
-      img.src = urls[idx];
+    function cargarConFallback(imgEl, urls, onOk, onFail, idx = 0) {
+      if (idx >= urls.length) { onFail(); return; }
+      imgEl.onload = () => onOk(urls[idx]);
+      imgEl.onerror = () => cargarConFallback(imgEl, urls, onOk, onFail, idx + 1);
+      imgEl.src = urls[idx];
     }
 
-    const urlsOK = []; const fallidas=[];
-    function addTile(url, i, probeImg){
-      const tile = document.createElement('button');
-      tile.type='button';
-      tile.className='tile';
-      tile.setAttribute('aria-label', `Abrir foto ${i} en grande`);
-      tile.dataset.index = i;
-
-      // Altura según proporción real de la imagen
-      const setSize = ()=>{
-        const w = tile.clientWidth || tile.getBoundingClientRect().width || 300;
-        const ratio = probeImg.naturalWidth / probeImg.naturalHeight;
-        const h = Math.max(180, Math.round(w / ratio));
-        tile.style.height = h + 'px';
-      };
-
-      // Fondo + UI
-      tile.style.backgroundImage = `url("${url}")`;
-      tile.innerHTML = `
-        <span class="slot--badge">${i}</span>
-        <span class="loupe" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </span>
-      `;
-
-      tile.addEventListener('click', ()=> openLightboxFromIndex(i));
-      gridProducto.appendChild(tile);
-      requestAnimationFrame(setSize);
-      window.addEventListener('resize', setSize);
+    function openLightboxFrom(okUrl, visibles){
+      const idxVisible = visibles.indexOf(okUrl);
+      openLightbox(visibles, Math.max(idxVisible,0));
     }
 
-    function renderMasonryProducto(){
-      if(!gridProducto) return;
-      gridProducto.innerHTML = '';
-      for(let i=1;i<=PRODUCTO_COUNT;i++){
-        const candidates = posiblesURLs(PRODUCTO_DIR, i);
+    function renderFotosDesdeCarpetaRobusto(grid, baseDir, count) {
+      if (!grid || count <= 0) return;
+      grid.innerHTML = '';
+      const urlsOK = [];  // índice 1..n (mantiene huecos si alguno falla)
+      const fallidas = [];
+
+      for (let i = 1; i <= count; i++) {
+        const candidatos = posiblesURLs(baseDir, i);
+        const a = document.createElement('a');
+        a.href = '#';
+        a.className = 'slot';
+
+        const img = document.createElement('img');
+        img.alt = `Foto ${i}`;
+        img.setAttribute('draggable','false');
+
+        const badge = document.createElement('span');
+        badge.className = 'slot--badge';
+        badge.textContent = String(i);
+
+        a.appendChild(img);
+        a.appendChild(badge);
+        grid.appendChild(a);
+
         cargarConFallback(
-          candidates,
-          (okUrl, probe) => { urlsOK[i]=okUrl; addTile(okUrl, i, probe); },
+          img,
+          candidatos,
+          (okUrl) => {
+            urlsOK[i] = okUrl;
+            a.href = okUrl;
+
+            // Recalcular span de grid al cargar
+            setGridSpanForItem(grid, a);
+
+            a.addEventListener('click', (e) => {
+              e.preventDefault();
+              const visibles = urlsOK.filter(Boolean);
+              openLightboxFrom(okUrl, visibles);
+            });
+          },
           () => {
             fallidas.push(i);
+            a.replaceChildren();
             const ph = document.createElement('div');
             ph.className = 'slot--empty';
             ph.innerHTML = `<div class='plus'>No encontrada<br><small>foto ${i}</small></div>`;
-            gridProducto.appendChild(ph);
+            a.appendChild(ph);
+            setGridSpanForItem(grid, a);
           }
         );
       }
-      setTimeout(()=>{ if(fallidas.length){ console.warn('Fotos NO encontradas:', fallidas); }}, 1500);
-    }
-    renderMasonryProducto();
 
-    /* ====== LIGHTBOX + ZOOM (sin animaciones, con botón X) ====== */
-    const lb = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lbImg');
-    const lbPrev = document.getElementById('lbPrev');
-    const lbNext = document.getElementById('lbNext');
-    const lbClose= document.getElementById('lbClose');
-    const zoomWrap = document.getElementById('zoomWrap');
-    const zoomInBtn = document.getElementById('zoomIn');
-    const zoomOutBtn= document.getElementById('zoomOut');
-    const zoomResetBtn=document.getElementById('zoomReset');
+      // Recalcular spans también al redimensionar
+      window.addEventListener('resize', ()=> reflowGrid(grid));
+      setTimeout(()=> reflowGrid(grid), 1000);
 
-    let currentIdx = 1;
-    let scale = 1, tx = 0, ty = 0;
-    let isPanning = false, startX=0, startY=0, origX=0, origY=0;
-
-    function visibles(){
-      return urlsOK
-        .map((url,idx)=>({url,idx}))
-        .filter(x=>!!x.url);
-    }
-    function showAt(idx){
-      const list = visibles();
-      const pos = list.findIndex(x=>x.idx===idx);
-      const clampPos = pos<0 ? 0 : pos;
-      const item = list[clampPos] || list[0];
-      if(!item) return;
-      currentIdx = item.idx;
-      lbImg.src = item.url;
-      scale = 1; tx = 0; ty = 0; applyTransform();
-    }
-    function openLightboxFromIndex(idx){
-      showAt(idx);
-      if(typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open','');
-    }
-    function applyTransform(){
-      lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-    }
-    function zoomBy(delta){
-      const newScale = Math.min(4, Math.max(1, scale + delta));
-      if(newScale===1){ tx=0; ty=0; }
-      scale = newScale; applyTransform();
-    }
-    function nav(step){
-      const list = visibles();
-      if(!list.length) return;
-      const pos = list.findIndex(x=>x.idx===currentIdx);
-      const next = (pos + step + list.length) % list.length;
-      showAt(list[next].idx);
+      setTimeout(() => {
+        if (fallidas.length) {
+          console.warn('Fotos NO encontradas (índices):', fallidas);
+          console.warn('Revisa extensión (.jpeg/.png) o el espacio en el nombre: "foto (i)" vs "foto(i)".');
+        }
+      }, 1500);
     }
 
-    lbPrev.addEventListener('click', ()=> nav(-1));
-    lbNext.addEventListener('click', ()=> nav(1));
-    lbClose.addEventListener('click', ()=> lb.close());
-    window.addEventListener('keydown', (e)=>{
-      if(!lb.open) return;
-      if(e.key==='Escape') lb.close();
-      if(e.key==='ArrowLeft') nav(-1);
-      if(e.key==='ArrowRight') nav(1);
-      if(e.key==='+' || (e.key==='='&&(e.ctrlKey||e.metaKey))) { e.preventDefault(); zoomBy(+0.25); }
-      if(e.key==='-' || (e.key==='_'&&(e.ctrlKey||e.metaKey))) { e.preventDefault(); zoomBy(-0.25); }
-      if(e.key==='0' && (e.ctrlKey||e.metaKey)) { e.preventDefault(); scale=1; tx=ty=0; applyTransform(); }
-    });
+    // ==== Masonry-like por JS, SIN reordenar ====
+    function setGridSpanForItem(grid, item){
+      const rowHeight = parseInt(getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+      const rowGap    = parseInt(getComputedStyle(grid).getPropertyValue('gap'));
+      const content   = item.querySelector('img, .slot--empty');
+      if (!content) return;
+      const height = content.getBoundingClientRect().height;
+      const span = Math.ceil( (height + rowGap) / (rowHeight + rowGap) );
+      item.style.gridRowEnd = `span ${span}`;
+    }
+    function reflowGrid(grid){
+      Array.from(grid.children).forEach(item=> setGridSpanForItem(grid, item));
+    }
 
-    // Zoom botones y doble click
-    zoomInBtn.addEventListener('click', ()=> zoomBy(+0.25));
-    zoomOutBtn.addEventListener('click',()=> zoomBy(-0.25));
-    zoomResetBtn.addEventListener('click',()=> { scale=1; tx=ty=0; applyTransform(); });
-    lbImg.addEventListener('dblclick', ()=> { scale = scale===1 ? 2 : 1; if(scale===1){ tx=ty=0; } applyTransform(); });
+    // Render inicial
+    renderFotosDesdeCarpetaRobusto(gridProducto, PRODUCTO_DIR, PRODUCTO_COUNT);
 
-    // Pan al arrastrar (cuando zoom > 1)
-    lbImg.addEventListener('mousedown', (e)=>{
-      if(scale<=1) return;
-      isPanning=true; startX=e.clientX; startY=e.clientY; origX=tx; origY=ty;
-    });
-    window.addEventListener('mousemove', (e)=>{
-      if(!isPanning) return;
-      tx = origX + (e.clientX - startX);
-      ty = origY + (e.clientY - startY);
-      applyTransform();
-    });
-    window.addEventListener('mouseup', ()=> isPanning=false);
-
-    // Zoom con rueda
-    zoomWrap.addEventListener('wheel', (e)=>{
-      e.preventDefault();
-      const delta = e.deltaY>0 ? -0.2 : +0.2;
-      zoomBy(delta);
-    }, {passive:false});
-
-    // Cerrar al click fuera
-    lb.addEventListener('click',(e)=>{
-      const box=lbImg.getBoundingClientRect();
-      const outside=e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom;
-      const clickedClose = e.target.id==='lbClose';
-      if(outside && !clickedClose) lb.close();
-    });
-
-    /* ====== Video (placeholder para futuro) ====== */
-    const vModal=document.getElementById('videoModal'); const vFrame=document.getElementById('videoFrame');
-    function openVideo(url){ vFrame.src=url; if(typeof vModal.showModal==='function') vModal.showModal(); else vModal.setAttribute('open',''); }
-    vModal.addEventListener('click',(e)=>{ const box=vFrame.getBoundingClientRect(); const outside=e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom; if(outside){ vFrame.src=''; vModal.close(); }});
-
+    // ====== Video (si lo usas) ======
+    // const gridVideoGen = document.getElementById('grid-video-general');
+    // const gridVideoRed = document.getElementById('grid-video-redes');
+    // renderVideos(['https://www.youtube.com/embed/dQw4w9WgXcQ'], gridVideoGen);
+    // renderVideos([], gridVideoRed);
   </script>
 </body>
 </html> 
