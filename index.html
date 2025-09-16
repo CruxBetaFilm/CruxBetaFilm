@@ -254,216 +254,93 @@
   </dialog>
 
   <script>
-    // ====== Router por hash ======
-    (function(){
-      const sections = Array.from(document.querySelectorAll('[data-route]'));
-      function show(route){
-        sections.forEach(s=>s.classList.toggle('hidden-route', s.getAttribute('data-route')!==route));
-        document.body.classList.toggle('lock', route==='home');
-        window.scrollTo({top:0,behavior:'auto'});
-      }
-      function render(){
-        const routes=sections.map(s=>s.getAttribute('data-route'));
-        let route=(location.hash||'#home').slice(1);
-        if(!routes.includes(route)) route='home';
-        show(route);
-      }
-      window.addEventListener('hashchange', render); render();
-    })();
-
-    // ====== Datos de Portafolio ======
-    // FOTOGRAFÍA: hasta 50; si vacío, NO aparece el grid (sin placeholders)
-    const FOTOS_PRODUCTO = [
-      'https://images.unsplash.com/photo-1542152399-6e3e150d8977?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1579705707736-218206d2d0a0?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1620712948210-e5559c5d140e?q=80&w=1600&auto=format&fit=crop',
-    ];
-    const FOTOS_REGISTRO = [
-      'https://images.unsplash.com/photo-1596727409244-a957b11d94be?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1558299105-e414c52f754b?q=80&w=1600&auto=format&fit=crop',
-    ];
-
-    // VIDEO: 10 slots fijos por subcategoría (rellenos o placeholders)
-    const VIDEOS_GENERAL = [
-      'https://www.youtube.com/embed/dQw4w9WgXcQ',
-      'https://player.vimeo.com/video/76979871'
-    ];
-    const VIDEOS_REDES = [
-      // agrega aquí
-    ];
-
-    // ====== Render helpers ======
-    const gridProducto=document.getElementById('grid-producto');
-    const gridRegistro=document.getElementById('grid-registro');
-    const gridVideoGen=document.getElementById('grid-video-general');
-    const gridVideoRed=document.getElementById('grid-video-redes');
-
-    function renderFotos(list, grid){
-      grid.innerHTML='';
-      if(!list || list.length===0){ grid.parentElement.classList.add('hidden'); return; }
-      grid.parentElement.classList.remove('hidden');
-      list.slice(0,50).forEach((src,i)=>{
-        const a=document.createElement('a'); a.href=src; a.className='slot'; a.innerHTML=`<img src="${src}" alt="Foto ${i+1}"><span class="slot--badge">${i+1}</span>`; a.addEventListener('click',(e)=>{ e.preventDefault(); openLightbox(list,i); }); grid.appendChild(a);
-      });
-    }
-
-    function renderVideos(list, grid){
-      grid.innerHTML=''; const MAX=10; const filled=(list||[]).slice(0,MAX);
-      filled.forEach((url,i)=>{ const div=document.createElement('div'); div.className='slot'; div.innerHTML=`<img src="${videoThumb(url)}" alt="Video ${i+1}"><span class='slot--badge'>${i+1}/10</span>`; div.addEventListener('click',()=>openVideo(url)); grid.appendChild(div); });
-      for(let i=filled.length;i<MAX;i++){ const ph=document.createElement('div'); ph.className='slot--empty'; ph.innerHTML=`<div class='plus'>+ slot ${i+1}/10</div>`; grid.appendChild(ph); }
-    }
-
-    function videoThumb(url){
-      const yt=String(url).match(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]{6,})/); if(yt) return `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`;
-      const vm=String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/); if(vm) return 'https://via.placeholder.com/800x450?text=Vimeo+Video';
-      return 'https://via.placeholder.com/800x450?text=Video';
-    }
-
-    // ====== Lightbox fotos ======
-    const lb=document.getElementById('lightbox'); const lbImg=document.getElementById('lbImg'); const lbPrev=document.getElementById('lbPrev'); const lbNext=document.getElementById('lbNext');
-    let currentList=[], currentIdx=0;
-    function openLightbox(list,i){ currentList=list; currentIdx=i; lbImg.src=list[i]; if(typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open',''); }
-    function lbNav(step){ if(!currentList.length) return; currentIdx=(currentIdx+step+currentList.length)%currentList.length; lbImg.src=currentList[currentIdx]; }
-    lbPrev.addEventListener('click',()=>lbNav(-1)); lbNext.addEventListener('click',()=>lbNav(1));
-    lb.addEventListener('click',(e)=>{ const r=lbImg.getBoundingClientRect(); const outside=e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom; if(outside) lb.close(); });
-    window.addEventListener('keydown',(e)=>{ if(!lb.open) return; if(e.key==='ArrowLeft') lbNav(-1); if(e.key==='ArrowRight') lbNav(1); if(e.key==='Escape') lb.close(); });
-
-    // ====== Video modal ======
-    const vModal=document.getElementById('videoModal'); const vFrame=document.getElementById('videoFrame');
-    function openVideo(url){ vFrame.src=url; if(typeof vModal.showModal==='function') vModal.showModal(); else vModal.setAttribute('open',''); }
-    vModal.addEventListener('click',(e)=>{ const box=vFrame.getBoundingClientRect(); const outside=e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom; if(outside){ vFrame.src=''; vModal.close(); }});
-
-    // ====== Tabs principales ======
-    const mainTabs=document.querySelectorAll('.tab-btn');
-    const panes={ fotografia:document.getElementById('tab-fotografia'), video:document.getElementById('tab-video') };
-    mainTabs.forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        if(!btn.dataset.tab) return; // ignora botones fuera del portafolio
-        mainTabs.forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        const t=btn.dataset.tab; if(panes.fotografia&&panes.video){ panes.fotografia.classList.toggle('hidden', t!=='fotografia'); panes.video.classList.toggle('hidden', t!=='video'); }
-      });
-    });
-
-    // ====== Subtabs Fotografía ======
-    const fotoSubBtns=document.querySelectorAll('#tab-fotografia .subtab-btn');
-    const subFoto={ producto:document.getElementById('sub-producto'), registro:document.getElementById('sub-registro') };
-    fotoSubBtns.forEach(btn=>{ btn.addEventListener('click',()=>{ fotoSubBtns.forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const t=btn.dataset.subtab; Object.entries(subFoto).forEach(([k,el])=> el.classList.toggle('hidden', k!==t)); }); });
-
-    // ====== Subtabs Video ======
-    const videoSubBtns=document.querySelectorAll('#tab-video .subtab-btn');
-    const subVid={ general:document.getElementById('sub-general'), redes:document.getElementById('sub-redes') };
-    videoSubBtns.forEach(btn=>{ btn.addEventListener('click',()=>{ videoSubBtns.forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const t=btn.dataset.subtab; Object.entries(subVid).forEach(([k,el])=> el.classList.toggle('hidden', k!==t)); }); });
-
-    // Render inicial
-    renderFotos(FOTOS_PRODUCTO, gridProducto);
-    renderFotos(FOTOS_REGISTRO, gridRegistro);
-    renderVideos(VIDEOS_GENERAL, gridVideoGen);
-    renderVideos(VIDEOS_REDES, gridVideoRed);
-   <script>
-    const PRODUCTO_DIR = './img/producto/';
-    const PRODUCTO_COUNT = 43;   // de foto (1) a foto (43)
-    const PRODUCTO_EXT = 'jpg';  // o webp/png
-
-    function fotoUrl(baseDir, i, ext='jpg') {
-      const name = `foto (${i}).${ext}`;
-      return baseDir + encodeURIComponent(name);
-    }
-
-    function renderFotosEn(id, baseDir, count, ext='jpg') {
-      const grid = document.querySelector(`#${id} .grid-slots`);
-      if (!grid || count <= 0) return;
-      grid.innerHTML = '';
-      for (let i = 1; i <= count; i++) {
-        const url = fotoUrl(baseDir, i, ext);
-        const cell = document.createElement('div');
-        cell.className = 'slot';
-        cell.innerHTML = `<img src="${url}" alt="Foto ${i}">`;
-        grid.appendChild(cell);
-      }
-    }
-
-    // Genera automáticamente las fotos de producto
-    renderFotosEn('producto', PRODUCTO_DIR, PRODUCTO_COUNT, PRODUCTO_EXT);
-  <script>
-  // ====== Router por hash ======
+  // ====== Router por hash + Failsafe por clic ======
   (function(){
     const sections = Array.from(document.querySelectorAll('[data-route]'));
+    const routes = sections.map(s => s.getAttribute('data-route'));
+
     function show(route){
-      sections.forEach(s=>s.classList.toggle('hidden-route', s.getAttribute('data-route')!==route));
+      sections.forEach(s => s.classList.toggle('hidden-route', s.getAttribute('data-route')!==route));
       document.body.classList.toggle('lock', route==='home');
-      window.scrollTo({top:0,behavior:'auto'});
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
     function render(){
-      const routes=sections.map(s=>s.getAttribute('data-route'));
-      let route=(location.hash||'#home').slice(1);
-      if(!routes.includes(route)) route='home';
+      let route = (location.hash || '#home').slice(1);
+      if (!routes.includes(route)) route = 'home';
       show(route);
     }
     window.addEventListener('hashchange', render);
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const target = (a.getAttribute('href') || '#home').slice(1);
+      if (routes.includes(target)) {
+        e.preventDefault();
+        if (location.hash.slice(1) !== target) location.hash = '#' + target;
+        else show(target); // mismo hash -> forzar render
+      }
+    });
     render();
   })();
 
-  // ====== Portafolio: helpers ======
+  // ====== Utils Portafolio ======
   function videoThumb(url){
-    const yt=String(url).match(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]{6,})/);
-    if(yt) return `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`;
-    const vm=String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/);
-    if(vm) return 'https://via.placeholder.com/800x450?text=Vimeo+Video';
+    const yt = String(url).match(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]{6,})/);
+    if (yt) return `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`;
+    const vm = String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    if (vm) return 'https://via.placeholder.com/800x450?text=Vimeo+Video';
     return 'https://via.placeholder.com/800x450?text=Video';
   }
-
   function renderFotos(list, grid){
-    grid.innerHTML='';
-    if(!list || list.length===0){ grid.parentElement.classList.add('hidden'); return; }
+    grid.innerHTML = '';
+    if (!list || list.length===0){ grid.parentElement.classList.add('hidden'); return; }
     grid.parentElement.classList.remove('hidden');
     list.slice(0,50).forEach((src,i)=>{
-      const a=document.createElement('a');
-      a.href=src;
-      a.className='slot';
-      a.innerHTML=`<img src="${src}" alt="Foto ${i+1}"><span class="slot--badge">${i+1}</span>`;
-      a.addEventListener('click',(e)=>{ e.preventDefault(); openLightbox(list,i); });
+      const a = document.createElement('a');
+      a.href = src;
+      a.className = 'slot';
+      a.innerHTML = `<img src="${src}" alt="Foto ${i+1}"><span class="slot--badge">${i+1}</span>`;
+      a.addEventListener('click', (e)=>{ e.preventDefault(); openLightbox(list,i); });
       grid.appendChild(a);
     });
   }
-
   function renderVideos(list, grid){
-    grid.innerHTML='';
-    const MAX=10;
-    const filled=(list||[]).slice(0,MAX);
+    grid.innerHTML = '';
+    const MAX = 10;
+    const filled = (list || []).slice(0,MAX);
     filled.forEach((url,i)=>{
-      const div=document.createElement('div');
-      div.className='slot';
-      div.innerHTML=`<img src="${videoThumb(url)}" alt="Video ${i+1}"><span class='slot--badge'>${i+1}/10</span>`;
-      div.addEventListener('click',()=>openVideo(url));
+      const div = document.createElement('div');
+      div.className = 'slot';
+      div.innerHTML = `<img src="${videoThumb(url)}" alt="Video ${i+1}"><span class='slot--badge'>${i+1}/10</span>`;
+      div.addEventListener('click', ()=> openVideo(url));
       grid.appendChild(div);
     });
     for(let i=filled.length;i<MAX;i++){
-      const ph=document.createElement('div');
-      ph.className='slot--empty';
-      ph.innerHTML=`<div class='plus'>+ slot ${i+1}/10</div>`;
+      const ph = document.createElement('div');
+      ph.className = 'slot--empty';
+      ph.innerHTML = `<div class='plus'>+ slot ${i+1}/10</div>`;
       grid.appendChild(ph);
     }
   }
 
-  // ====== Lightbox fotos ======
-  const lb=document.getElementById('lightbox');
-  const lbImg=document.getElementById('lbImg');
-  const lbPrev=document.getElementById('lbPrev');
-  const lbNext=document.getElementById('lbNext');
-  let currentList=[], currentIdx=0;
+  // ====== Lightbox ======
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+  let currentList = [], currentIdx = 0;
   function openLightbox(list,i){
     currentList=list; currentIdx=i; lbImg.src=list[i];
-    if(typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open','');
+    if (typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open','');
   }
   function lbNav(step){
-    if(!currentList.length) return;
+    if (!currentList.length) return;
     currentIdx=(currentIdx+step+currentList.length)%currentList.length;
     lbImg.src=currentList[currentIdx];
   }
-  lbPrev.addEventListener('click',()=>lbNav(-1));
-  lbNext.addEventListener('click',()=>lbNav(1));
-  lb.addEventListener('click',(e)=>{
+  lbPrev.addEventListener('click', ()=> lbNav(-1));
+  lbNext.addEventListener('click', ()=> lbNav(1));
+  lb.addEventListener('click', (e)=>{
     const r=lbImg.getBoundingClientRect();
     const outside=e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom;
     if(outside) lb.close();
@@ -476,98 +353,61 @@
   });
 
   // ====== Video modal ======
-  const vModal=document.getElementById('videoModal');
-  const vFrame=document.getElementById('videoFrame');
+  const vModal = document.getElementById('videoModal');
+  const vFrame = document.getElementById('videoFrame');
   function openVideo(url){
-    vFrame.src=url;
-    if(typeof vModal.showModal==='function') vModal.showModal(); else vModal.setAttribute('open','');
+    vFrame.src = url;
+    if (typeof vModal.showModal==='function') vModal.showModal(); else vModal.setAttribute('open','');
   }
-  vModal.addEventListener('click',(e)=>{
-    const box=vFrame.getBoundingClientRect();
-    const outside=e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom;
+  vModal.addEventListener('click', (e)=>{
+    const box = vFrame.getBoundingClientRect();
+    const outside = e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom;
     if(outside){ vFrame.src=''; vModal.close(); }
   });
 
-  // ====== Tabs principales (dentro de Portafolio) ======
-  const mainTabs=document.querySelectorAll('.tab-btn');
-  const panes={ fotografia:document.getElementById('tab-fotografia'), video:document.getElementById('tab-video') };
+  // ====== Tabs (Portafolio) ======
+  const mainTabs = document.querySelectorAll('.tab-btn');
+  const panes = { fotografia: document.getElementById('tab-fotografia'), video: document.getElementById('tab-video') };
   mainTabs.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      if(!btn.dataset.tab) return; // ignora botones del header
+    btn.addEventListener('click', ()=>{
+      if(!btn.dataset.tab) return; // los del header no tienen data-tab
       mainTabs.forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      const t=btn.dataset.tab;
-      if(panes.fotografia&&panes.video){
+      const t = btn.dataset.tab;
+      if(panes.fotografia && panes.video){
         panes.fotografia.classList.toggle('hidden', t!=='fotografia');
         panes.video.classList.toggle('hidden', t!=='video');
       }
     });
   });
 
-  // ====== Subtabs Fotografía ======
-  const fotoSubBtns=document.querySelectorAll('#tab-fotografia .subtab-btn');
-  const subFoto={ producto:document.getElementById('sub-producto'), registro:document.getElementById('sub-registro') };
-  fotoSubBtns.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      fotoSubBtns.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      const t=btn.dataset.subtab;
-      Object.entries(subFoto).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
-    });
-  });
+  // ====== Autollenado desde /img/producto ======
+  const gridProducto = document.getElementById('grid-producto');
+  const gridRegistro = document.getElementById('grid-registro');
+  const gridVideoGen = document.getElementById('grid-video-general');
+  const gridVideoRed = document.getElementById('grid-video-redes');
 
-  // ====== Subtabs Video ======
-  const videoSubBtns=document.querySelectorAll('#tab-video .subtab-btn');
-  const subVid={ general:document.getElementById('sub-general'), redes:document.getElementById('sub-redes') };
-  videoSubBtns.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      videoSubBtns.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      const t=btn.dataset.subtab;
-      Object.entries(subVid).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
-    });
-  });
+  const PRODUCTO_DIR   = './img/producto/';
+  const PRODUCTO_COUNT = 43;     // foto (1) ... foto (43)
+  const PRODUCTO_EXT   = 'jpg';
 
-  // ====== Datos de ejemplo (puedes quitarlos si no los usas) ======
-  const FOTOS_PRODUCTO = [];     // ← vacío: usaremos la carpeta de GitHub
-  const FOTOS_REGISTRO = [];
-  const VIDEOS_GENERAL = ['https://www.youtube.com/embed/dQw4w9WgXcQ'];
-  const VIDEOS_REDES = [];
-
-  // ====== Autollenado desde tu carpeta img/producto ======
-  const PRODUCTO_DIR = './img/producto/';
-  const PRODUCTO_COUNT = 43;     // de foto (1) a foto (43)
-  const PRODUCTO_EXT = 'jpg';
-
-  function fotoUrl(baseDir, i, ext='jpg') {
+  function fotoUrl(baseDir, i, ext='jpg'){
     const name = `foto (${i}).${ext}`;
     return baseDir + encodeURIComponent(name);
   }
 
-  function renderFotosDesdeCarpeta(gridId, baseDir, count, ext='jpg') {
-    const grid = document.getElementById(gridId);
-    if (!grid || count <= 0) return;
-    grid.innerHTML = '';
+  (function renderFotosDesdeCarpeta(){
+    if (!gridProducto) return;
     const list = [];
-    for (let i=1; i<=count; i++) list.push(fotoUrl(baseDir, i, ext));
-    renderFotos(list, grid); // reutilizamos lightbox, estilos y numeración
-  }
+    for (let i=1; i<=PRODUCTO_COUNT; i++) list.push(fotoUrl(PRODUCTO_DIR, i, PRODUCTO_EXT));
+    renderFotos(list, gridProducto);
+  })();
 
-  // ====== Render inicial ======
-  const gridProducto=document.getElementById('grid-producto');
-  const gridRegistro=document.getElementById('grid-registro');
-  const gridVideoGen=document.getElementById('grid-video-general');
-  const gridVideoRed=document.getElementById('grid-video-redes');
-
-  // Fotos desde carpeta (Producto)
-  renderFotosDesdeCarpeta('grid-producto', PRODUCTO_DIR, PRODUCTO_COUNT, PRODUCTO_EXT);
-
-  // Si luego usas registro con carpeta:
-  // renderFotosDesdeCarpeta('grid-registro', './img/registro/', NUM, 'jpg');
-
-  // Videos (si usas)
-  renderVideos(VIDEOS_GENERAL, gridVideoGen);
-  renderVideos(VIDEOS_REDES, gridVideoRed);
+  // Si más tarde usas videos:
+  // const VIDEOS_GENERAL = ['https://www.youtube.com/embed/ID'];
+  // const VIDEOS_REDES = [];
+  // renderVideos(VIDEOS_GENERAL, gridVideoGen);
+  // renderVideos(VIDEOS_REDES, gridVideoRed);
 </script>
 </body>
 </html>
