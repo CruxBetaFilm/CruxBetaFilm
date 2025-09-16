@@ -10,25 +10,37 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet"/>
 
   <style>
-    :root{ --black:#0a0a0a; --border:rgba(255,255,255,.14); --gold:#c8a035; --gold-2:#a07a18; --gold-3:#f3e2a5; }
+    :root{
+      --black:#0a0a0a; --gray-900:#121212; --gray-800:#1e1e1e; --border:rgba(255,255,255,.14);
+      --gold:#c8a035; --gold-2:#a07a18; --gold-3:#f3e2a5; --accent:#c47c3b;
+    }
     html,body{height:100%}
     body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--black);color:#ececec}
     .hidden-route{display:none!important}
     .subtext{color:#d8d8d8}
     body.lock{height:100vh;overflow:hidden}
 
-    /* Buttons */
+    /* ===== Botones ===== */
     .btn-gold{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--gold-3),var(--gold));color:#141414;border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(200,160,53,.22);transition:transform .18s ease,filter .18s ease}
     .btn-gold:hover{transform:translateY(-1px);filter:brightness(1.06)}
     .btn-gold-outline{position:relative;overflow:hidden;background:rgba(255,255,255,.02);color:var(--gold-3);border:1px solid rgba(200,160,53,.55);box-shadow:0 8px 24px rgba(0,0,0,.24);transition:transform .18s ease,filter .18s ease}
     .btn-gold-outline:hover{transform:translateY(-1px);filter:brightness(1.08)}
+    .btn-sheen::after{content:"";position:absolute;inset:0;transform:translateX(-120%) skewX(12deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:sheen 2.2s infinite;mix-blend-mode:screen}
+    @keyframes sheen{0%{transform:translateX(-120%) skewX(12deg)}60%{transform:translateX(120%) skewX(12deg)}100%{transform:translateX(120%) skewX(12deg)}}
 
-    /* Panel / Card */
+    /* ===== Panel / Card ===== */
     .panel{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid var(--border);box-shadow:0 20px 50px rgba(0,0,0,.6);backdrop-filter:blur(8px);border-radius:16px}
     .card{position:relative;border:1px solid var(--border);background:rgba(255,255,255,.04);box-shadow:0 0 0 1px rgba(255,255,255,.02) inset,0 20px 60px -20px rgba(0,0,0,.6);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;border-radius:14px}
     .card:hover{transform:translateY(-4px);box-shadow:0 0 0 1px rgba(212,175,55,.18) inset,0 30px 80px -20px rgba(212,175,55,.25);border-color:rgba(212,175,55,.35)}
 
-    /* Portafolio: tabs & grids */
+    .badge-accent{background:linear-gradient(180deg,rgba(196,124,59,.95),rgba(160,122,24,.95));color:#fff;border:1px solid rgba(255,255,255,.18)}
+    .floating-note{animation:float 3s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+    /* ===== Línea decorativa ===== */
+    .hrule{height:2px;width:72px;margin:.75rem 0 1rem;background:linear-gradient(90deg,var(--gold-2),var(--gold-3),transparent);border-radius:999px;opacity:.95}
+
+    /* ===== Portafolio (tabs + grids) ===== */
     .tabbar{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
     .tab-btn{padding:.55rem 1rem;border:1px solid rgba(200,160,53,.45);border-radius:9999px;font-weight:800;letter-spacing:.2px;background:rgba(255,255,255,.02);color:var(--gold-3);cursor:pointer;transition:.18s}
     .tab-btn:hover{transform:translateY(-1px);filter:brightness(1.06)}
@@ -36,15 +48,18 @@
     .subtabs{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:.75rem 0 1.25rem}
     .subtab-btn{padding:.4rem .85rem;border:1px dashed rgba(200,160,53,.35);border-radius:9999px;font-weight:700;color:#e7e7e7;background:rgba(255,255,255,.02);cursor:pointer;transition:.18s}
     .subtab-btn.active{border-style:solid;color:#111;background:linear-gradient(180deg,var(--gold-3),var(--gold))}
-    .grid-wrap{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:14px}
+
+    .grid-wrap{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:18px}
     @media(min-width:640px){.grid-wrap{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(min-width:1024px){.grid-wrap{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media(min-width:1280px){.grid-wrap{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
     .slot{position:relative;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.04);box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);transition:transform .22s, box-shadow .22s, border-color .22s}
     .slot:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(212,175,55,.18) inset, 0 30px 80px -20px rgba(212,175,55,.25);border-color:rgba(212,175,55,.35)}
-    .slot img{display:block;width:100%;height:220px;object-fit:cover;filter:grayscale(28%) contrast(105%);transition:filter .2s}
+    .slot img{display:block;width:100%;height:240px;object-fit:cover;filter:grayscale(28%) contrast(105%);transition:filter .2s}
     .slot:hover img{filter:grayscale(0%) contrast(110%)}
-    .slot--empty{display:flex;align-items:center;justify-content:center;height:220px;border:1px dashed rgba(200,160,53,.35);background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.03));color:#cbb77a;border-radius:14px}
+
+    .slot--empty{display:flex;align-items:center;justify-content:center;height:240px;border:1px dashed rgba(200,160,53,.35);background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.03));color:#cbb77a;border-radius:14px}
     .slot--empty .plus{font-size:28px;line-height:1;opacity:.7}
     .slot--badge{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(4px);padding:4px 8px;border-radius:10px;font-size:12px;color:#fff}
 
@@ -66,26 +81,81 @@
       <img src="https://raw.githubusercontent.com/edgarces9/Mi-primera-p-gina-/main/IMG_1135.png" alt="Logo de Crux&Beta Film" class="mx-auto mb-5 rounded-full w-32 h-32 border border-white/20 object-cover"/>
       <h1 class="text-4xl sm:text-6xl font-black tracking-tight bg-clip-text text-transparent" style="background-image:linear-gradient(90deg,var(--gold-3),var(--gold),var(--gold-2))">Crux&Beta Film</h1>
       <p class="mt-3 text-lg sm:text-2xl subtext">Fotografía &amp; Video con un look formal y atemporal</p>
-      <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
-        <a href="#paquetes" class="btn-gold px-6 py-3 rounded-full font-extrabold">Ver paquetes</a>
-        <a href="#contacto" class="btn-gold-outline px-6 py-3 rounded-full font-extrabold">Contacto</a>
-        <a href="#portafolio" class="btn-gold-outline px-6 py-3 rounded-full font-extrabold">Portafolio</a>
-        <a href="#opiniones" class="btn-gold-outline px-6 py-3 rounded-full font-extrabold">Opiniones</a>
-      </div>
+      <nav class="mt-7 flex flex-wrap items-center justify-center gap-3" aria-label="Navegación principal">
+        <a href="#paquetes" class="btn-gold btn-sheen font-extrabold px-6 py-3 rounded-full">Ver paquetes</a>
+        <a href="#contacto" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full">Contacto</a>
+        <a href="#portafolio" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full">Portafolio</a>
+        <a href="#opiniones" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full">Opiniones</a>
+      </nav>
     </div>
   </section>
 
-  <!-- PAQUETES -->
-  <section data-route="paquetes" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
+  <!-- PAQUETES (restaurado: tamaños + badge "Más Popular" + animaciones) -->
+  <section data-route="paquetes" class="hidden-route min-h-screen flex items-center justify-center px-4 py-12">
     <div class="panel max-w-6xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
       <div class="flex items-center gap-3 mb-6">
-        <a href="#home" class="btn-gold-outline px-4 py-2 rounded-full font-bold">← Volver</a>
+        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
         <h2 class="text-3xl sm:text-4xl font-extrabold">Paquetes</h2>
       </div>
+
+      <div class="text-center mb-10">
+        <h3 class="text-4xl font-extrabold mb-2" style="color:var(--gold-3)">Construye la imagen de tu negocio</h3>
+        <p class="subtext text-lg sm:text-xl">Selecciona el paquete que mejor se adapte a tus objetivos.</p>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="card p-6"><div class="flex flex-col h-full"><h4 class="text-2xl font-extrabold mb-2" style="color:var(--gold-3)">Inicio</h4><p class="subtext mb-4">Para arrancar.</p><div class="text-4xl font-extrabold mb-4">$8,900 MXN</div><ul class="space-y-2 subtext"><li>20 fotos editadas</li><li>3 reels (30–45s)</li></ul><a href="#contacto" class="btn-gold px-5 py-2 rounded-full font-bold mt-6 text-center">Contratar</a></div></div>
-        <div class="card p-8 bg-white/5 ring-2 ring-[color:var(--gold-3)] scale-105"><div class="flex flex-col h-full"><h4 class="text-3xl font-extrabold mb-2" style="color:var(--gold-3)">Crecimiento</h4><p class="subtext mb-4">Pack completo.</p><div class="text-5xl font-extrabold mb-4">$13,900 MXN</div><ul class="space-y-2 subtext"><li>30 fotos editadas</li><li>5 reels (30–45s)</li><li>1 video largo (1–2 min)</li></ul><a href="#contacto" class="btn-gold px-5 py-2 rounded-full font-bold mt-6 text-center">Contratar</a></div></div>
-        <div class="card p-6"><div class="flex flex-col h-full"><h4 class="text-2xl font-extrabold mb-2" style="color:var(--gold-3)">Impacto</h4><p class="subtext mb-4">Campaña integral.</p><div class="text-4xl font-extrabold mb-4">$21,900 MXN</div><ul class="space-y-2 subtext"><li>50 fotos editadas</li><li>8 reels</li><li>2 videos largos</li><li>10 fotos de producto extra</li></ul><a href="#contacto" class="btn-gold px-5 py-2 rounded-full font-bold mt-6 text-center">Contratar</a></div></div>
+        <!-- Inicio -->
+        <div class="card p-6">
+          <div class="flex flex-col h-full">
+            <h4 class="text-2xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Inicio</h4>
+            <p class="text-sm subtext mb-4">Ideal para comenzar a impulsar tu marca.</p>
+            <div class="text-4xl font-extrabold mb-4">$8,900 MXN</div>
+            <ul class="space-y-3 text-base list-disc list-inside flex-grow subtext">
+              <li><strong class="text-white">20 fotografías</strong> editadas</li>
+              <li><strong class="text-white">3 videos cortos</strong> (30–45s)</li>
+            </ul>
+            <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold mt-6 text-center">Contratar</a>
+          </div>
+        </div>
+
+        <!-- Crecimiento (Más Popular) -->
+        <div class="card p-8 bg-white/5 ring-2 ring-[color:var(--gold-3)] transform scale-105 transition-all duration-300 relative">
+          <span class="badge-accent absolute top-0 right-0 -mt-3 -mr-3 px-3 py-1 text-sm font-bold rounded-full shadow-lg floating-note">Más Popular</span>
+          <div class="flex flex-col h-full">
+            <h4 class="text-3xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Crecimiento</h4>
+            <p class="text-sm subtext mb-4">Acelera tu crecimiento con contenido completo.</p>
+            <div class="text-5xl font-extrabold mb-4">$13,900 MXN</div>
+            <ul class="space-y-3 text-base list-disc list-inside flex-grow subtext">
+              <li><strong class="text-white">30 fotografías</strong> editadas</li>
+              <li><strong class="text-white">5 videos cortos</strong> (30–45s)</li>
+              <li><strong class="text-white">1 video largo</strong> (1–2 min)</li>
+            </ul>
+            <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold mt-6 text-center">Contratar</a>
+          </div>
+        </div>
+
+        <!-- Impacto -->
+        <div class="card p-6">
+          <div class="flex flex-col h-full">
+            <h4 class="text-2xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Impacto</h4>
+            <p class="text-sm subtext mb-4">Campaña integral para dominar tu mercado.</p>
+            <div class="text-4xl font-extrabold mb-4">$21,900 MXN</div>
+            <ul class="space-y-3 text-base list-disc list-inside flex-grow subtext">
+              <li><strong class="text-white">50 fotografías</strong> editadas</li>
+              <li><strong class="text-white">8 videos cortos</strong> (30–45s)</li>
+              <li><strong class="text-white">2 videos largos</strong> (1–2 min)</li>
+              <li><strong class="text-white">10 fotos de producto</strong> adicionales</li>
+            </ul>
+            <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold mt-6 text-center">Contratar</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center subtext mt-12 text-sm sm:text-base">
+        <p class="mb-2">⚡ Edición profesional y entrega digital en alta calidad.</p>
+        <p class="mb-2">💳 50% de anticipo para reservar fecha.</p>
+        <p class="mb-2 font-extrabold text-white">⏳ Entrega estimada: 7 días hábiles.</p>
+        <p>📌 Precios sujetos a IVA.</p>
       </div>
     </div>
   </section>
@@ -94,12 +164,12 @@
   <section data-route="opiniones" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
     <div class="panel max-w-5xl w-full p-6 sm:p-10 bg-black/40">
       <div class="flex items-center gap-3 mb-6">
-        <a href="#home" class="btn-gold-outline px-4 py-2 rounded-full font-bold">← Volver</a>
+        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
         <h2 class="text-3xl sm:text-4xl font-extrabold">Opiniones</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <blockquote class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">“Excelente experiencia”</h4><p class="subtext">“Subió nuestras reservas en 3 semanas. Fotografía que parece cine.” — Cornalina</p></blockquote>
-        <blockquote class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">“Entrega puntual”</h4><p class="subtext">“Fotos y video highlight justo como lo queríamos.” — Cliente social</p></blockquote>
+        <blockquote class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">“Excelente experiencia”</h4><p class="subtext">“Subió nuestras reservas en brunch en 3 semanas. Fotografía que parece cine.” — Cornalina</p></blockquote>
+        <blockquote class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">“Entrega puntual”</h4><p class="subtext">“Fotos y video highlight justo como lo queríamos. Recomendado.” — Cliente social</p></blockquote>
       </div>
     </div>
   </section>
@@ -108,7 +178,7 @@
   <section data-route="portafolio" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
     <div class="panel max-w-7xl w-full p-6 sm:p-10 bg-black/40">
       <div class="flex items-center gap-3 mb-6">
-        <a href="#home" class="btn-gold-outline px-4 py-2 rounded-full font-bold">← Volver</a>
+        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
         <h2 class="text-3xl sm:text-4xl font-extrabold">Portafolio</h2>
       </div>
 
@@ -124,11 +194,11 @@
           <button class="subtab-btn active" data-subtab="producto" role="tab" aria-controls="sub-producto">Producto</button>
           <button class="subtab-btn" data-subtab="registro" role="tab" aria-controls="sub-registro">Registro</button>
         </div>
-        <!-- Producto: hasta 50 imágenes. SIN placeholders si no hay fotos -->
+        <!-- Producto: hasta 50 imágenes. Sin placeholders si no hay fotos -->
         <div id="sub-producto" class="subpane">
           <div class="grid-wrap" id="grid-producto" aria-live="polite"></div>
         </div>
-        <!-- Registro: hasta 50 imágenes. SIN placeholders si no hay fotos -->
+        <!-- Registro: hasta 50 imágenes. Sin placeholders si no hay fotos -->
         <div id="sub-registro" class="subpane hidden">
           <div class="grid-wrap" id="grid-registro" aria-live="polite"></div>
         </div>
@@ -140,11 +210,11 @@
           <button class="subtab-btn active" data-subtab="general" role="tab" aria-controls="sub-general">General</button>
           <button class="subtab-btn" data-subtab="redes" role="tab" aria-controls="sub-redes">Redes Sociales</button>
         </div>
-        <!-- General: 10 slots SIEMPRE visibles (rellenos o vacíos) -->
+        <!-- General: 10 slots (con placeholders si faltan) -->
         <div id="sub-general" class="subpane">
           <div class="grid-wrap" id="grid-video-general" aria-live="polite"></div>
         </div>
-        <!-- Redes Sociales: 10 slots SIEMPRE visibles (rellenos o vacíos) -->
+        <!-- Redes Sociales: 10 slots (con placeholders si faltan) -->
         <div id="sub-redes" class="subpane hidden">
           <div class="grid-wrap" id="grid-video-redes" aria-live="polite"></div>
         </div>
@@ -156,11 +226,11 @@
   <section data-route="contacto" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
     <div class="panel max-w-5xl w-full p-6 sm:p-10 bg-black/40">
       <div class="flex items-center gap-3 mb-6">
-        <a href="#home" class="btn-gold-outline px-4 py-2 rounded-full font-bold">← Volver</a>
+        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
         <h2 class="text-3xl sm:text-4xl font-extrabold">Contacto</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">WhatsApp</h4><p class="subtext">Tap para conversar: <a href="https://tapni.com/cruxbetafilm" class="underline" target="_blank" rel="noopener">cruxbetafilm</a></p><a href="https://tapni.com/cruxbetafilm" target="_blank" rel="noopener" class="btn-gold mt-4 inline-block px-5 py-2 rounded-full font-bold">Abrir chat</a></div>
+        <div class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">WhatsApp</h4><p class="subtext">Tap para conversar: <a href="https://tapni.com/cruxbetafilm" class="underline" target="_blank" rel="noopener">cruxbetafilm</a></p><a href="https://tapni.com/cruxbetafilm" target="_blank" rel="noopener" class="btn-gold btn-sheen mt-4 inline-block px-5 py-2 rounded-full font-bold">Abrir chat</a></div>
         <div class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">Cobertura</h4><p class="subtext">Monterrey y área metropolitana. Viajes a otros estados bajo agenda.</p></div>
         <div class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">Entrega</h4><p class="subtext">Fotos en 7 días. Video highlight en 7–10 días.</p></div>
       </div>
@@ -193,18 +263,17 @@
         window.scrollTo({top:0,behavior:'auto'});
       }
       function render(){
-        const routes = sections.map(s=>s.getAttribute('data-route'));
-        let route = (location.hash||'#home').slice(1);
-        if(!routes.includes(route)) route = 'home';
+        const routes=sections.map(s=>s.getAttribute('data-route'));
+        let route=(location.hash||'#home').slice(1);
+        if(!routes.includes(route)) route='home';
         show(route);
       }
       window.addEventListener('hashchange', render); render();
     })();
 
-    // ====== Datos (edítalos) ======
-    // Fotos: hasta 50 por subcategoría; si vacío => NO se muestran slots.
+    // ====== Datos de Portafolio ======
+    // FOTOGRAFÍA: hasta 50; si vacío, NO aparece el grid (sin placeholders)
     const FOTOS_PRODUCTO = [
-      // 'https://...jpg'
       'https://images.unsplash.com/photo-1542152399-6e3e150d8977?q=80&w=1600&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1579705707736-218206d2d0a0?q=80&w=1600&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1620712948210-e5559c5d140e?q=80&w=1600&auto=format&fit=crop',
@@ -214,109 +283,77 @@
       'https://images.unsplash.com/photo-1558299105-e414c52f754b?q=80&w=1600&auto=format&fit=crop',
     ];
 
-    // Videos: 10 slots SIEMPRE por subcategoría (rellenos o vacíos)
-    // Usa YouTube (embed), Vimeo (player) o MP4 directo.
+    // VIDEO: 10 slots fijos por subcategoría (rellenos o placeholders)
     const VIDEOS_GENERAL = [
       'https://www.youtube.com/embed/dQw4w9WgXcQ',
-      'https://player.vimeo.com/video/76979871',
+      'https://player.vimeo.com/video/76979871'
     ];
     const VIDEOS_REDES = [
-      // 'https://www.youtube.com/embed/xxxx',
+      // agrega aquí
     ];
 
-    // ====== Render ======
-    const gridProducto = document.getElementById('grid-producto');
-    const gridRegistro = document.getElementById('grid-registro');
-    const gridVideoGen = document.getElementById('grid-video-general');
-    const gridVideoRed = document.getElementById('grid-video-redes');
+    // ====== Render helpers ======
+    const gridProducto=document.getElementById('grid-producto');
+    const gridRegistro=document.getElementById('grid-registro');
+    const gridVideoGen=document.getElementById('grid-video-general');
+    const gridVideoRed=document.getElementById('grid-video-redes');
 
     function renderFotos(list, grid){
-      grid.innerHTML = '';
+      grid.innerHTML='';
       if(!list || list.length===0){ grid.parentElement.classList.add('hidden'); return; }
       grid.parentElement.classList.remove('hidden');
       list.slice(0,50).forEach((src,i)=>{
-        const a = document.createElement('a'); a.href = src; a.className = 'slot';
-        a.innerHTML = `<img src="${src}" alt="Foto ${i+1}"><span class="slot--badge">${i+1}</span>`;
-        a.addEventListener('click', (e)=>{ e.preventDefault(); openLightbox(list, i); });
-        grid.appendChild(a);
+        const a=document.createElement('a'); a.href=src; a.className='slot'; a.innerHTML=`<img src="${src}" alt="Foto ${i+1}"><span class="slot--badge">${i+1}</span>`; a.addEventListener('click',(e)=>{ e.preventDefault(); openLightbox(list,i); }); grid.appendChild(a);
       });
-    }
-
-    function videoThumb(url){
-      const yt = String(url).match(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]{6,})/);
-      if(yt) return `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`;
-      const vm = String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/);
-      if(vm) return 'https://via.placeholder.com/800x450?text=Vimeo+Video';
-      return 'https://via.placeholder.com/800x450?text=Video';
     }
 
     function renderVideos(list, grid){
-      grid.innerHTML = '';
-      const MAX=10; const filled=(list||[]).slice(0,MAX);
-      filled.forEach((url,i)=>{
-        const div = document.createElement('div'); div.className = 'slot';
-        div.innerHTML = `<img src="${videoThumb(url)}" alt="Video ${i+1}"><span class='slot--badge'>${i+1}/10</span>`;
-        div.addEventListener('click', ()=> openVideo(url));
-        grid.appendChild(div);
-      });
-      for(let i=filled.length;i<MAX;i++){
-        const ph = document.createElement('div'); ph.className = 'slot--empty'; ph.innerHTML = `<div class='plus'>+ slot ${i+1}/10</div>`; grid.appendChild(ph);
-      }
+      grid.innerHTML=''; const MAX=10; const filled=(list||[]).slice(0,MAX);
+      filled.forEach((url,i)=>{ const div=document.createElement('div'); div.className='slot'; div.innerHTML=`<img src="${videoThumb(url)}" alt="Video ${i+1}"><span class='slot--badge'>${i+1}/10</span>`; div.addEventListener('click',()=>openVideo(url)); grid.appendChild(div); });
+      for(let i=filled.length;i<MAX;i++){ const ph=document.createElement('div'); ph.className='slot--empty'; ph.innerHTML=`<div class='plus'>+ slot ${i+1}/10</div>`; grid.appendChild(ph); }
+    }
+
+    function videoThumb(url){
+      const yt=String(url).match(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]{6,})/); if(yt) return `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`;
+      const vm=String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/); if(vm) return 'https://via.placeholder.com/800x450?text=Vimeo+Video';
+      return 'https://via.placeholder.com/800x450?text=Video';
     }
 
     // ====== Lightbox fotos ======
-    const lb = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lbImg');
-    const lbPrev = document.getElementById('lbPrev');
-    const lbNext = document.getElementById('lbNext');
-    let currentList = []; let currentIdx = 0;
-    function openLightbox(list, index){ currentList=list; currentIdx=index; lbImg.src=list[index]; if(typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open',''); }
+    const lb=document.getElementById('lightbox'); const lbImg=document.getElementById('lbImg'); const lbPrev=document.getElementById('lbPrev'); const lbNext=document.getElementById('lbNext');
+    let currentList=[], currentIdx=0;
+    function openLightbox(list,i){ currentList=list; currentIdx=i; lbImg.src=list[i]; if(typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open',''); }
     function lbNav(step){ if(!currentList.length) return; currentIdx=(currentIdx+step+currentList.length)%currentList.length; lbImg.src=currentList[currentIdx]; }
-    lbPrev.addEventListener('click', ()=> lbNav(-1));
-    lbNext.addEventListener('click', ()=> lbNav(1));
-    lb.addEventListener('click', (e)=>{ const r = lbImg.getBoundingClientRect(); const outside = e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom; if(outside) lb.close(); });
-    window.addEventListener('keydown', (e)=>{ if(!lb.open) return; if(e.key==='ArrowLeft') lbNav(-1); if(e.key==='ArrowRight') lbNav(1); if(e.key==='Escape') lb.close(); });
+    lbPrev.addEventListener('click',()=>lbNav(-1)); lbNext.addEventListener('click',()=>lbNav(1));
+    lb.addEventListener('click',(e)=>{ const r=lbImg.getBoundingClientRect(); const outside=e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom; if(outside) lb.close(); });
+    window.addEventListener('keydown',(e)=>{ if(!lb.open) return; if(e.key==='ArrowLeft') lbNav(-1); if(e.key==='ArrowRight') lbNav(1); if(e.key==='Escape') lb.close(); });
 
     // ====== Video modal ======
-    const vModal = document.getElementById('videoModal');
-    const vFrame = document.getElementById('videoFrame');
-    function openVideo(url){ vFrame.src = url; if(typeof vModal.showModal==='function') vModal.showModal(); else vModal.setAttribute('open',''); }
-    vModal.addEventListener('click', (e)=>{ const box = vFrame.getBoundingClientRect(); const outside = e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom; if(outside){ vFrame.src=''; vModal.close(); }});
+    const vModal=document.getElementById('videoModal'); const vFrame=document.getElementById('videoFrame');
+    function openVideo(url){ vFrame.src=url; if(typeof vModal.showModal==='function') vModal.showModal(); else vModal.setAttribute('open',''); }
+    vModal.addEventListener('click',(e)=>{ const box=vFrame.getBoundingClientRect(); const outside=e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom; if(outside){ vFrame.src=''; vModal.close(); }});
 
     // ====== Tabs principales ======
-    const mainTabs = document.querySelectorAll('.tab-btn');
-    const panes = { fotografia: document.getElementById('tab-fotografia'), video: document.getElementById('tab-video') };
+    const mainTabs=document.querySelectorAll('.tab-btn');
+    const panes={ fotografia:document.getElementById('tab-fotografia'), video:document.getElementById('tab-video') };
     mainTabs.forEach(btn=>{
-      // Solo controlar los dos tabs principales (ignorar los subtabs aquí)
-      if(!['fotografia','video'].includes(btn.dataset.tab)) return;
       btn.addEventListener('click',()=>{
-        mainTabs.forEach(b=>{ if(['fotografia','video'].includes(b.dataset.tab)) b.classList.remove('active'); });
+        if(!btn.dataset.tab) return; // ignora botones fuera del portafolio
+        mainTabs.forEach(b=>b.classList.remove('active'));
         btn.classList.add('active');
-        const t = btn.dataset.tab; Object.entries(panes).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
+        const t=btn.dataset.tab; if(panes.fotografia&&panes.video){ panes.fotografia.classList.toggle('hidden', t!=='fotografia'); panes.video.classList.toggle('hidden', t!=='video'); }
       });
     });
 
     // ====== Subtabs Fotografía ======
-    const fotoSubBtns = document.querySelectorAll('#tab-fotografia .subtab-btn');
-    const subFoto = { producto: document.getElementById('sub-producto'), registro: document.getElementById('sub-registro') };
-    fotoSubBtns.forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        fotoSubBtns.forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        const t = btn.dataset.subtab; Object.entries(subFoto).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
-      });
-    });
+    const fotoSubBtns=document.querySelectorAll('#tab-fotografia .subtab-btn');
+    const subFoto={ producto:document.getElementById('sub-producto'), registro:document.getElementById('sub-registro') };
+    fotoSubBtns.forEach(btn=>{ btn.addEventListener('click',()=>{ fotoSubBtns.forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const t=btn.dataset.subtab; Object.entries(subFoto).forEach(([k,el])=> el.classList.toggle('hidden', k!==t)); }); });
 
     // ====== Subtabs Video ======
-    const videoSubBtns = document.querySelectorAll('#tab-video .subtab-btn');
-    const subVid = { general: document.getElementById('sub-general'), redes: document.getElementById('sub-redes') };
-    videoSubBtns.forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        videoSubBtns.forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        const t = btn.dataset.subtab; Object.entries(subVid).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
-      });
-    });
+    const videoSubBtns=document.querySelectorAll('#tab-video .subtab-btn');
+    const subVid={ general:document.getElementById('sub-general'), redes:document.getElementById('sub-redes') };
+    videoSubBtns.forEach(btn=>{ btn.addEventListener('click',()=>{ videoSubBtns.forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const t=btn.dataset.subtab; Object.entries(subVid).forEach(([k,el])=> el.classList.toggle('hidden', k!==t)); }); });
 
     // Render inicial
     renderFotos(FOTOS_PRODUCTO, gridProducto);
