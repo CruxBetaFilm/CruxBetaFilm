@@ -23,7 +23,7 @@
     .subtext{color:#d8d8d8}
     body.lock{height:100vh;overflow:hidden}
 
-    /* ===== Botones / paneles (SIN CAMBIOS) ===== */
+    /* ===== Botones / paneles ===== */
     .btn-gold{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--gold-3),var(--gold));color:#141414;border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(200,160,53,.22);transition:transform .18s ease,filter .18s ease}
     .btn-gold:hover{transform:translateY(-1px);filter:brightness(1.06)}
     .btn-gold-outline{position:relative;overflow:hidden;background:rgba(255,255,255,.02);color:var(--gold-3);border:1px solid rgba(200,160,53,.55);box-shadow:0 8px 24px rgba(0,0,0,.24);transition:transform .18s ease,filter .18s ease}
@@ -36,7 +36,7 @@
     .card:hover{transform:translateY(-4px);box-shadow:0 0 0 1px rgba(212,175,55,.18) inset,0 30px 80px -20px rgba(212,175,55,.25);border-color:rgba(212,175,55,.35)}
     .badge-accent{background:linear-gradient(180deg,rgba(196,124,59,.95),rgba(160,122,24,.95));color:#fff;border:1px solid rgba(255,255,255,.18)}
 
-    /* ===== Portafolio (SIN animaciones innecesarias) ===== */
+    /* ===== Portafolio ===== */
     .tabbar{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
     .tab-btn{padding:.55rem 1rem;border:1px solid rgba(200,160,53,.45);border-radius:9999px;font-weight:800;letter-spacing:.2px;background:rgba(255,255,255,.02);color:var(--gold-3);cursor:pointer;transition:.18s}
     .tab-btn:hover{transform:translateY(-1px);filter:brightness(1.06)}
@@ -60,38 +60,43 @@
       position:relative;border:1px solid var(--border);border-radius:14px;overflow:hidden;
       background:rgba(255,255,255,.04);
       box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);
-      /* sin transform/hover/filters para evitar lag */
       -webkit-user-select:none;user-select:none;-webkit-user-drag:none;
     }
     .slot img{
-      display:block;width:100%;height:auto; /* mantiene proporción natural */
-      /* color completo por defecto, sin filtros */
+      display:block;width:100%;height:auto;
     }
-
     .slot--empty{display:flex;align-items:center;justify-content:center;min-height:160px;border:1px dashed rgba(200,160,53,.35);background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.03));color:#cbb77a;border-radius:14px}
     .slot--empty .plus{font-size:28px;line-height:1;opacity:.7}
-    .slot--badge{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(4px);padding:4px 8px;border-radius:10px;font-size:12px;color:#fff}
 
     /* Lightbox */
     #lightbox::backdrop{background:rgba(0,0,0,.85)}
     #lightbox[open]{padding:0;border:0;background:transparent}
     #lightbox{padding:0;border:0;background:transparent}
-    .lb-stage{position:relative}
+    .lb-stage{
+      position:relative;
+      display:flex; align-items:center; justify-content:center;
+      padding:12px;
+    }
     .lb-inner{
       position:relative;
-      width:min(92vw,1200px);
-      max-height:92vh;
+      /* ¡clave para evitar bandas negras! */
+      width:auto; height:auto;
+      max-width:92vw; max-height:92vh;
       overflow:hidden;
       border-radius:12px;
       margin:auto;
       background:#000;
-      cursor:zoom-in; /* cambia a zoom-out cuando esté ampliado */
-      touch-action:none; /* mejora gesto en móvil */
+      touch-action:none;
     }
     .lb-img{
-      display:block;max-width:100%;max-height:92vh;object-fit:contain;user-select:none;-webkit-user-drag:none;
-      transform:translate(0px,0px) scale(1); /* será editado por JS */
+      display:block;
+      width:100%; height:100%;
+      max-width:100%; max-height:100%;
+      object-fit:contain;
+      user-select:none;-webkit-user-drag:none;
+      transform:translate(0px,0px) scale(1);
       will-change:transform;
+      cursor:zoom-in; /* cambia dinámicamente con JS */
     }
     .lb-close{
       position:absolute;top:8px;right:8px;z-index:3;
@@ -115,7 +120,7 @@
     }
     .lb-zoom-hint svg{width:18px;height:18px}
 
-    /* Evitar selección y menú contextual globalmente (suave) */
+    /* Evitar selección/drag global suave */
     img{user-select:none;-webkit-user-drag:none}
   </style>
 </head>
@@ -305,15 +310,26 @@
   </dialog>
 
   <script>
-    /* ====== Router por hash + Failsafe de clic ====== */
+    /* ====== Router por hash + init portafolio cuando se muestra ====== */
     (function(){
       const sections = Array.from(document.querySelectorAll('[data-route]'));
       const routes = sections.map(s => s.getAttribute('data-route'));
+      let portfolioInitialized = false;
 
       function show(route){
         sections.forEach(s => s.classList.toggle('hidden-route', s.getAttribute('data-route')!==route));
         document.body.classList.toggle('lock', route==='home');
         window.scrollTo({ top: 0, behavior: 'auto' });
+
+        // Inicializa/refluye grid al entrar/salir
+        if (route === 'portafolio') {
+          if (!portfolioInitialized) {
+            initPortfolio();           // <-- primera vez
+            portfolioInitialized = true;
+          } else {
+            reflowGrid(gridProducto);  // <-- siguientes veces
+          }
+        }
       }
       function render(){
         let route = (location.hash || '#home').slice(1);
@@ -350,7 +366,12 @@
       filled.forEach((url,i)=>{
         const div = document.createElement('div');
         div.className = 'slot';
-        div.innerHTML = `<img src="${videoThumb(url)}" alt="Video ${i+1}"><span class='slot--badge'>${i+1}/10</span>`;
+        const img = document.createElement('img');
+        img.src = videoThumb(url);
+        img.alt = `Video ${i+1}`;
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        div.appendChild(img);
         div.addEventListener('click', ()=> openVideo(url));
         grid.appendChild(div);
       });
@@ -362,7 +383,7 @@
       }
     }
 
-    /* ====== Lightbox con Zoom + Arrastre ====== */
+    /* ====== Lightbox con Zoom + Arrastre (Pointer Events) ====== */
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lbImg');
     const lbInner = document.getElementById('lbInner');
@@ -373,11 +394,11 @@
 
     let currentList = [], currentIdx = 0;
     let scale = 1, tx = 0, ty = 0;
-    let dragging = false, startX = 0, startY = 0, startTx = 0, startTy = 0;
+    let dragging = false, startX = 0, startY = 0, startTx = 0, startTy = 0, moved = false;
 
     function applyTransform(){
       lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-      lbInner.style.cursor = scale>1 ? 'grab' : 'zoom-in';
+      lbImg.style.cursor = scale>1 ? (dragging ? 'grabbing' : 'grab') : 'zoom-in';
     }
     function resetZoom(){
       scale = 1; tx = 0; ty = 0; applyTransform();
@@ -422,41 +443,50 @@
       setTimeout(()=>{ lbHint.style.display='none'; }, 2000);
     }
 
-    // Click para zoom
-    lbInner.addEventListener('click', (e)=>{
-      e.preventDefault();
-      toggleZoom(e.clientX, e.clientY);
-    });
+    // Pointer events para drag/zoom sin “rebote”
+    lbInner.addEventListener('pointerdown',(e)=>{
+      if (e.button !== 0) return; // solo click principal
+      lbInner.setPointerCapture(e.pointerId);
+      moved = false;
+      if (scale>1){
+        dragging = true; startX = e.clientX; startY = e.clientY; startTx = tx; startTy = ty;
+        lbImg.style.cursor = 'grabbing';
+      }
+    }, {passive:false});
 
-    // Arrastre cuando hay zoom
-    lbInner.addEventListener('mousedown',(e)=>{
-      if (scale===1) return;
-      dragging = true; startX = e.clientX; startY = e.clientY; startTx = tx; startTy = ty;
-      lbInner.style.cursor = 'grabbing';
-    });
-    window.addEventListener('mousemove',(e)=>{
+    lbInner.addEventListener('pointermove',(e)=>{
       if (!dragging) return;
-      tx = startTx + (e.clientX - startX);
-      ty = startTy + (e.clientY - startY);
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+      tx = startTx + dx; ty = startTy + dy;
       applyTransform();
-    });
-    window.addEventListener('mouseup',()=>{
-      if (!dragging) return;
-      dragging = false;
-      lbInner.style.cursor = 'grab';
+    }, {passive:false});
+
+    lbInner.addEventListener('pointerup',(e)=>{
+      lbInner.releasePointerCapture(e.pointerId);
+      if (dragging){
+        dragging = false;
+        applyTransform();
+        // Si hubo arrastre significativo, NO togglear zoom.
+        if (!moved){
+          toggleZoom(e.clientX, e.clientY);
+        }
+      } else {
+        // Sin drag y en escala 1: click = toggle zoom
+        toggleZoom(e.clientX, e.clientY);
+      }
     });
 
-    // Cerrar con Esc y bloquear menú contextual sobre la imagen
+    // Navegación con teclado
     window.addEventListener('keydown',(e)=>{
       if(!lb.open) return;
       if(e.key==='Escape') closeLightbox();
       if(e.key==='ArrowLeft') nav(-1);
       if(e.key==='ArrowRight') nav(1);
     });
-    lbImg.addEventListener('contextmenu', (e)=> e.preventDefault());
-    lbImg.addEventListener('dragstart', (e)=> e.preventDefault());
 
-    // Clic fuera cierra
+    // Click fuera cierra
     lb.addEventListener('click', (e)=>{
       const innerRect = lbInner.getBoundingClientRect();
       const outside = e.clientX<innerRect.left||e.clientX>innerRect.right||e.clientY<innerRect.top||e.clientY>innerRect.bottom;
@@ -487,6 +517,8 @@
         btn.classList.add('active');
         const t = btn.dataset.subtab;
         Object.entries(subFoto).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
+        // Reflow al cambiar subtabs
+        reflowGrid(gridProducto);
       });
     });
 
@@ -503,7 +535,6 @@
 
     /* ====== Autollenado desde /img/producto (robusto, conserva ORDEN) ====== */
     const gridProducto = document.getElementById('grid-producto');
-    // Si luego usas registro:
     // const gridRegistro = document.getElementById('grid-registro');
 
     const PRODUCTO_DIR   = './img/producto/';
@@ -544,7 +575,7 @@
     function renderFotosDesdeCarpetaRobusto(grid, baseDir, count) {
       if (!grid || count <= 0) return;
       grid.innerHTML = '';
-      const urlsOK = [];  // índice 1..n (mantiene huecos si alguno falla)
+      const urlsOK = [];  // índice 1..n
       const fallidas = [];
 
       for (let i = 1; i <= count; i++) {
@@ -556,13 +587,10 @@
         const img = document.createElement('img');
         img.alt = `Foto ${i}`;
         img.setAttribute('draggable','false');
-
-        const badge = document.createElement('span');
-        badge.className = 'slot--badge';
-        badge.textContent = String(i);
+        img.loading = 'lazy';       // <-- carga diferida
+        img.decoding = 'async';     // <-- decodificación asíncrona
 
         a.appendChild(img);
-        a.appendChild(badge);
         grid.appendChild(a);
 
         cargarConFallback(
@@ -572,7 +600,7 @@
             urlsOK[i] = okUrl;
             a.href = okUrl;
 
-            // Recalcular span de grid al cargar
+            // Recalcular span del grid al cargar
             setGridSpanForItem(grid, a);
 
             a.addEventListener('click', (e) => {
@@ -595,14 +623,15 @@
 
       // Recalcular spans también al redimensionar
       window.addEventListener('resize', ()=> reflowGrid(grid));
-      setTimeout(()=> reflowGrid(grid), 1000);
+      // Pequeño delay para corregir primeras mediciones
+      setTimeout(()=> reflowGrid(grid), 300);
 
       setTimeout(() => {
         if (fallidas.length) {
           console.warn('Fotos NO encontradas (índices):', fallidas);
           console.warn('Revisa extensión (.jpeg/.png) o el espacio en el nombre: "foto (i)" vs "foto(i)".');
         }
-      }, 1500);
+      }, 1000);
     }
 
     // ==== Masonry-like por JS, SIN reordenar ====
@@ -611,16 +640,18 @@
       const rowGap    = parseInt(getComputedStyle(grid).getPropertyValue('gap'));
       const content   = item.querySelector('img, .slot--empty');
       if (!content) return;
-      const height = content.getBoundingClientRect().height;
+      const height = content.getBoundingClientRect().height || content.offsetHeight || 0;
       const span = Math.ceil( (height + rowGap) / (rowHeight + rowGap) );
-      item.style.gridRowEnd = `span ${span}`;
+      item.style.gridRowEnd = `span ${Math.max(span, 1)}`;
     }
     function reflowGrid(grid){
       Array.from(grid.children).forEach(item=> setGridSpanForItem(grid, item));
     }
 
-    // Render inicial
-    renderFotosDesdeCarpetaRobusto(gridProducto, PRODUCTO_DIR, PRODUCTO_COUNT);
+    // Init portafolio cuando se entra por primera vez
+    function initPortfolio(){
+      renderFotosDesdeCarpetaRobusto(gridProducto, PRODUCTO_DIR, PRODUCTO_COUNT);
+    }
 
     // ====== Video (si lo usas) ======
     // const gridVideoGen = document.getElementById('grid-video-general');
