@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crux&Beta Film - Fotografía & Video</title>
 
-  <!-- Tailwind CDN -->
+  <!-- Tailwind CDN (ok para pruebas; en producción conviene build) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet"/>
 
@@ -82,15 +82,15 @@
       <h1 class="text-4xl sm:text-6xl font-black tracking-tight bg-clip-text text-transparent" style="background-image:linear-gradient(90deg,var(--gold-3),var(--gold),var(--gold-2))">Crux&Beta Film</h1>
       <p class="mt-3 text-lg sm:text-2xl subtext">Fotografía &amp; Video con un look formal y atemporal</p>
       <nav class="mt-7 flex flex-wrap items-center justify-center gap-3" aria-label="Navegación principal">
-        <a href="#paquetes" class="btn-gold btn-sheen font-extrabold px-6 py-3 rounded-full">Ver paquetes</a>
-        <a href="#contacto" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full">Contacto</a>
+        <a href="#paquetes"  class="btn-gold btn-sheen font-extrabold px-6 py-3 rounded-full">Ver paquetes</a>
+        <a href="#contacto"  class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full">Contacto</a>
         <a href="#portafolio" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full">Portafolio</a>
         <a href="#opiniones" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full">Opiniones</a>
       </nav>
     </div>
   </section>
 
-  <!-- PAQUETES (restaurado: tamaños + badge "Más Popular" + animaciones) -->
+  <!-- PAQUETES -->
   <section data-route="paquetes" class="hidden-route min-h-screen flex items-center justify-center px-4 py-12">
     <div class="panel max-w-6xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
       <div class="flex items-center gap-3 mb-6">
@@ -194,11 +194,11 @@
           <button class="subtab-btn active" data-subtab="producto" role="tab" aria-controls="sub-producto">Producto</button>
           <button class="subtab-btn" data-subtab="registro" role="tab" aria-controls="sub-registro">Registro</button>
         </div>
-        <!-- Producto: hasta 50 imágenes. Sin placeholders si no hay fotos -->
+        <!-- Producto -->
         <div id="sub-producto" class="subpane">
           <div class="grid-wrap" id="grid-producto" aria-live="polite"></div>
         </div>
-        <!-- Registro: hasta 50 imágenes. Sin placeholders si no hay fotos -->
+        <!-- Registro -->
         <div id="sub-registro" class="subpane hidden">
           <div class="grid-wrap" id="grid-registro" aria-live="polite"></div>
         </div>
@@ -210,11 +210,9 @@
           <button class="subtab-btn active" data-subtab="general" role="tab" aria-controls="sub-general">General</button>
           <button class="subtab-btn" data-subtab="redes" role="tab" aria-controls="sub-redes">Redes Sociales</button>
         </div>
-        <!-- General: 10 slots (con placeholders si faltan) -->
         <div id="sub-general" class="subpane">
           <div class="grid-wrap" id="grid-video-general" aria-live="polite"></div>
         </div>
-        <!-- Redes Sociales: 10 slots (con placeholders si faltan) -->
         <div id="sub-redes" class="subpane hidden">
           <div class="grid-wrap" id="grid-video-redes" aria-live="polite"></div>
         </div>
@@ -254,160 +252,181 @@
   </dialog>
 
   <script>
-  // ====== Router por hash + Failsafe por clic ======
-  (function(){
-    const sections = Array.from(document.querySelectorAll('[data-route]'));
-    const routes = sections.map(s => s.getAttribute('data-route'));
+    /* ====== Router por hash + Failsafe de clic ====== */
+    (function(){
+      const sections = Array.from(document.querySelectorAll('[data-route]'));
+      const routes = sections.map(s => s.getAttribute('data-route'));
 
-    function show(route){
-      sections.forEach(s => s.classList.toggle('hidden-route', s.getAttribute('data-route')!==route));
-      document.body.classList.toggle('lock', route==='home');
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    }
-    function render(){
-      let route = (location.hash || '#home').slice(1);
-      if (!routes.includes(route)) route = 'home';
-      show(route);
-    }
-    window.addEventListener('hashchange', render);
-    document.addEventListener('click', (e) => {
-      const a = e.target.closest('a[href^="#"]');
-      if (!a) return;
-      const target = (a.getAttribute('href') || '#home').slice(1);
-      if (routes.includes(target)) {
-        e.preventDefault();
-        if (location.hash.slice(1) !== target) location.hash = '#' + target;
-        else show(target); // mismo hash -> forzar render
+      function show(route){
+        sections.forEach(s => s.classList.toggle('hidden-route', s.getAttribute('data-route')!==route));
+        document.body.classList.toggle('lock', route==='home');
+        window.scrollTo({ top: 0, behavior: 'auto' });
       }
-    });
-    render();
-  })();
-
-  // ====== Utils Portafolio ======
-  function videoThumb(url){
-    const yt = String(url).match(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]{6,})/);
-    if (yt) return `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`;
-    const vm = String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/);
-    if (vm) return 'https://via.placeholder.com/800x450?text=Vimeo+Video';
-    return 'https://via.placeholder.com/800x450?text=Video';
-  }
-  function renderFotos(list, grid){
-    grid.innerHTML = '';
-    if (!list || list.length===0){ grid.parentElement.classList.add('hidden'); return; }
-    grid.parentElement.classList.remove('hidden');
-    list.slice(0,50).forEach((src,i)=>{
-      const a = document.createElement('a');
-      a.href = src;
-      a.className = 'slot';
-      a.innerHTML = `<img src="${src}" alt="Foto ${i+1}"><span class="slot--badge">${i+1}</span>`;
-      a.addEventListener('click', (e)=>{ e.preventDefault(); openLightbox(list,i); });
-      grid.appendChild(a);
-    });
-  }
-  function renderVideos(list, grid){
-    grid.innerHTML = '';
-    const MAX = 10;
-    const filled = (list || []).slice(0,MAX);
-    filled.forEach((url,i)=>{
-      const div = document.createElement('div');
-      div.className = 'slot';
-      div.innerHTML = `<img src="${videoThumb(url)}" alt="Video ${i+1}"><span class='slot--badge'>${i+1}/10</span>`;
-      div.addEventListener('click', ()=> openVideo(url));
-      grid.appendChild(div);
-    });
-    for(let i=filled.length;i<MAX;i++){
-      const ph = document.createElement('div');
-      ph.className = 'slot--empty';
-      ph.innerHTML = `<div class='plus'>+ slot ${i+1}/10</div>`;
-      grid.appendChild(ph);
-    }
-  }
-
-  // ====== Lightbox ======
-  const lb = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lbImg');
-  const lbPrev = document.getElementById('lbPrev');
-  const lbNext = document.getElementById('lbNext');
-  let currentList = [], currentIdx = 0;
-  function openLightbox(list,i){
-    currentList=list; currentIdx=i; lbImg.src=list[i];
-    if (typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open','');
-  }
-  function lbNav(step){
-    if (!currentList.length) return;
-    currentIdx=(currentIdx+step+currentList.length)%currentList.length;
-    lbImg.src=currentList[currentIdx];
-  }
-  lbPrev.addEventListener('click', ()=> lbNav(-1));
-  lbNext.addEventListener('click', ()=> lbNav(1));
-  lb.addEventListener('click', (e)=>{
-    const r=lbImg.getBoundingClientRect();
-    const outside=e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom;
-    if(outside) lb.close();
-  });
-  window.addEventListener('keydown',(e)=>{
-    if(!lb.open) return;
-    if(e.key==='ArrowLeft') lbNav(-1);
-    if(e.key==='ArrowRight') lbNav(1);
-    if(e.key==='Escape') lb.close();
-  });
-
-  // ====== Video modal ======
-  const vModal = document.getElementById('videoModal');
-  const vFrame = document.getElementById('videoFrame');
-  function openVideo(url){
-    vFrame.src = url;
-    if (typeof vModal.showModal==='function') vModal.showModal(); else vModal.setAttribute('open','');
-  }
-  vModal.addEventListener('click', (e)=>{
-    const box = vFrame.getBoundingClientRect();
-    const outside = e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom;
-    if(outside){ vFrame.src=''; vModal.close(); }
-  });
-
-  // ====== Tabs (Portafolio) ======
-  const mainTabs = document.querySelectorAll('.tab-btn');
-  const panes = { fotografia: document.getElementById('tab-fotografia'), video: document.getElementById('tab-video') };
-  mainTabs.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      if(!btn.dataset.tab) return; // los del header no tienen data-tab
-      mainTabs.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      const t = btn.dataset.tab;
-      if(panes.fotografia && panes.video){
-        panes.fotografia.classList.toggle('hidden', t!=='fotografia');
-        panes.video.classList.toggle('hidden', t!=='video');
+      function render(){
+        let route = (location.hash || '#home').slice(1);
+        if (!routes.includes(route)) route = 'home';
+        show(route);
       }
+      window.addEventListener('hashchange', render);
+      document.addEventListener('click', (e) => {
+        const a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        const target = (a.getAttribute('href') || '#home').slice(1);
+        if (routes.includes(target)) {
+          e.preventDefault();
+          if (location.hash.slice(1) !== target) location.hash = '#' + target;
+          else show(target); // mismo hash -> forzar render
+        }
+      });
+      render();
+    })();
+
+    /* ====== Utils Portafolio ====== */
+    function videoThumb(url){
+      const yt = String(url).match(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]{6,})/);
+      if (yt) return `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`;
+      const vm = String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/);
+      if (vm) return 'https://via.placeholder.com/800x450?text=Vimeo+Video';
+      return 'https://via.placeholder.com/800x450?text=Video';
+    }
+    function renderFotos(list, grid){
+      grid.innerHTML = '';
+      if (!list || list.length===0){ grid.parentElement.classList.add('hidden'); return; }
+      grid.parentElement.classList.remove('hidden');
+      list.slice(0,50).forEach((src,i)=>{
+        const a = document.createElement('a');
+        a.href = src;
+        a.className = 'slot';
+        a.innerHTML = `<img src="${src}" alt="Foto ${i+1}"><span class="slot--badge">${i+1}</span>`;
+        a.addEventListener('click', (e)=>{ e.preventDefault(); openLightbox(list,i); });
+        grid.appendChild(a);
+      });
+    }
+    function renderVideos(list, grid){
+      grid.innerHTML = '';
+      const MAX = 10;
+      const filled = (list || []).slice(0,MAX);
+      filled.forEach((url,i)=>{
+        const div = document.createElement('div');
+        div.className = 'slot';
+        div.innerHTML = `<img src="${videoThumb(url)}" alt="Video ${i+1}"><span class='slot--badge'>${i+1}/10</span>`;
+        div.addEventListener('click', ()=> openVideo(url));
+        grid.appendChild(div);
+      });
+      for(let i=filled.length;i<MAX;i++){
+        const ph = document.createElement('div');
+        ph.className = 'slot--empty';
+        ph.innerHTML = `<div class='plus'>+ slot ${i+1}/10</div>`;
+        grid.appendChild(ph);
+      }
+    }
+
+    /* ====== Lightbox ====== */
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+    let currentList = [], currentIdx = 0;
+    function openLightbox(list,i){
+      currentList=list; currentIdx=i; lbImg.src=list[i];
+      if (typeof lb.showModal==='function') lb.showModal(); else lb.setAttribute('open','');
+    }
+    function lbNav(step){
+      if (!currentList.length) return;
+      currentIdx=(currentIdx+step+currentList.length)%currentList.length;
+      lbImg.src=currentList[currentIdx];
+    }
+    lbPrev.addEventListener('click', ()=> lbNav(-1));
+    lbNext.addEventListener('click', ()=> lbNav(1));
+    lb.addEventListener('click', (e)=>{
+      const r=lbImg.getBoundingClientRect();
+      const outside=e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom;
+      if(outside) lb.close();
     });
-  });
+    window.addEventListener('keydown',(e)=>{
+      if(!lb.open) return;
+      if(e.key==='ArrowLeft') lbNav(-1);
+      if(e.key==='ArrowRight') lbNav(1);
+      if(e.key==='Escape') lb.close();
+    });
 
-  // ====== Autollenado desde /img/producto ======
-  const gridProducto = document.getElementById('grid-producto');
-  const gridRegistro = document.getElementById('grid-registro');
-  const gridVideoGen = document.getElementById('grid-video-general');
-  const gridVideoRed = document.getElementById('grid-video-redes');
+    /* ====== Video modal ====== */
+    const vModal = document.getElementById('videoModal');
+    const vFrame = document.getElementById('videoFrame');
+    function openVideo(url){
+      vFrame.src = url;
+      if (typeof vModal.showModal==='function') vModal.showModal(); else vModal.setAttribute('open','');
+    }
+    vModal.addEventListener('click', (e)=>{
+      const box = vFrame.getBoundingClientRect();
+      const outside = e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom;
+      if(outside){ vFrame.src=''; vModal.close(); }
+    });
 
-  const PRODUCTO_DIR   = './img/producto/';
-  const PRODUCTO_COUNT = 43;     // foto (1) ... foto (43)
-  const PRODUCTO_EXT   = 'jpg';
+    /* ====== Tabs (Portafolio) ====== */
+    const mainTabs = document.querySelectorAll('.tab-btn');
+    const panes = { fotografia: document.getElementById('tab-fotografia'), video: document.getElementById('tab-video') };
+    mainTabs.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(!btn.dataset.tab) return; // los del header no tienen data-tab
+        mainTabs.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const t = btn.dataset.tab;
+        if(panes.fotografia && panes.video){
+          panes.fotografia.classList.toggle('hidden', t!=='fotografia');
+          panes.video.classList.toggle('hidden', t!=='video');
+        }
+      });
+    });
 
-  function fotoUrl(baseDir, i, ext='jpg'){
-    const name = `foto (${i}).${ext}`;
-    return baseDir + encodeURIComponent(name);
-  }
+    const fotoSubBtns = document.querySelectorAll('#tab-fotografia .subtab-btn');
+    const subFoto = { producto: document.getElementById('sub-producto'), registro: document.getElementById('sub-registro') };
+    fotoSubBtns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        fotoSubBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const t = btn.dataset.subtab;
+        Object.entries(subFoto).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
+      });
+    });
 
-  (function renderFotosDesdeCarpeta(){
-    if (!gridProducto) return;
-    const list = [];
-    for (let i=1; i<=PRODUCTO_COUNT; i++) list.push(fotoUrl(PRODUCTO_DIR, i, PRODUCTO_EXT));
-    renderFotos(list, gridProducto);
-  })();
+    const videoSubBtns = document.querySelectorAll('#tab-video .subtab-btn');
+    const subVid = { general: document.getElementById('sub-general'), redes: document.getElementById('sub-redes') };
+    videoSubBtns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        videoSubBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const t = btn.dataset.subtab;
+        Object.entries(subVid).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
+      });
+    });
 
-  // Si más tarde usas videos:
-  // const VIDEOS_GENERAL = ['https://www.youtube.com/embed/ID'];
-  // const VIDEOS_REDES = [];
-  // renderVideos(VIDEOS_GENERAL, gridVideoGen);
-  // renderVideos(VIDEOS_REDES, gridVideoRed);
-</script>
+    /* ====== Autollenado desde /img/producto ====== */
+    const gridProducto = document.getElementById('grid-producto');
+    const gridRegistro = document.getElementById('grid-registro');
+    const gridVideoGen = document.getElementById('grid-video-general');
+    const gridVideoRed = document.getElementById('grid-video-redes');
+
+    const PRODUCTO_DIR   = './img/producto/';
+    const PRODUCTO_COUNT = 43;     // foto (1) ... foto (43)
+    const PRODUCTO_EXT   = 'jpg';
+
+    function fotoUrl(baseDir, i, ext='jpg'){
+      const name = `foto (${i}).${ext}`;
+      return baseDir + encodeURIComponent(name);
+    }
+    (function renderFotosDesdeCarpeta(){
+      if (!gridProducto) return;
+      const list = [];
+      for (let i=1; i<=PRODUCTO_COUNT; i++) list.push(fotoUrl(PRODUCTO_DIR, i, PRODUCTO_EXT));
+      renderFotos(list, gridProducto);
+    })();
+
+    // Si luego usas videos:
+    // const VIDEOS_GENERAL = ['https://www.youtube.com/embed/ID'];
+    // const VIDEOS_REDES = [];
+    // renderVideos(VIDEOS_GENERAL, gridVideoGen);
+    // renderVideos(VIDEOS_REDES, gridVideoRed);
+  </script>
 </body>
 </html>
