@@ -4,559 +4,306 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crux&Beta Film - Fotografía & Video</title>
-
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet"/>
-
-  <!-- SEO / OG -->
+  <link rel="canonical" href="https://edgarces9.github.io/" />
   <meta name="description" content="Crux&Beta Film — Fotografía & Video con un look formal y atemporal.">
   <meta property="og:title" content="Crux&Beta Film">
   <meta property="og:description" content="Fotografía & Video con un look formal y atemporal.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://raw.githubusercontent.com/edgarces9/Mi-primera-p-gina-/main/IMG_1135.png">
+  <meta property="og:url" content="https://edgarces9.github.io/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/favicon.ico">
-
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CreativeWorkSeries","name":"Crux&Beta Film","description":"Servicios de fotografía y video en Monterrey con estética formal y atemporal.","url":"https://edgarces9.github.io/","areaServed":"Monterrey, MX","brand":{"@type":"Brand","name":"Crux&Beta Film"}}
+  </script>
   <style>
-    :root{
-      --black:#0a0a0a;
-      --gray-900:#121212;
-      --gray-800:#1e1e1e;
-      --gray-700:#2a2a2a;
-      --gray-300:#d1d5db;
-      --gray-200:#e5e7eb;
-
-      /* Dorados optimizados para pantalla */
-      --gold:#c8a035;   /* base */
-      --gold-2:#a07a18; /* sombra/profundidad */
-      --gold-3:#f3e2a5; /* brillo */
-
-      /* Acento sutil (cobre) para pequeños detalles */
-      --accent:#c47c3b;
-
-      --border:rgba(255,255,255,.14);
-    }
-
+    :root{--black:#0a0a0a;--gray-900:#121212;--gray-800:#1e1e1e;--gray-700:#2a2a2a;--gray-300:#d1d5db;--gray-200:#e5e7eb;--gold:#c8a035;--gold-2:#a07a18;--gold-3:#f3e2a5;--accent:#c47c3b;--border:rgba(255,255,255,.14)}
     html,body{height:100%}
-    body{
-      font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:#ececec; /* texto principal ligeramente más claro */
-      background:
-        radial-gradient(1000px 540px at 75% -10%, rgba(212,175,55,.14), transparent 60%),
-        radial-gradient(900px 520px at 15% 110%, rgba(184,134,11,.10), transparent 60%),
-        var(--black);
-      transition:height .2s ease;
-    }
-    .hidden-route{display:none !important}
+    body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#ececec;background:radial-gradient(1000px 540px at 75% -10%,rgba(212,175,55,.14),transparent 60%),radial-gradient(900px 520px at 15% 110%,rgba(184,134,11,.10),transparent 60%),var(--black);transition:height .2s ease}
+    .hidden-route{display:none!important}
     .subtext{color:#d8d8d8}
-
-    /* Bloquear scroll en HOME */
-    body.lock{height:100vh; overflow:hidden}
-
-    /* Botones CTA */
-    .btn-gold{
-      position:relative; overflow:hidden;
-      background:linear-gradient(180deg, var(--gold-3), var(--gold));
-      color:#141414; border:1px solid rgba(255,255,255,.18);
-      box-shadow:0 10px 28px rgba(200,160,53,.22);
-      transition:filter .2s ease, transform .2s ease, box-shadow .2s ease;
-    }
-    .btn-gold:hover{ filter:brightness(1.06); transform:translateY(-1px); }
-    .btn-gold:focus{ outline:none; box-shadow:
-      0 0 0 3px rgba(20,20,20,.6),
-      0 0 0 5px rgba(243,226,165,.45);
-    }
-
-    .btn-gold-outline{
-      position:relative; overflow:hidden;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.02));
-      color:var(--gold-3); border:1px solid rgba(200,160,53,.55);
-      box-shadow:0 8px 24px rgba(0,0,0,.24);
-      transition:filter .2s ease, transform .2s ease, box-shadow .2s ease;
-    }
-    .btn-gold-outline:hover{ filter:brightness(1.08); transform:translateY(-1px); }
-
-    /* Efecto sheen */
-    .btn-sheen::after{
-      content:""; position:absolute; inset:0;
-      transform:translateX(-120%) skewX(12deg);
-      background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
-      animation:sheen 2s infinite; mix-blend-mode:screen;
-    }
-    @keyframes sheen{
-      0%{transform:translateX(-120%) skewX(12deg)}
-      60%{transform:translateX(120%) skewX(12deg)}
-      100%{transform:translateX(120%) skewX(12deg)}
-    }
-
-    /* Panel con “marco joya” sutil */
-    .panel{
-      position:relative;
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-      border:1px solid var(--border);
-      box-shadow:0 20px 50px rgba(0,0,0,.6);
-      backdrop-filter: blur(8px);
-      border-radius:16px;
-    }
-    .panel::before{
-      content:""; position:absolute; inset:-1px; border-radius:inherit; padding:1px;
-      background:linear-gradient(120deg, rgba(243,226,165,.6), rgba(200,160,53,.25), rgba(160,122,24,.35), transparent 70%);
-      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
-      pointer-events:none; opacity:.35;
-    }
-
-    /* Tarjetas */
-    .card{
-      position:relative;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.04);
-      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);
-      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-      border-radius:14px;
-    }
-    .card:hover{
-      transform:translateY(-4px);
-      box-shadow:0 0 0 1px rgba(212,175,55,.18) inset, 0 30px 80px -20px rgba(212,175,55,.25);
-      border-color:rgba(212,175,55,.35);
-    }
-
-    /* Masonry */
-    .masonry{columns:1; column-gap:16px}
-    @media(min-width:700px){.masonry{columns:2}}
-    @media(min-width:1024px){.masonry{columns:3}}
-    .masonry img{
-      width:100%;margin:0 0 16px;border-radius:14px;display:block;break-inside:avoid;
-      filter:grayscale(30%) contrast(105%); cursor:pointer;
-      transition:filter .25s ease, box-shadow .25s ease, transform .25s ease;
-    }
-    .masonry img:hover{filter:grayscale(0%) contrast(110%); box-shadow:0 0 0 2px rgba(200,160,53,.45), 0 18px 40px rgba(0,0,0,.45); transform:translateY(-2px); }
-    .masonry img:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(243,226,165,.6), 0 0 0 6px rgba(20,20,20,.7); }
-
-    /* Nota flotante */
-    .floating-note { animation: float 3s ease-in-out infinite; }
-    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
-
-    /* Subrayado cinematográfico */
-    .hrule{
-      height:2px; width:72px; margin:.75rem 0 1rem;
-      background:linear-gradient(90deg,var(--gold-2),var(--gold-3),transparent);
-      border-radius:999px; opacity:.95;
-    }
-    .hrule--sociales{ background:linear-gradient(90deg,var(--accent),var(--gold-3),transparent); }
-    .hrule--videos{ background:linear-gradient(90deg,var(--gold-2),#ffd58a,transparent); }
-
-    /* Badge acento */
-    .badge-accent{
-      background:linear-gradient(180deg, rgba(196,124,59,.95), rgba(160,122,24,.95));
-      color:#fff; border:1px solid rgba(255,255,255,.18);
-    }
-
-    /* Lightbox backdrop y fallback */
-    #lightbox::backdrop { background: rgba(0,0,0,.85); }
-    #lightbox[open]{padding:0;border:0;background:transparent;}
-    #lightbox{position:relative;}
-    .lb-controls button{z-index:50; border:1px solid rgba(200,160,53,.45); box-shadow:0 6px 18px rgba(0,0,0,.45); }
-
-    /* Meta del lightbox */
-    .lb-meta{
-      position:absolute; left:50%; transform:translateX(-50%);
-      bottom:12px; max-width:88vw;
-      background:rgba(0,0,0,.55); color:#fff;
-      border:1px solid rgba(255,255,255,.18);
-      border-radius:10px; padding:6px 10px;
-      font-size:14px; line-height:1.2;
-      box-shadow:0 10px 24px rgba(0,0,0,.4);
-      backdrop-filter:saturate(1.1) blur(2px);
-      z-index:40;
-    }
-    .lb-meta b{ color:var(--gold-3); }
-
-    /* Respeto a reduce-motion */
-    @media (prefers-reduced-motion: reduce) {
-      .btn-sheen::after { animation: none; }
-      .floating-note { animation: none; }
-      .card, .masonry img, .btn-gold, .btn-gold-outline { transition:none; }
-    }
+    body.lock{height:100vh;overflow:hidden}
+    .btn-gold{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--gold-3),var(--gold));color:#141414;border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 28px rgba(200,160,53,.22);transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+    .btn-gold:hover{transform:translateY(-1px);filter:brightness(1.06);box-shadow:0 14px 32px rgba(200,160,53,.28)}
+    .btn-gold:active{transform:translateY(0)}
+    .btn-gold:focus{outline:none;box-shadow:0 0 0 3px rgba(20,20,20,.6),0 0 0 5px rgba(243,226,165,.45)}
+    .btn-gold-outline{position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.02));color:var(--gold-3);border:1px solid rgba(200,160,53,.55);box-shadow:0 8px 24px rgba(0,0,0,.24);transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+    .btn-gold-outline:hover{transform:translateY(-1px);filter:brightness(1.08);box-shadow:0 12px 28px rgba(0,0,0,.3)}
+    .panel{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid var(--border);box-shadow:0 20px 50px rgba(0,0,0,.6);backdrop-filter:blur(8px);border-radius:16px}
+    .panel::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(120deg,rgba(243,226,165,.6),rgba(200,160,53,.25),rgba(160,122,24,.35),transparent 70%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.35}
+    .card{position:relative;border:1px solid var(--border);background:rgba(255,255,255,.04);box-shadow:0 0 0 1px rgba(255,255,255,.02) inset,0 20px 60px -20px rgba(0,0,0,.6);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;border-radius:14px}
+    .card:hover{transform:translateY(-4px);box-shadow:0 0 0 1px rgba(212,175,55,.18) inset,0 30px 80px -20px rgba(212,175,55,.25);border-color:rgba(212,175,55,.35)}
+    .floating-note{animation:float 3s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+    .hrule{height:2px;width:72px;margin:.75rem 0 1rem;background:linear-gradient(90deg,var(--gold-2),var(--gold-3),transparent);border-radius:999px;opacity:.95}
+    .hrule--sociales{background:linear-gradient(90deg,var(--accent),var(--gold-3),transparent)}
+    .hrule--videos{background:linear-gradient(90deg,var(--gold-2),#ffd58a,transparent)}
+    .badge-accent{background:linear-gradient(180deg,rgba(196,124,59,.95),rgba(160,122,24,.95));color:#fff;border:1px solid rgba(255,255,255,.18)}
+    #lightbox::backdrop{background:rgba(0,0,0,.85)}#lightbox[open]{padding:0;border:0;background:transparent}#lightbox{position:relative}.lb-controls button{z-index:50;border:1px solid rgba(200,160,53,.45);box-shadow:0 6px 18px rgba(0,0,0,.45)}
+    .lb-meta{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;max-width:88vw;background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:6px 10px;font-size:14px;line-height:1.2;box-shadow:0 10px 24px rgba(0,0,0,.4);backdrop-filter:saturate(1.1) blur(2px);z-index:40}
+    .lb-meta b{color:var(--gold-3)}
+    .hero-glow::after{content:"";position:absolute;inset:-20%;pointer-events:none;border-radius:50%;background:radial-gradient(circle at 50% 30%,rgba(243,226,165,.12),transparent 55%);animation:heroPulse 6s ease-in-out infinite}
+    @keyframes heroPulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.03)}}
+    .fab{position:fixed;right:18px;bottom:18px;z-index:60}
+    .fab a{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:#22c55e;color:#0b1b0b;font-weight:800;box-shadow:0 12px 24px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.22);transition:transform .18s ease}
+    .fab a:hover{transform:translateY(-2px)}
+    @media (prefers-reduced-motion: reduce){.floating-note,.hero-glow::after{animation:none}.card,.masonry img,.btn-gold,.btn-gold-outline{transition:none}}
   </style>
 </head>
-
 <body class="min-h-screen">
 
   <!-- HOME -->
-  <section data-route="home" class="min-h-screen flex items-center justify-center relative overflow-hidden px-6">
-    <!-- Fondo y overlay: no capturan clic -->
-    <div class="pointer-events-none absolute inset-0 opacity-25 grayscale bg-[url('https://images.unsplash.com/photo-1499084732479-de2c02d45fc4?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center"></div>
-    <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 to-black/90"></div>
-
-    <!-- Contenido por encima -->
+  <section data-route="home" class="min-h-screen flex items-center justify-center relative overflow-hidden px-6 hero-glow" aria-label="Portada">
+    <div class="pointer-events-none absolute inset-0 opacity-25 grayscale bg-[url('https://images.unsplash.com/photo-1499084732479-de2c02d45fc4?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 to-black/90" aria-hidden="true"></div>
     <div class="relative z-10 text-center max-w-3xl">
-      <img
-        src="https://raw.githubusercontent.com/edgarces9/Mi-primera-p-gina-/main/IMG_1135.png"
-        alt="Logo de Crux&Beta Film"
-        class="mx-auto mb-5 rounded-full w-32 h-32 border border-white/20 object-cover"/>
-
-      <h1 class="text-4xl sm:text-6xl font-black tracking-tight bg-clip-text text-transparent"
-          style="background-image:linear-gradient(90deg,var(--gold-3),var(--gold),var(--gold-2))">
-        Crux&Beta Film
-      </h1>
+      <img src="https://raw.githubusercontent.com/edgarces9/Mi-primera-p-gina-/main/IMG_1135.png" alt="Logo de Crux&Beta Film" class="mx-auto mb-5 rounded-full w-32 h-32 border border-white/20 object-cover"/>
+      <h1 class="text-4xl sm:text-6xl font-black tracking-tight bg-clip-text text-transparent" style="background-image:linear-gradient(90deg,var(--gold-3),var(--gold),var(--gold-2))">Crux&Beta Film</h1>
       <p class="mt-3 text-lg sm:text-2xl subtext">Fotografía &amp; Video con un look formal y atemporal</p>
-
-      <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
-        <a href="#paquetes" class="btn-gold btn-sheen font-extrabold px-6 py-3 rounded-full hover:brightness-110 transition">Ver paquetes</a>
-        <a href="#contacto" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full hover:brightness-110 transition">Contacto</a>
-        <a href="#portafolio" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full hover:brightness-110 transition">Portafolio</a>
-        <a href="#opiniones" class="btn-gold-outline btn-sheen font-extrabold px-6 py-3 rounded-full hover:brightness-110 transition">Opiniones</a>
-      </div>
+      <nav class="mt-7 flex flex-wrap items-center justify-center gap-3" aria-label="Navegación principal">
+        <a href="#paquetes" class="btn-gold font-extrabold px-6 py-3 rounded-full">Ver paquetes</a>
+        <a href="#contacto" class="btn-gold-outline font-extrabold px-6 py-3 rounded-full">Contacto</a>
+        <a href="#portafolio" class="btn-gold-outline font-extrabold px-6 py-3 rounded-full">Portafolio</a>
+        <a href="#opiniones" class="btn-gold-outline font-extrabold px-6 py-3 rounded-full">Opiniones</a>
+      </nav>
     </div>
   </section>
 
-  <!-- PAQUETES -->
-  <section data-route="paquetes" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
+  <!-- PAQUETES (sin cambios sustanciales) -->
+  <section data-route="paquetes" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10" aria-label="Paquetes">
     <div class="panel max-w-6xl w-full rounded-2xl p-6 sm:p-10 bg-black/40">
       <div class="flex items-center gap-3 mb-6">
-        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
+        <a href="#home" class="btn-gold-outline px-4 py-2 rounded-full font-bold" role="button">← Volver</a>
         <h2 class="text-3xl sm:text-4xl font-extrabold">Paquetes</h2>
       </div>
-
       <div class="text-center mb-10">
         <h3 class="text-4xl font-extrabold mb-2" style="color:var(--gold-3)">Construye la imagen de tu negocio</h3>
         <p class="subtext text-lg sm:text-xl">Selecciona el paquete que mejor se adapte a tus objetivos de crecimiento.</p>
       </div>
-
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="card p-6">
-          <div class="flex flex-col h-full">
-            <h4 class="text-2xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Inicio</h4>
-            <p class="text-sm subtext mb-4">Ideal para comenzar a impulsar tu marca.</p>
-            <div class="text-4xl font-extrabold mb-4">$8,900 MXN</div>
-            <ul class="space-y-3 text-base list-disc list-inside flex-grow subtext">
-              <li><strong class="text-white">20 fotografías</strong> profesionales y editadas</li>
-              <li><strong class="text-white">3 videos cortos</strong> para Reels/TikTok (30-45s)</li>
-            </ul>
-            <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold mt-6 text-center">Contratar</a>
-          </div>
-        </div>
-
-        <div class="card p-8 bg-white/5 border-gold/50 ring-2 ring-[color:var(--gold-3)] transform scale-105 transition-all duration-300 relative">
-          <span class="badge-accent absolute top-0 right-0 -mt-3 -mr-3 px-3 py-1 text-sm font-bold rounded-full shadow-lg floating-note">Más Popular</span>
-          <div class="flex flex-col h-full">
-            <h4 class="text-3xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Crecimiento</h4>
-            <p class="text-sm subtext mb-4">Acelera tu crecimiento con contenido completo.</p>
-            <div class="text-5xl font-extrabold mb-4">$13,900 MXN</div>
-            <ul class="space-y-3 text-base list-disc list-inside flex-grow subtext">
-              <li><strong class="text-white">30 fotografías</strong> profesionales y editadas</li>
-              <li><strong class="text-white">5 videos cortos</strong> para Reels/TikTok (30-45s)</li>
-              <li><strong class="text-white">1 video largo</strong> para YouTube/Web (1-2 min)</li>
-            </ul>
-            <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold mt-6 text-center">Contratar</a>
-          </div>
-        </div>
-
-        <div class="card p-6">
-          <div class="flex flex-col h-full">
-            <h4 class="text-2xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Impacto</h4>
-            <p class="text-sm subtext mb-4">Dominio total del mercado con una campaña completa.</p>
-            <div class="text-4xl font-extrabold mb-4">$21,900 MXN</div>
-            <ul class="space-y-3 text-base list-disc list-inside flex-grow subtext">
-              <li><strong class="text-white">50 fotografías</strong> profesionales y editadas</li>
-              <li><strong class="text-white">8 videos cortos</strong> para Reels/TikTok (30-45s)</li>
-              <li><strong class="text-white">2 videos largos</strong> para YouTube/Web (1-2 min)</li>
-              <li><strong class="text-white">10 fotografías</strong> de producto adicionales</li>
-            </ul>
-            <a href="#contacto" class="btn-gold btn-sheen px-5 py-2 rounded-full font-bold mt-6 text-center">Contratar</a>
-          </div>
-        </div>
+        <div class="card p-6"><div class="flex flex-col h-full"><h4 class="text-2xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Inicio</h4><p class="text-sm subtext mb-4">Ideal para comenzar a impulsar tu marca.</p><div class="text-4xl font-extrabold mb-4">$8,900 MXN</div><ul class="space-y-3 text-base list-disc list-inside flex-grow subtext"><li><strong class="text-white">20 fotografías</strong> profesionales y editadas</li><li><strong class="text-white">3 videos cortos</strong> para Reels/TikTok (30-45s)</li></ul><a href="#contacto" class="btn-gold px-5 py-2 rounded-full font-bold mt-6 text-center" role="button">Contratar</a></div></div>
+        <div class="card p-8 bg-white/5 ring-2 ring-[color:var(--gold-3)] transform scale-105 relative"><span class="badge-accent absolute top-0 right-0 -mt-3 -mr-3 px-3 py-1 text-sm font-bold rounded-full shadow-lg floating-note">Más Popular</span><div class="flex flex-col h-full"><h4 class="text-3xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Crecimiento</h4><p class="text-sm subtext mb-4">Acelera tu crecimiento con contenido completo.</p><div class="text-5xl font-extrabold mb-4">$13,900 MXN</div><ul class="space-y-3 text-base list-disc list-inside flex-grow subtext"><li><strong class="text-white">30 fotografías</strong> profesionales y editadas</li><li><strong class="text-white">5 videos cortos</strong> para Reels/TikTok (30-45s)</li><li><strong class="text-white">1 video largo</strong> para YouTube/Web (1-2 min)</li></ul><a href="#contacto" class="btn-gold px-5 py-2 rounded-full font-bold mt-6 text-center" role="button">Contratar</a></div></div>
+        <div class="card p-6"><div class="flex flex-col h-full"><h4 class="text-2xl font-extrabold mb-2" style="color:var(--gold-3)">Paquete Impacto</h4><p class="text-sm subtext mb-4">Dominio total del mercado con una campaña completa.</p><div class="text-4xl font-extrabold mb-4">$21,900 MXN</div><ul class="space-y-3 text-base list-disc list-inside flex-grow subtext"><li><strong class="text-white">50 fotografías</strong> profesionales y editadas</li><li><strong class="text-white">8 videos cortos</strong> para Reels/TikTok (30-45s)</li><li><strong class="text-white">2 videos largos</strong> para YouTube/Web (1-2 min)</li><li><strong class="text-white">10 fotografías</strong> de producto adicionales</li></ul><a href="#contacto" class="btn-gold px-5 py-2 rounded-full font-bold mt-6 text-center" role="button">Contratar</a></div></div>
       </div>
-
-      <div class="text-center subtext mt-12 text-sm sm:text-base">
-        <p class="mb-2">⚡ Todos los paquetes incluyen edición profesional y entrega digital en alta calidad.</p>
-        <p class="mb-2">💳 Se requiere 50% de anticipo para reservar fecha.</p>
-        <p class="mb-2 font-extrabold text-white">⏳ Entrega de todos los paquetes en 7 días hábiles.</p>
-        <p>📌 Precios sujetos a IVA.</p>
-      </div>
+      <div class="text-center subtext mt-12 text-sm sm:text-base"><p class="mb-2">⚡ Todos los paquetes incluyen edición profesional y entrega digital en alta calidad.</p><p class="mb-2">💳 Se requiere 50% de anticipo para reservar fecha.</p><p class="mb-2 font-extrabold text-white">⏳ Entrega de todos los paquetes en 7 días hábiles.</p><p>📌 Precios sujetos a IVA.</p></div>
     </div>
   </section>
 
-  <!-- OPINIONES -->
-  <section data-route="opiniones" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
+  <!-- OPINIONES (igual) -->
+  <section data-route="opiniones" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10" aria-label="Opiniones">
     <div class="panel max-w-5xl w-full p-6 sm:p-10 bg-black/40">
-      <div class="flex items-center gap-3 mb-6">
-        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
-        <h2 class="text-3xl sm:text-4xl font-extrabold">Opiniones</h2>
-      </div>
-
+      <div class="flex items-center gap-3 mb-6"><a href="#home" class="btn-gold-outline px-4 py-2 rounded-full font-bold" role="button">← Volver</a><h2 class="text-3xl sm:text-4xl font-extrabold">Opiniones</h2></div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <blockquote class="card p-6">
-          <h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">“Excelente experiencia”</h4>
-          <p class="subtext">“Subió nuestras reservas en brunch en 3 semanas. Fotografía que parece cine.” — Cornalina</p>
-        </blockquote>
-        <blockquote class="card p-6">
-          <h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">“Entrega puntual”</h4>
-          <p class="subtext">“Fotos y video highlight justo como lo queríamos. Recomendado.” — Cliente social</p>
-        </blockquote>
+        <blockquote class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">“Excelente experiencia”</h4><p class="subtext">“Subió nuestras reservas en brunch en 3 semanas. Fotografía que parece cine.” — Cornalina</p></blockquote>
+        <blockquote class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">“Entrega puntual”</h4><p class="subtext">“Fotos y video highlight justo como lo queríamos. Recomendado.” — Cliente social</p></blockquote>
       </div>
     </div>
   </section>
 
-  <!-- PORTAFOLIO -->
-  <section data-route="portafolio" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
-    <div class="panel max-w-5xl w-full p-6 sm:p-10 bg-black/40">
-      <div class="flex items-center gap-3 mb-6">
-        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
-        <h2 class="text-3xl sm:text-4xl font-extrabold">Portafolio</h2>
+  <!-- PORTAFOLIO con subpestañas y álbumes -->
+  <section data-route="portafolio" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10" aria-label="Portafolio">
+    <div class="panel max-w-6xl w-full p-6 sm:p-10 bg-black/40">
+      <div class="flex items-center gap-3 mb-6"><a href="#home" class="btn-gold-outline px-4 py-2 rounded-full font-bold" role="button">← Volver</a><h2 class="text-3xl sm:text-4xl font-extrabold">Portafolio</h2></div>
+      <div class="flex flex-wrap items-center gap-3 mb-8" role="tablist" aria-label="Categorías del portafolio">
+        <button data-cat-btn="producto" class="btn-gold-outline px-4 py-2 rounded-full font-bold" role="tab" aria-controls="pf-producto">Producto</button>
+        <button data-cat-btn="sociales" class="btn-gold-outline px-4 py-2 rounded-full font-bold" role="tab" aria-controls="pf-sociales">Sociales</button>
+        <button data-cat-btn="videos" class="btn-gold-outline px-4 py-2 rounded-full font-bold" role="tab" aria-controls="pf-videos">Videos</button>
       </div>
 
-      <div class="text-center mb-10">
-        <h3 class="text-4xl font-extrabold mb-2" style="color:var(--gold-3)">Nuestro trabajo habla por sí mismo</h3>
-        <p class="subtext text-lg sm:text-xl">Explora nuestras fotografías y videos organizados por especialidad.</p>
-      </div>
+      <!-- PRODUCTO -->
+      <section id="pf-producto" class="pf-cat hidden" aria-label="Producto">
+        <h3 class="text-2xl font-bold text-gray-100 mb-2">Fotografía de Producto 📦</h3>
+        <div class="hrule"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <article class="card overflow-hidden" data-album="producto/packshots">
+            <button class="w-full text-left" data-open-album>
+              <img src="https://images.unsplash.com/photo-1542152399-6e3e150d8977?q=80&w=1200&auto=format&fit=crop" alt="Packshots en estudio" class="w-full h-48 object-cover"/>
+              <div class="p-4"><h4 class="font-extrabold" style="color:var(--gold-3)">Packshots Studio</h4><p class="subtext text-sm">Fondo limpio, producto protagonista.</p></div>
+            </button>
+            <div class="hidden" data-album-images>
+              <img src="https://images.unsplash.com/photo-1542152399-6e3e150d8977?q=80&w=1587&auto=format&fit=crop" alt="Packshot 01"/>
+              <img src="https://images.unsplash.com/photo-1579705707736-218206d2d0a0?q=80&w=1587&auto=format&fit=crop" alt="Packshot 02"/>
+              <img src="https://images.unsplash.com/photo-1620712948210-e5559c5d140e?q=80&w=1587&auto=format&fit=crop" alt="Packshot 03"/>
+            </div>
+          </article>
+          <article class="card overflow-hidden" data-album="producto/contexto">
+            <button class="w-full text-left" data-open-album>
+              <img src="https://images.unsplash.com/photo-1620712948210-e5559c5d140e?q=80&w=1200&auto=format&fit=crop" alt="Producto en contexto" class="w-full h-48 object-cover"/>
+              <div class="p-4"><h4 class="font-extrabold" style="color:var(--gold-3)">Producto en Contexto</h4><p class="subtext text-sm">Lifestyle y uso real del producto.</p></div>
+            </button>
+            <div class="hidden" data-album-images>
+              <img src="https://images.unsplash.com/photo-1620712948210-e5559c5d140e?q=80&w=1587&auto=format&fit=crop" alt="Contexto 01"/>
+              <img src="https://images.unsplash.com/photo-1579705707736-218206d2d0a0?q=80&w=1587&auto=format&fit=crop" alt="Contexto 02"/>
+              <img src="https://images.unsplash.com/photo-1542152399-6e3e150d8977?q=80&w=1587&auto=format&fit=crop" alt="Contexto 03"/>
+            </div>
+          </article>
+        </div>
+      </section>
 
-      <h4 class="text-2xl font-bold text-gray-100 mb-2">Fotografía de Producto 📦</h4>
-      <div class="hrule"></div>
-      <div class="masonry mb-12" data-group="producto">
-        <img src="https://images.unsplash.com/photo-1542152399-6e3e150d8977?q=80&w=1587&auto=format&fit=crop"
-             alt="Producto profesional" loading="lazy" decoding="async" width="1587" height="1060">
-        <img src="https://images.unsplash.com/photo-1579705707736-218206d2d0a0?q=80&w=1587&auto=format&fit=crop"
-             alt="Producto con fondo limpio" loading="lazy" decoding="async" width="1587" height="1060">
-        <img src="https://images.unsplash.com/photo-1620712948210-e5559c5d140e?q=80&w=1587&auto=format&fit=crop"
-             alt="Producto en exteriores" loading="lazy" decoding="async" width="1587" height="1060">
-      </div>
+      <!-- SOCIALES -->
+      <section id="pf-sociales" class="pf-cat hidden" aria-label="Sociales">
+        <h3 class="text-2xl font-bold text-gray-100 mb-2">Sesiones Sociales y Eventos 📸</h3>
+        <div class="hrule hrule--sociales"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <article class="card overflow-hidden" data-album="sociales/pareja">
+            <button class="w-full text-left" data-open-album>
+              <img src="https://images.unsplash.com/photo-1596727409244-a957b11d94be?q=80&w=1200&auto=format&fit=crop" alt="Sesión de pareja" class="w-full h-48 object-cover"/>
+              <div class="p-4"><h4 class="font-extrabold" style="color:var(--gold-3)">Sesión de pareja</h4><p class="subtext text-sm">Retrato emocional con luz natural.</p></div>
+            </button>
+            <div class="hidden" data-album-images>
+              <img src="https://images.unsplash.com/photo-1596727409244-a957b11d94be?q=80&w=1587&auto=format&fit=crop" alt="Pareja 01"/>
+              <img src="https://images.unsplash.com/photo-1612151855475-877969f4a6cc?q=80&w=1587&auto=format&fit=crop" alt="Pareja 02"/>
+              <img src="https://images.unsplash.com/photo-1558299105-e414c52f754b?q=80&w=1587&auto=format&fit=crop" alt="Pareja 03"/>
+            </div>
+          </article>
+          <article class="card overflow-hidden" data-album="sociales/familiar">
+            <button class="w-full text-left" data-open-album>
+              <img src="https://images.unsplash.com/photo-1558299105-e414c52f754b?q=80&w=1200&auto=format&fit=crop" alt="Fotografía familiar" class="w-full h-48 object-cover"/>
+              <div class="p-4"><h4 class="font-extrabold" style="color:var(--gold-3)">Evento familiar</h4><p class="subtext text-sm">Cobertura cálida y discreta.</p></div>
+            </button>
+            <div class="hidden" data-album-images>
+              <img src="https://images.unsplash.com/photo-1558299105-e414c52f754b?q=80&w=1587&auto=format&fit=crop" alt="Familiar 01"/>
+              <img src="https://images.unsplash.com/photo-1612151855475-877969f4a6cc?q=80&w=1587&auto=format&fit=crop" alt="Familiar 02"/>
+              <img src="https://images.unsplash.com/photo-1596727409244-a957b11d94be?q=80&w=1587&auto=format&fit=crop" alt="Familiar 03"/>
+            </div>
+          </article>
+        </div>
+      </section>
 
-      <h4 class="text-2xl font-bold text-gray-100 mb-2">Sesiones Sociales y Eventos 📸</h4>
-      <div class="hrule hrule--sociales"></div>
-      <div class="masonry mb-12" data-group="sociales">
-        <img src="https://images.unsplash.com/photo-1596727409244-a957b11d94be?q=80&w=1587&auto=format&fit=crop"
-             alt="Sesión de pareja" loading="lazy" decoding="async" width="1587" height="1060">
-        <img src="https://images.unsplash.com/photo-1612151855475-877969f4a6cc?q=80&w=1587&auto=format&fit=crop"
-             alt="Fotografía de moda" loading="lazy" decoding="async" width="1587" height="1060">
-        <img src="https://images.unsplash.com/photo-1558299105-e414c52f754b?q=80&w=1587&auto=format&fit=crop"
-             alt="Fotografía familiar" loading="lazy" decoding="async" width="1587" height="1060">
-      </div>
-      
-      <h4 class="text-2xl font-bold text-gray-100 mb-2">Videos y Comerciales 🎥</h4>
-      <div class="hrule hrule--videos"></div>
-      <div class="masonry mb-12" data-group="videos">
-        <img src="https://images.unsplash.com/photo-1588661726081-37f26d246d6b?q=80&w=1587&auto=format&fit=crop"
-             alt="Video musical" loading="lazy" decoding="async" width="1587" height="1060">
-        <img src="https://images.unsplash.com/photo-1510443909117-2708b17b209e?q=80&w=1587&auto=format&fit=crop"
-             alt="Comercial de comida" loading="lazy" decoding="async" width="1587" height="1060">
-        <img src="https://images.unsplash.com/photo-1587050308060-e74f85e49221?q=80&w=1587&auto=format&fit=crop"
-             alt="Video automotriz" loading="lazy" decoding="async" width="1587" height="1060">
-      </div>
+      <!-- VIDEOS -->
+      <section id="pf-videos" class="pf-cat hidden" aria-label="Videos">
+        <h3 class="text-2xl font-bold text-gray-100 mb-2">Videos y Comerciales 🎥</h3>
+        <div class="hrule hrule--videos"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <article class="card overflow-hidden" data-album="videos/musical">
+            <button class="w-full text-left" data-open-album>
+              <img src="https://images.unsplash.com/photo-1588661726081-37f26d246d6b?q=80&w=1200&auto=format&fit=crop" alt="Video musical" class="w-full h-48 object-cover"/>
+              <div class="p-4"><h4 class="font-extrabold" style="color:var(--gold-3)">Video musical</h4><p class="subtext text-sm">Narrativa y ritmo cinematográfico.</p></div>
+            </button>
+            <div class="hidden" data-album-images>
+              <img src="https://images.unsplash.com/photo-1588661726081-37f26d246d6b?q=80&w=1587&auto=format&fit=crop" alt="Musical 01"/>
+              <img src="https://images.unsplash.com/photo-1510443909117-2708b17b209e?q=80&w=1587&auto=format&fit=crop" alt="Musical 02"/>
+              <img src="https://images.unsplash.com/photo-1587050308060-e74f85e49221?q=80&w=1587&auto=format&fit=crop" alt="Musical 03"/>
+            </div>
+          </article>
+          <article class="card overflow-hidden" data-album="videos/comida">
+            <button class="w-full text-left" data-open-album>
+              <img src="https://images.unsplash.com/photo-1510443909117-2708b17b209e?q=80&w=1200&auto=format&fit=crop" alt="Comercial de comida" class="w-full h-48 object-cover"/>
+              <div class="p-4"><h4 class="font-extrabold" style="color:var(--gold-3)">Comercial de comida</h4><p class="subtext text-sm">Foodstyling y antojo visual.</p></div>
+            </button>
+            <div class="hidden" data-album-images>
+              <img src="https://images.unsplash.com/photo-1510443909117-2708b17b209e?q=80&w=1587&auto=format&fit=crop" alt="Comida 01"/>
+              <img src="https://images.unsplash.com/photo-1587050308060-e74f85e49221?q=80&w=1587&auto=format&fit=crop" alt="Comida 02"/>
+              <img src="https://images.unsplash.com/photo-1588661726081-37f26d246d6b?q=80&w=1587&auto=format&fit=crop" alt="Comida 03"/>
+            </div>
+          </article>
+        </div>
+      </section>
     </div>
   </section>
 
-  <!-- CONTACTO -->
-  <section data-route="contacto" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10">
+  <!-- CONTACTO (igual) -->
+  <section data-route="contacto" class="hidden-route min-h-screen flex items-center justify-center px-4 py-10" aria-label="Contacto">
     <div class="panel max-w-5xl w-full p-6 sm:p-10 bg-black/40">
-      <div class="flex items-center gap-3 mb-6">
-        <a href="#home" class="btn-gold-outline btn-sheen px-4 py-2 rounded-full font-bold">← Volver</a>
-        <h2 class="text-3xl sm:text-4xl font-extrabold">Contacto</h2>
-      </div>
-
+      <div class="flex items-center gap-3 mb-6"><a href="#home" class="btn-gold-outline px-4 py-2 rounded-full font-bold" role="button">← Volver</a><h2 class="text-3xl sm:text-4xl font-extrabold">Contacto</h2></div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="card p-6">
-          <h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">WhatsApp</h4>
-          <p class="subtext">Tap para conversar: <a href="https://tapni.com/cruxbetafilm" class="underline" target="_blank">cruxbetafilm</a></p>
-          <a href="https://tapni.com/cruxbetafilm" target="_blank" class="btn-gold btn-sheen mt-4 inline-block px-5 py-2 rounded-full font-bold">Abrir chat</a>
-        </div>
-
-        <div class="card p-6">
-          <h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">Cobertura</h4>
-          <p class="subtext">Monterrey y área metropolitana. Viajes a otros estados bajo agenda.</p>
-        </div>
-
-        <div class="card p-6">
-          <h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">Entrega</h4>
-          <p class="subtext">Fotos en 7 días. Video highlight en 7–10 días.</p>
-        </div>
+        <div class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">WhatsApp</h4><p class="subtext">Tap para conversar: <a href="https://tapni.com/cruxbetafilm" class="underline" target="_blank" rel="noopener">cruxbetafilm</a></p><a href="https://tapni.com/cruxbetafilm" target="_blank" rel="noopener" class="btn-gold mt-4 inline-block px-5 py-2 rounded-full font-bold">Abrir chat</a></div>
+        <div class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">Cobertura</h4><p class="subtext">Monterrey y área metropolitana. Viajes a otros estados bajo agenda.</p></div>
+        <div class="card p-6"><h4 class="text-lg font-extrabold mb-2" style="color:var(--gold-3)">Entrega</h4><p class="subtext">Fotos en 7 días. Video highlight en 7–10 días.</p></div>
       </div>
-
-      <div class="mt-10 text-center">
-        <div class="flex items-center justify-center gap-4">
-          <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="WhatsApp" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
-            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12.04 2C6.54 2 2.08 6.46 2.08 11.96c0 1.7.45 3.32 1.25 4.74L2 22l4.98-1.31a9.982 9.982 0 005.06 1.34c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm3.32 14.77a2.238 2.238 0 01-1.59 1.58c-.46.12-.96.18-1.46.18a3.194 3.194 0 01-2.28-.96 11.232 11.232 0 01-4.14-7.25c-.1-.36-.15-.75-.15-1.14a2.915 2.915 0 012.92-2.92c.67 0 1.33.15 1.94.45l.17.08c.55.28.9.5 1.13.75.14.15.22.28.26.43.05.2.06.33.02.43-.05.1-.14.28-.31.47a1.693 1.693 0 00-.23.47c-.05.15-.09.31-.02.5.07.21.2.42.36.65.16.23.33.45.5.65.23.28.45.54.73.74.28.2.58.33.9.33s.62-.05.82-.1a1.293 1.293 0 01.7-.58l.1-.16a1.59 1.59 0 011.64-.78l.45.09c.3.06.5.15.6.28.1.13.15.27.18.42.03.18.06.36.06.58a1.597 1.597 0 01-.1.49z"/>
-            </svg>
-          </a>
-          <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="Instagram" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
-            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.978 4.978.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.252-1.691 4.771-4.978 4.978-.058-1.255-.07-1.645-.07-4.825s.012-3.57.07-4.825c-.141-2.441-1.408-3.723-3.834-3.834-1.255-.058-1.645-.07-4.825-.07zm-5.26 3.65c-.88 0-1.6.72-1.6 1.6s.72 1.6 1.6 1.6 1.6-.72 1.6-1.6-.72-1.6-1.6-1.6zm5.26 4.97c-2.762 0-5 2.238-5 5s2.238 5 5 5 5-2.238 5-5-2.238-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
-            </svg>
-          </a>
-          <a href="https://tapni.com/cruxbetafilm" target="_blank" aria-label="Facebook" class="text-gray-300 hover:text-[color:var(--gold-3)] transition">
-            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M22.675 0h-21.35c-.739 0-1.325.586-1.325 1.325v21.35c0 .739.586 1.325 1.325 1.325h11.455v-9.352h-3.13v-3.648h3.13v-2.618c0-3.085 1.884-4.755 4.624-4.755 1.325 0 2.477.098 2.812.141v3.235l-1.921-.001c-1.503 0-1.795.714-1.795 1.765v2.318h3.58l-.466 3.648h-3.114v9.352h6.082c.739 0 1.325-.586 1.325-1.325v-21.35c0-.739-.586-1.325-1.325-1.325z"/>
-            </svg>
-          </a>
-        </div>
-      </div>
+      <div class="mt-10 text-center"><div class="flex items-center justify-center gap-4" aria-label="Redes sociales">
+        <a href="https://tapni.com/cruxbetafilm" target="_blank" rel="noopener" aria-label="WhatsApp" class="text-gray-300 hover:text-[color:var(--gold-3)] transition"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M12.04 2C6.54 2 2.08 6.46 2.08 11.96c0 1.7.45 3.32 1.25 4.74L2 22l4.98-1.31a9.982 9.982 0 005.06 1.34c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm3.32 14.77a2.238 2.238 0 01-1.59 1.58c-.46.12-.96.18-1.46.18a3.194 3.194 0 01-2.28-.96 11.232 11.232 0 01-4.14-7.25c-.1-.36-.15-.75-.15-1.14a2.915 2.915 0 012.92-2.92c.67 0 1.33.15 1.94.45l.17.08c.55.28.9.5 1.13.75.14.15.22.28.26.43.05.2.06.33.02.43-.05.1-.14.28-.31.47a1.693 1.693 0 00-.23.47c-.05.15-.09.31-.02.5.07.21.2.42.36.65.16.23.33.45.5.65.23.28.45.54.73.74.28.2.58.33.9.33s.62-.05.82-.1a1.293 1.293 0 01.7-.58l.1-.16a1.59 1.59 0 011.64-.78l.45.09c.3.06.5.15.6.28.1.13.15.27.18.42.03.18.06.36.06.58a1.597 1.597 0 01-.1.49z"/></svg></a>
+        <a href="https://tapni.com/cruxbetafilm" target="_blank" rel="noopener" aria-label="Instagram" class="text-gray-300 hover:text-[color:var(--gold-3)] transition"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.978 4.978.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.252-1.691 4.771-4.978 4.978-.058-1.255-.07-1.645-.07-4.825s.012-3.57.07-4.825c-.141-2.441-1.408-3.723-3.834-3.834-1.255-.058-1.645-.07-4.825-.07zm-5.26 3.65c-.88 0-1.6.72-1.6 1.6s.72 1.6 1.6 1.6 1.6-.72 1.6-1.6-.72-1.6-1.6-1.6zm5.26 4.97c-2.762 0-5 2.238-5 5s2.238 5 5 5 5-2.238 5-5-2.238-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg></a>
+        <a href="https://tapni.com/cruxbetafilm" target="_blank" rel="noopener" aria-label="Facebook" class="text-gray-300 hover:text-[color:var(--gold-3)] transition"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M22.675 0h-21.35c-.739 0-1.325.586-1.325 1.325v21.35c0 .739.586 1.325 1.325 1.325h11.455v-9.352h-3.13v-3.648h3.13v-2.618c0-3.085 1.884-4.755 4.624-4.755 1.325 0 2.477.098 2.812.141v3.235l-1.921-.001c-1.503 0-1.795.714-1.795 1.765v2.318h3.58l-.466 3.648h-3.114v9.352h6.082c.739 0 1.325-.586 1.325-1.325v-21.35c0-.739-.586-1.325-1.325-1.325z"/></svg></a>
+      </div></div>
     </div>
   </section>
 
-  <!-- LIGHTBOX (con controles + caption + contador) -->
-  <dialog id="lightbox" class="p-0 rounded-xl">
+  <!-- FOOTER + FAB WhatsApp -->
+  <footer class="border-t border-white/10 bg-black/40"><div class="max-w-6xl mx-auto px-6 py-10"><div class="flex flex-wrap items-center justify-between gap-6"><p class="text-sm text-gray-400">© <span id="y"></span> Crux&Beta Film · Monterrey, MX</p><div class="flex items-center gap-6 opacity-70"><svg width="90" height="24" viewBox="0 0 90 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-300"><rect width="90" height="24" fill="currentColor" fill-opacity="0.08"/><text x="45" y="16" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.6">CLIENTE A</text></svg><svg width="90" height="24" viewBox="0 0 90 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-300"><rect width="90" height="24" fill="currentColor" fill-opacity="0.08"/><text x="45" y="16" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.6">CLIENTE B</text></svg><svg width="90" height="24" viewBox="0 0 90 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-300"><rect width="90" height="24" fill="currentColor" fill-opacity="0.08"/><text x="45" y="16" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.6">CLIENTE C</text></svg></div></div></div></footer>
+  <div class="fab"><a href="https://tapni.com/cruxbetafilm" target="_blank" rel="noopener" aria-label="Abrir WhatsApp"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.93 11.93 0 0012 0C5.38 0 0 5.38 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.2-1.6A11.94 11.94 0 0012 24c6.62 0 12-5.38 12-12 0-3.2-1.24-6.21-3.48-8.52zM12 21.6c-1.84 0-3.62-.5-5.18-1.44l-.37-.22-3.68.95.98-3.58-.24-.38A9.55 9.55 0 012.4 12C2.4 6.7 6.7 2.4 12 2.4S21.6 6.7 21.6 12 17.3 21.6 12 21.6zm5.26-7.67c-.29-.15-1.7-.84-1.96-.94-.26-.1-.45-.15-.65.15-.2.3-.75.94-.9 1.14-.16.2-.33.23-.62.08-.29-.15-1.23-.45-2.35-1.44-.87-.78-1.45-1.74-1.62-2.03-.17-.29-.02-.45.13-.6.13-.13.29-.33.44-.49.15-.17.2-.29.3-.49.1-.2.05-.38-.03-.53-.08-.15-.65-1.55-.89-2.12-.24-.57-.48-.49-.65-.5l-.56-.01c-.2 0-.53.08-.81.38-.28.3-1.07 1.05-1.07 2.56 0 1.51 1.1 2.97 1.26 3.17.16.2 2.16 3.3 5.23 4.62.73.32 1.3.5 1.74.64.73.23 1.4.2 1.93.12.59-.09 1.8-.74 2.06-1.45.26-.71.26-1.32.18-1.45-.08-.13-.26-.2-.55-.35z"/></svg></a></div>
+
+  <!-- LIGHTBOX -->
+  <dialog id="lightbox" class="p-0 rounded-xl" aria-label="Visor de imágenes" aria-modal="true">
     <div class="relative">
-      <!-- Barra superior con botón cerrar -->
-      <div class="lb-controls absolute inset-x-0 top-0 z-50 flex items-center justify-end p-3">
-        <button id="lbClose"
-          class="w-10 h-10 rounded-full bg-black/60 text-white text-2xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none ring-1 ring-white/30"
-          aria-label="Cerrar (Esc)">×</button>
-      </div>
-
-      <!-- Botón anterior -->
-      <button id="lbPrev"
-        class="lb-controls absolute left-3 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/60 text-white text-3xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none ring-1 ring-white/30"
-        aria-label="Anterior">‹</button>
-
-      <!-- Imagen -->
-      <img id="lbImg" src="" alt="" class="relative z-10 max-w-[92vw] max-h-[92vh] rounded-lg block select-none">
-
-      <!-- Botón siguiente -->
-      <button id="lbNext"
-        class="lb-controls absolute right-3 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/60 text-white text-3xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none ring-1 ring-white/30"
-        aria-label="Siguiente">›</button>
-
-      <!-- Meta: caption + contador -->
+      <div class="lb-controls absolute inset-x-0 top-0 z-50 flex items-center justify-end p-3"><button id="lbClose" class="w-10 h-10 rounded-full bg-black/60 text-white text-2xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none ring-1 ring-white/30" aria-label="Cerrar (Esc)">×</button></div>
+      <button id="lbPrev" class="lb-controls absolute left-3 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/60 text-white text-3xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none ring-1 ring-white/30" aria-label="Anterior">‹</button>
+      <img id="lbImg" src="" alt="" class="relative z-10 max-w-[92vw] max-h-[92vh] rounded-lg block select-none" draggable="false">
+      <button id="lbNext" class="lb-controls absolute right-3 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/60 text-white text-3xl leading-none flex items-center justify-center hover:bg-black/80 focus:outline-none ring-1 ring-white/30" aria-label="Siguiente">›</button>
       <div id="lbMeta" class="lb-meta" aria-live="polite"></div>
     </div>
   </dialog>
 
-  <!-- Router + Lightbox -->
   <script>
-    // Router de secciones
-    (function () {
-      const sections = Array.from(document.querySelectorAll("[data-route]"));
-      function getRoutes() { return sections.map(s => s.getAttribute("data-route")); }
-      function show(hash) {
-        sections.forEach(s => {
-          const visible = s.getAttribute("data-route") === hash;
-          s.classList.toggle("hidden-route", !visible);
-        });
-        document.body.classList.toggle("lock", hash === "home");
-        window.scrollTo({ top: 0, behavior: "auto" });
-      }
-      function render() {
-        const routes = getRoutes();
-        let hash = (location.hash || "#home").slice(1);
-        if (!routes.includes(hash)) hash = "home";
-        show(hash);
-      }
-      window.addEventListener("hashchange", render);
-      render();
+    document.getElementById('y').textContent = new Date().getFullYear();
 
-      // Cierra el lightbox si navegas a otra sección
-      window.addEventListener("hashchange", () => {
-        const dlg = document.getElementById('lightbox');
-        if (dlg?.open) dlg.close();
-      });
+    // Router de secciones + subruta de portafolio (?cat)
+    (function(){
+      const sections = Array.from(document.querySelectorAll('[data-route]'));
+      function getRoutes(){ return sections.map(s=>s.getAttribute('data-route')); }
+      function show(route){
+        sections.forEach(s=>s.classList.toggle('hidden-route', s.getAttribute('data-route')!==route));
+        document.body.classList.toggle('lock', route==='home');
+        window.scrollTo({top:0,behavior:'auto'});
+      }
+      function selectCategory(cat){
+        const cats = Array.from(document.querySelectorAll('.pf-cat'));
+        cats.forEach(c=>c.classList.add('hidden'));
+        const target = document.getElementById('pf-'+cat) || document.getElementById('pf-producto');
+        target.classList.remove('hidden');
+        document.querySelectorAll('[data-cat-btn]').forEach(b=>b.classList.toggle('btn-gold', b.dataset.catBtn===cat));
+      }
+      function render(){
+        const raw=(location.hash||'#home').slice(1);
+        const [route, query] = raw.split('?');
+        const params = new URLSearchParams(query||'');
+        const routes=getRoutes();
+        if(!routes.includes(route)) return show('home');
+        show(route);
+        if(route==='portafolio') selectCategory(params.get('cat')||'producto');
+      }
+      window.addEventListener('hashchange', render); render();
+      document.addEventListener('click', e=>{ const btn=e.target.closest('[data-cat-btn]'); if(!btn) return; location.hash=`portafolio?cat=${encodeURIComponent(btn.dataset.catBtn)}`; });
+      window.addEventListener('hashchange',()=>{ const dlg=document.getElementById('lightbox'); if(dlg?.open) dlg.close(); });
     })();
 
-    // Lightbox segmentado por grupo (+ caption + contador)
-    (function () {
-      const dlg = document.getElementById('lightbox');
-      const imgEl = document.getElementById('lbImg');
-      const btnPrev = document.getElementById('lbPrev');
-      const btnNext = document.getElementById('lbNext');
-      const btnClose = document.getElementById('lbClose');
-      const meta = document.getElementById('lbMeta');
-
-      // Mapa: group -> array de <img>
-      const galleries = new Map();
-
-      function buildGalleries() {
-        galleries.clear();
-        document.querySelectorAll('[data-route="portafolio"] .masonry').forEach(container => {
-          const group = container.dataset.group || 'default';
-          galleries.set(group, Array.from(container.querySelectorAll('img')));
+    // Lightbox por álbum
+    (function(){
+      const dlg=document.getElementById('lightbox');
+      const imgEl=document.getElementById('lbImg');
+      const btnPrev=document.getElementById('lbPrev');
+      const btnNext=document.getElementById('lbNext');
+      const btnClose=document.getElementById('lbClose');
+      const meta=document.getElementById('lbMeta');
+      const albums=new Map();
+      function buildAlbums(){
+        albums.clear();
+        document.querySelectorAll('[data-route="portafolio"] [data-album]').forEach(card=>{
+          const key=card.getAttribute('data-album');
+          const imgs=Array.from(card.querySelectorAll('[data-album-images] img')).map(i=>({src:i.src,alt:i.alt||'Imagen'}));
+          albums.set(key, imgs);
         });
       }
-      buildGalleries();
-
-      let currentGroup = null;
-      let currentIndex = -1;
-
-      function updateMeta() {
-        const list = galleries.get(currentGroup) || [];
-        if (!list.length) { meta.textContent = ""; return; }
-        const el = list[currentIndex];
-        const caption = el.alt || "Imagen";
-        meta.innerHTML = `<b>${caption}</b> &nbsp;—&nbsp; ${currentIndex + 1} / ${list.length}`;
-      }
-
-      function openAt(group, index) {
-        const list = galleries.get(group) || [];
-        if (!list.length) return;
-        currentGroup = group;
-        // wrap index
-        currentIndex = ((index % list.length) + list.length) % list.length;
-        const el = list[currentIndex];
-        const src = el.dataset.full || el.src;
-        imgEl.src = src;
-        imgEl.alt = el.alt || '';
-        updateMeta();
-        if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
-        setTimeout(() => btnClose.focus(), 0);
-      }
-
-      function prev() {
-        const list = galleries.get(currentGroup) || [];
-        if (list.length) openAt(currentGroup, currentIndex - 1);
-      }
-      function next() {
-        const list = galleries.get(currentGroup) || [];
-        if (list.length) openAt(currentGroup, currentIndex + 1);
-      }
-      function closeLB() { if (dlg.open) dlg.close(); }
-
-      // Abrir: click en cualquier imagen de portafolio
-      document.addEventListener('click', (e) => {
-        const img = e.target.closest('[data-route="portafolio"] .masonry img');
-        if (!img) return;
-        buildGalleries(); // por si cambias contenido dinámicamente
-        const container = img.closest('.masonry');
-        const group = container?.dataset.group || 'default';
-        const list = galleries.get(group) || [];
-        const idx = list.indexOf(img);
-        if (idx >= 0) openAt(group, idx);
-      });
-
-      // Controles
-      btnPrev.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
-      btnNext.addEventListener('click', (e) => { e.stopPropagation(); next(); });
-      btnClose.addEventListener('click', (e) => { e.stopPropagation(); closeLB(); });
-
-      // Cerrar al click fuera de la imagen
-      dlg.addEventListener('click', (e) => {
-        const rect = imgEl.getBoundingClientRect();
-        const outside = e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom;
-        if (outside) closeLB();
-      });
-
-      // Teclado: ← / → / Esc
-      window.addEventListener('keydown', (e) => {
-        if (!dlg.open) return;
-        if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
-        else if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
-        else if (e.key === 'Escape') { e.preventDefault(); closeLB(); }
-      });
-
-      // Evitar arrastrar imagen
-      imgEl.addEventListener('dragstart', (e) => e.preventDefault());
-
-      // Al cambiar de sección, cerrar y resetear
-      window.addEventListener('hashchange', () => {
-        if (dlg.open) closeLB();
-        currentGroup = null;
-        currentIndex = -1;
-      });
+      buildAlbums();
+      let currentKey=null, currentIndex=-1;
+      function updateMeta(list){ const item=list[currentIndex]; meta.innerHTML=`<b>${item.alt}</b> &nbsp;—&nbsp; ${currentIndex+1} / ${list.length}`; }
+      function openAt(key, index){ const list=albums.get(key)||[]; if(!list.length) return; currentKey=key; currentIndex=((index%list.length)+list.length)%list.length; const item=list[currentIndex]; imgEl.src=item.src; imgEl.alt=item.alt; updateMeta(list); if(typeof dlg.showModal==='function') dlg.showModal(); else dlg.setAttribute('open',''); setTimeout(()=>btnClose.focus(),0); }
+      function prev(){ const list=albums.get(currentKey)||[]; if(list.length) openAt(currentKey, currentIndex-1); }
+      function next(){ const list=albums.get(currentKey)||[]; if(list.length) openAt(currentKey, currentIndex+1); }
+      function closeLB(){ if(dlg.open) dlg.close(); }
+      document.addEventListener('click', e=>{ const btn=e.target.closest('[data-open-album]'); if(!btn) return; const card=btn.closest('[data-album]'); if(!card) return; buildAlbums(); const key=card.getAttribute('data-album'); openAt(key,0); });
+      btnPrev.addEventListener('click', e=>{ e.stopPropagation(); prev(); });
+      btnNext.addEventListener('click', e=>{ e.stopPropagation(); next(); });
+      btnClose.addEventListener('click', e=>{ e.stopPropagation(); closeLB(); });
+      dlg.addEventListener('click', e=>{ const r=imgEl.getBoundingClientRect(); const outside=e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom; if(outside) closeLB(); });
+      window.addEventListener('keydown', e=>{ if(!dlg.open) return; if(e.key==='ArrowLeft'){e.preventDefault(); prev();} else if(e.key==='ArrowRight'){e.preventDefault(); next();} else if(e.key==='Escape'){e.preventDefault(); closeLB();} });
+      imgEl.addEventListener('dragstart', e=>e.preventDefault());
+      window.addEventListener('hashchange', ()=>{ if(dlg.open) closeLB(); currentKey=null; currentIndex=-1; });
     })();
   </script>
-
 </body>
 </html>
