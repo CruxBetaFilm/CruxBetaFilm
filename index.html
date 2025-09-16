@@ -54,24 +54,35 @@
     @media(min-width:1024px){.grid-wrap{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media(min-width:1280px){.grid-wrap{grid-template-columns:repeat(4,minmax(0,1fr))}}
 
-.slot{position:relative;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.04);box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);transition:transform .22s, box-shadow .22s, border-color .22s}
-.slot:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(212,175,55,.18) inset, 0 30px 80px -20px rgba(212,175,55,.25);border-color:rgba(212,175,55,.35)}
-.slot img{display:block;width:100%;height:240px;object-fit:cover;filter:none;transition:transform .2s, filter .2s}
-@media (hover: hover) and (pointer: fine){
-  .slot:hover img{transform:scale(1.02); filter:saturate(110%) contrast(108%)}
-}
+    .slot{
+      position:relative;border:1px solid var(--border);border-radius:14px;overflow:hidden;
+      background:rgba(255,255,255,.04);
+      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 20px 60px -20px rgba(0,0,0,.6);
+      transition:transform .22s, box-shadow .22s, border-color .22s;
+      /* rendimiento */
+      content-visibility:auto; contain:layout paint;
+    }
+    .slot:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(212,175,55,.18) inset, 0 30px 80px -20px rgba(212,175,55,.25);border-color:rgba(212,175,55,.35)}
+    .slot img{
+      display:block;width:100%;height:240px;object-fit:cover;
+      /* color completo por defecto (sin opacidad/grayscale) */
+      filter:none; transition:transform .2s, filter .2s;
+    }
+    /* Efecto sutil SOLO en equipos con hover (desktop/laptop) */
+    @media (hover:hover) and (pointer:fine){
+      .slot:hover img{ transform:scale(1.02); filter:saturate(110%) contrast(108%); will-change:transform, filter; }
+    }
 
-.slot--empty{display:flex;align-items:center;justify-content:center;height:240px;border:1px dashed rgba(200,160,53,.35);background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.03));color:#cbb77a;border-radius:14px}
-.slot--empty .plus{font-size:28px;line-height:1;opacity:.7}
-.slot--badge{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(4px);padding:4px 8px;border-radius:10px;font-size:12px;color:#fff}
+    .slot--empty{display:flex;align-items:center;justify-content:center;height:240px;border:1px dashed rgba(200,160,53,.35);background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.03));color:#cbb77a;border-radius:14px}
+    .slot--empty .plus{font-size:28px;line-height:1;opacity:.7}
+    .slot--badge{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(4px);padding:4px 8px;border-radius:10px;font-size:12px;color:#fff}
 
-/* Lightbox */
-#lightbox::backdrop{background:rgba(0,0,0,.85)}
-#lightbox[open]{padding:0;border:0;background:transparent}
-#lbImg{max-width:92vw;max-height:92vh;border-radius:12px}
-.lb-ctrl{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);color:#fff;border:1px solid rgba(255,255,255,.25);width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:24px}
-.lb-ctrl:hover{background:rgba(0,0,0,.8)}
-
+    /* Lightbox */
+    #lightbox::backdrop{background:rgba(0,0,0,.85)}
+    #lightbox[open]{padding:0;border:0;background:transparent}
+    #lbImg{max-width:92vw;max-height:92vh;border-radius:12px}
+    .lb-ctrl{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);color:#fff;border:1px solid rgba(255,255,255,.25);width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:24px}
+    .lb-ctrl:hover{background:rgba(0,0,0,.8)}
   </style>
 </head>
 
@@ -300,7 +311,7 @@
         const a = document.createElement('a');
         a.href = src;
         a.className = 'slot';
-        a.innerHTML = `<img src="${src}" alt="Foto ${i+1}"><span class="slot--badge">${i+1}</span>`;
+        a.innerHTML = `<img src="${src}" alt="Foto ${i+1}" loading="lazy" decoding="async"><span class="slot--badge">${i+1}</span>`;
         a.addEventListener('click', (e)=>{ e.preventDefault(); openLightbox(list,i); });
         grid.appendChild(a);
       });
@@ -312,7 +323,7 @@
       filled.forEach((url,i)=>{
         const div = document.createElement('div');
         div.className = 'slot';
-        div.innerHTML = `<img src="${videoThumb(url)}" alt="Video ${i+1}"><span class='slot--badge'>${i+1}/10</span>`;
+        div.innerHTML = `<img src="${videoThumb(url)}" alt="Video ${i+1}" loading="lazy" decoding="async"><span class='slot--badge'>${i+1}/10</span>`;
         div.addEventListener('click', ()=> openVideo(url));
         grid.appendChild(div);
       });
@@ -404,7 +415,7 @@
       });
     });
 
-        /* ====== Autollenado desde /img/producto (con fallback y diagnóstico) ====== */
+    /* ====== Autollenado desde /img/producto (con fallback y diagnóstico) ====== */
     const gridProducto = document.getElementById('grid-producto');
     const gridRegistro = document.getElementById('grid-registro');
     const gridVideoGen = document.getElementById('grid-video-general');
@@ -461,6 +472,10 @@
 
         const img = document.createElement('img');
         img.alt = `Foto ${i}`;
+        // rendimiento: lazy + async; primeras 6 eager + alta prioridad
+        img.loading = (i <= 6) ? 'eager' : 'lazy';
+        img.decoding = 'async';
+        if (i <= 6) img.fetchPriority = 'high';
 
         const badge = document.createElement('span');
         badge.className = 'slot--badge';
@@ -494,7 +509,7 @@
         );
       }
 
-      // Reporte en consola
+      // Reporte en consola para depurar nombres/extensiones
       setTimeout(() => {
         if (fallidas.length) {
           console.warn('Fotos NO encontradas (índices):', fallidas);
@@ -510,4 +525,4 @@
     // renderFotosDesdeCarpetaRobusto(gridRegistro, './img/registro/', 50);
   </script>
 </body>
-</html>
+</html> 
